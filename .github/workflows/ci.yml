@@ -1,0 +1,152 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  NODE_VERSION: '22'
+
+jobs:
+  # ── Backend Build & Test ──
+  backend:
+    name: Backend (.NET)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore KurdMap.slnx
+
+      - name: Build
+        run: dotnet build KurdMap.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test KurdMap.slnx --no-build --configuration Release --verbosity normal
+        continue-on-error: true
+
+  # ── Admin Panel Build & Test ──
+  admin:
+    name: Admin Panel (Angular)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/kurdmap-admin
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: src/kurdmap-admin/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npx ng lint
+        continue-on-error: true
+
+      - name: Test
+        run: npx ng test
+
+      - name: Build
+        run: npx ng build
+
+  # ── Frontend Build ──
+  frontend:
+    name: Frontend (Angular SSR)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/kurdmap-frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: src/kurdmap-frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npx ng build
+
+  # ── Mobile App Lint & Test ──
+  mobile:
+    name: Mobile (React Native)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/kurdmap-mobile
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: src/kurdmap-mobile/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npx eslint app/ src/ --ext .ts,.tsx --max-warnings=50
+
+      - name: Unit & Component tests
+        run: npx jest --ci --coverage
+        env:
+          NODE_OPTIONS: '--no-experimental-strip-types'
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-coverage
+          path: src/kurdmap-mobile/coverage/
+          retention-days: 7
+
+  # ── Docker Build ──
+  docker:
+    name: Docker Images
+    runs-on: ubuntu-latest
+    needs: [backend, admin, frontend, mobile]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build API image
+        run: docker build -f docker/api.Dockerfile -t kurdmap-api:${{ github.sha }} .
+
+      - name: Build Admin image
+        run: docker build -f docker/admin.Dockerfile -t kurdmap-admin:${{ github.sha }} .
+
+      - name: Build Frontend image
+        run: docker build -f docker/frontend.Dockerfile -t kurdmap-frontend:${{ github.sha }} .

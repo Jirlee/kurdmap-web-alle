@@ -1,0 +1,311 @@
+{
+  "nav": {
+    "home": "Home",
+    "search": "Search",
+    "categories": "Categories",
+    "about": "About",
+    "login": "Login"
+  },
+  "home": {
+    "title": "KurdMap",
+    "subtitle": "Kurdish Businesses across Germany",
+    "heroText": "Find Kurdish restaurants, barbers, hotels, and services near you.",
+    "searchPlaceholder": "Enter business name or category...",
+    "searchButton": "Search",
+    "nearMe": "Near me",
+    "featuredTitle": "Verified Businesses",
+    "discountedTitle": "Special Offers",
+    "categoriesTitle": "Categories",
+    "selectCity": "Select a city",
+    "exploreCities": "Explore Cities",
+    "viewAllBusinesses": "View all businesses"
+  },
+  "business": {
+    "verified": "Verified",
+    "openNow": "Open now",
+    "closed": "Closed",
+    "menu": "Menu",
+    "services": "Services",
+    "openingHours": "Opening Hours",
+    "contact": "Contact",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "website": "Website",
+    "shareOnWhatsApp": "Share on WhatsApp",
+    "shareOnTelegram": "Share on Telegram",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied!",
+    "openInMaps": "Open in Maps",
+    "share": "Share",
+    "favorite": "Favorite",
+    "favorited": "Favorited",
+    "description": "Description",
+    "location": "Location",
+    "loading": "Loading business...",
+    "notFound": "Business not found",
+    "notFoundHint": "The business you're looking for doesn't exist or has been removed.",
+    "backToSearch": "Back to search",
+    "today": "Today",
+    "price": "Price",
+    "noDescription": "No description available.",
+    "reviews": "Reviews",
+    "featured": "Featured",
+    "discount": "Discount",
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    }
+  },
+  "footer": {
+    "description": "A multilingual platform for discovering Kurdish businesses in Germany.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "rights": "All rights reserved."
+  },
+  "policy": {
+    "title": "Privacy Policy",
+    "intro": {
+      "title": "Privacy Policy",
+      "text": "KurdMap respects your privacy. This policy explains how we collect, use, and protect your personal data when you use our platform."
+    },
+    "dataCollection": {
+      "title": "Data Collection",
+      "text": "We collect only the data necessary to provide our services: business listings, search queries, and account information for registered business owners. We do not collect unnecessary personal data."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "text": "We use essential cookies for language preferences and session management. We do not use tracking cookies or share your data with advertising networks."
+    },
+    "thirdParty": {
+      "title": "Third-Party Services",
+      "text": "We use OpenStreetMap for map display and Google Fonts for typography. These services may collect anonymous usage data according to their own privacy policies."
+    },
+    "rights": {
+      "title": "Your Rights",
+      "text": "Under GDPR, you have the right to access, correct, or delete your personal data. You may also request data portability or object to processing. Contact us to exercise these rights."
+    },
+    "contact": {
+      "title": "Contact",
+      "text": "For privacy-related questions, please contact us at info@kurdmap.de."
+    },
+    "accountDeletion": {
+      "title": "Account Deletion",
+      "text": "You can delete your account at any time from the Profile settings in the app. Upon deletion, all your personal data including reviews, favorites, and login credentials will be permanently removed from our servers within 30 days. To request manual deletion, contact info@kurdmap.de."
+    },
+    "lastUpdated": "Last Updated"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Try again",
+    "back": "Go back",
+    "viewAll": "View all",
+    "readMore": "Read more",
+    "language": "Language"
+  },
+  "howItWorks": {
+    "title": "How KurdMap Works",
+    "subtitle": "Simple Steps",
+    "step1Title": "Search",
+    "step1Desc": "Enter a business name, category, or city to find Kurdish businesses near you.",
+    "step2Title": "Discover",
+    "step2Desc": "Browse through verified business listings with reviews, photos, and opening hours.",
+    "step3Title": "Connect",
+    "step3Desc": "Contact businesses directly, get directions, or share with friends."
+  },
+  "trustStats": {
+    "title": "Trusted by the Kurdish Community",
+    "subtitle": "Connecting Kurdish businesses with their community across Germany.",
+    "cities": "Cities Covered",
+    "categories": "Business Categories",
+    "languages": "Languages Supported",
+    "free": "Free to Use"
+  },
+  "newsletter": {
+    "title": "Stay Updated",
+    "subtitle": "Get notified about new businesses and features. No spam, just useful updates.",
+    "placeholder": "Your email address",
+    "button": "Subscribe",
+    "success": "Thank you! You're subscribed.",
+    "disclaimer": "We respect your privacy. Unsubscribe anytime."
+  },
+  "appCta": {
+    "badge": "Coming Soon",
+    "title": "KurdMap in Your Pocket",
+    "subtitle": "Soon available as a mobile app. Find Kurdish businesses on the go with location-based search and notifications.",
+    "downloadOn": "Download on the",
+    "getItOn": "Get it on",
+    "comingSoon": "Coming Soon"
+  },
+  "about": {
+    "badge": "About Us",
+    "title": "About KurdMap",
+    "subtitle": "A multilingual platform making Kurdish businesses visible across Germany.",
+    "mission": {
+      "title": "Our Mission",
+      "text": "KurdMap connects the Kurdish community with local businesses across Germany. We provide a free, multilingual platform where Kurdish restaurants, barbers, hotels, and services can be easily found."
+    },
+    "features": {
+      "multilingual": {
+        "title": "4 Languages",
+        "text": "Available in Kurdish (Sorani), Kurdish (Kurmanji), German, and English."
+      },
+      "map": {
+        "title": "Map-Based Search",
+        "text": "Find businesses near you with interactive map view and location-based search."
+      },
+      "mobile": {
+        "title": "Mobile Friendly",
+        "text": "Optimized for all devices — use KurdMap on the go from your smartphone."
+      },
+      "verified": {
+        "title": "Verified Listings",
+        "text": "Reviewed business listings with up-to-date information and opening hours."
+      }
+    },
+    "openSource": {
+      "title": "Community Project",
+      "text": "KurdMap is a community project that strengthens the visibility of Kurdish businesses in Germany."
+    }
+  },
+  "contact": {
+    "badge": "Contact",
+    "title": "Contact Us",
+    "subtitle": "Have questions or want to register your business? We're happy to help.",
+    "email": {
+      "title": "Email",
+      "text": "info@kurdmap.de"
+    },
+    "location": {
+      "title": "Location",
+      "text": "Nationwide, Germany"
+    },
+    "response": {
+      "title": "Response Time",
+      "text": "We typically respond within 24 hours."
+    },
+    "form": {
+      "name": "Your Name",
+      "email": "Email Address",
+      "message": "Your Message",
+      "send": "Send Message",
+      "success": "Message Sent!",
+      "successText": "Thank you for your message. We'll get back to you as soon as possible.",
+      "sending": "Sending...",
+      "error": "An error occurred while sending your message. Please try again."
+    }
+  },
+  "categories": {
+    "badge": "Categories",
+    "title": "All Categories",
+    "subtitle": "Browse Kurdish businesses by category — from restaurants to services.",
+    "explore": "Explore businesses →",
+    "empty": "No categories available yet."
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": {
+      "q": "What is KurdMap?",
+      "a": "KurdMap is a free multilingual platform for discovering Kurdish businesses across Germany. It supports Kurdish (Sorani), Kurdish (Kurmanji), German, and English."
+    },
+    "q2": {
+      "q": "How can I add my business?",
+      "a": "Currently, businesses can be added by contacting us at info@kurdmap.de. A self-service registration will be available soon."
+    },
+    "q3": {
+      "q": "Is KurdMap free?",
+      "a": "Yes! KurdMap is completely free for both users searching for businesses and business owners listing their services."
+    },
+    "q4": {
+      "q": "Which cities are covered?",
+      "a": "KurdMap covers Kurdish businesses across all of Germany. We are continuously expanding our listings."
+    },
+    "q5": {
+      "q": "How do I report incorrect information?",
+      "a": "If you find incorrect information about a business, please contact us at info@kurdmap.de and we will correct it promptly."
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Search businesses, categories, cities...",
+    "hint": "Press Esc to close",
+    "noResults": "No results found",
+    "businesses": "Businesses",
+    "categories": "Categories",
+    "cities": "Cities",
+    "recentSearches": "Recent Searches",
+    "clearRecent": "Clear",
+    "typeToSearch": "Type to search..."
+  },
+  "directions": {
+    "title": "Directions",
+    "getDirections": "Get Directions",
+    "yourLocation": "Your Location",
+    "destination": "Destination",
+    "distance": "Distance",
+    "duration": "Duration",
+    "steps": "Route Steps",
+    "close": "Close Route",
+    "calculating": "Calculating route...",
+    "noRoute": "Could not calculate route",
+    "allowLocation": "Allow location access for directions",
+    "km": "km",
+    "min": "min",
+    "arrived": "You have arrived"
+  },
+  "notification": {
+    "routeReady": "Route calculated",
+    "routeUpdated": "Route updated",
+    "businessNearby": "Business is nearby",
+    "locationGranted": "Location access granted",
+    "copied": "Copied to clipboard",
+    "favoriteAdded": "Added to favorites",
+    "favoriteRemoved": "Removed from favorites"
+  },
+  "search": {
+    "title": "Search Results",
+    "noResults": "No results found",
+    "noResultsHint": "Try adjusting your filters or using a different search term.",
+    "filters": "Filters",
+    "sortBy": "Sort by",
+    "relevance": "Relevance",
+    "newest": "Newest",
+    "name": "Name",
+    "verifiedFirst": "Verified first",
+    "placeholder": "Enter business name or category...",
+    "allCategories": "All Categories",
+    "allCities": "All Cities",
+    "resultsCount": "{{count}} results found",
+    "showMap": "Show map",
+    "hideMap": "Hide map",
+    "nearMe": "Near me",
+    "nearestFirst": "Nearest first",
+    "locationDenied": "Location access denied. Please allow in browser settings.",
+    "page": "Page",
+    "of": "of",
+    "featuredFirst": "Featured first",
+    "discountedFirst": "Discounted first",
+    "splitView": "Split view",
+    "listView": "List view",
+    "mapView": "Map view",
+    "activeFilters": "Active filters",
+    "clearAll": "Clear all"
+  },
+  "aria": {
+    "close": "Close",
+    "closeMenu": "Close menu",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "backToTop": "Back to top",
+    "searchInput": "Search",
+    "emailInput": "Email address",
+    "pagination": "Pagination"
+  }
+}

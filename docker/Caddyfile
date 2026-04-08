@@ -1,0 +1,106 @@
+# KurdMap — Caddy Site Config (Importable Snippet)
+# Import this from the host's main /etc/caddy/Caddyfile:
+#   import /opt/kurdmap/docker/Caddyfile
+#
+# The global options block (email, acme_ca, servers, log) belongs
+# in the HOST's /etc/caddy/Caddyfile, NOT here — since this
+# Hetzner server runs multiple websites under one Caddy instance.
+#
+# Domains (hardcoded — change if your domains differ):
+#   kurdmap.de, admin.kurdmap.de, api.kurdmap.de
+
+# ── Shared snippets (prefixed to avoid collisions) ─────────
+(kurdmap_security_headers) {
+	header {
+		Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(self), payment=()"
+		-Server
+		-X-Powered-By
+	}
+}
+
+(kurdmap_compression) {
+	encode zstd gzip
+}
+
+# ── Frontend: kurdmap.de ────────────────────────────────────
+kurdmap.de, www.kurdmap.de {
+	import kurdmap_security_headers
+	import kurdmap_compression
+
+	# Redirect www → non-www (SEO canonical)
+	@www host www.kurdmap.de
+	redir @www https://kurdmap.de{uri} permanent
+
+	reverse_proxy localhost:4000 {
+		header_up Host              {host}
+		header_up X-Real-IP         {remote_host}
+		header_up X-Forwarded-For   {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+
+		health_uri  /
+		health_interval 30s
+	}
+
+	log {
+		output file /var/log/caddy/kurdmap-frontend.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+	}
+}
+
+# ── Admin Panel: admin.kurdmap.de ───────────────────────────
+admin.kurdmap.de {
+	import kurdmap_security_headers
+	import kurdmap_compression
+
+	# Optional: IP allowlist (uncomment and adjust)
+	# @blocked not remote_ip 10.0.0.0/8 192.168.0.0/16
+	# respond @blocked 403
+
+	reverse_proxy localhost:8081 {
+		header_up Host              {host}
+		header_up X-Real-IP         {remote_host}
+		header_up X-Forwarded-For   {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+
+	log {
+		output file /var/log/caddy/kurdmap-admin.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+	}
+}
+
+# ── API: api.kurdmap.de ─────────────────────────────────────
+api.kurdmap.de {
+	import kurdmap_security_headers
+	import kurdmap_compression
+
+	# Request body size limit: 10MB
+	request_body {
+		max_size 10MB
+	}
+
+	reverse_proxy localhost:8080 {
+		header_up Host              {host}
+		header_up X-Real-IP         {remote_host}
+		header_up X-Forwarded-For   {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+
+		health_uri  /health
+		health_interval 30s
+	}
+
+	log {
+		output file /var/log/caddy/kurdmap-api.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+	}
+}

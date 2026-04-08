@@ -1,0 +1,311 @@
+{
+  "nav": {
+    "home": "Destpêk",
+    "search": "Lêgerîn",
+    "categories": "Kategorî",
+    "about": "Der barê me",
+    "login": "Têketin"
+  },
+  "home": {
+    "title": "KurdMap",
+    "subtitle": "Bazirganiyên Kurdî li seranserê Almanyayê",
+    "heroText": "Xwaringeh, berber, otel û xizmetguzariyên Kurdî li nêzê xwe bibînin.",
+    "searchPlaceholder": "Navê bazirganiyê an kategoriyê binivîse...",
+    "searchButton": "Lêgerîn",
+    "nearMe": "Nêzîkî min",
+    "featuredTitle": "Bazirganiyên Pejirandî",
+    "discountedTitle": "Pêşkêşên Taybet",
+    "categoriesTitle": "Kategorî",
+    "selectCity": "Bajarekî hilbijêre",
+    "exploreCities": "Bajaran keşf bike",
+    "viewAllBusinesses": "Hemû bazirganiyên bibîne"
+  },
+  "search": {
+    "title": "Encamên Lêgerînê",
+    "noResults": "Tu encam nehat dîtin",
+    "noResultsHint": "Hewce bike fîlterên xwe biguherîne an peyva lêgerînê biguherîne.",
+    "filters": "Fîlter",
+    "sortBy": "Rêz bike li gorî",
+    "relevance": "Têkildarî",
+    "newest": "Nûtirîn",
+    "name": "Nav",
+    "verifiedFirst": "Pêşî pejirandî",
+    "placeholder": "Navê bazirganiyê an kategoriyê binivîse...",
+    "allCategories": "Hemû kategorî",
+    "allCities": "Hemû bajar",
+    "resultsCount": "{{count}} encam hatin dîtin",
+    "showMap": "Nexşeyê nîşan bide",
+    "hideMap": "Nexşeyê veşêre",
+    "nearMe": "Nêzîkî min",
+    "nearestFirst": "Nêzîktirîn pêşîn",
+    "locationDenied": "Destûra cîhê hat redkirin. Ji kerema xwe di mîhengên gerokê de destûr bidin.",
+    "page": "Rûpel",
+    "of": "ji",
+    "featuredFirst": "Pêşniyarkirî pêşîn",
+    "discountedFirst": "Dakêşandin pêşîn",
+    "splitView": "Dîtina dubeş",
+    "listView": "Dîtina lîstê",
+    "mapView": "Dîtina nexşê",
+    "activeFilters": "Fîlterên çalak",
+    "clearAll": "Hemû paqij bike"
+  },
+  "business": {
+    "verified": "Pejirandî",
+    "openNow": "Niha vekirî ye",
+    "closed": "Girtî ye",
+    "menu": "Menû",
+    "services": "Xizmetguzarî",
+    "openingHours": "Demên vekirinê",
+    "contact": "Têkilî",
+    "address": "Navnîşan",
+    "phone": "Telefon",
+    "email": "E-name",
+    "website": "Malper",
+    "shareOnWhatsApp": "Li WhatsApp parve bike",
+    "shareOnTelegram": "Li Telegram parve bike",
+    "copyLink": "Lînkê kopî bike",
+    "linkCopied": "Lînk hat kopîkirin!",
+    "openInMaps": "Di nexşeyê de veke",
+    "share": "Parve bike",
+    "favorite": "Bijare",
+    "favorited": "Bijarîn",
+    "description": "Danasîn",
+    "location": "Cîh",
+    "loading": "Bazirganî tê barkirin...",
+    "notFound": "Bazirganî nehat dîtin",
+    "notFoundHint": "Ew bazirganiya ku hûn lê digerin tune ye yan hatiye rakirin.",
+    "backToSearch": "Vegere lêgerînê",
+    "today": "Îro",
+    "price": "Biha",
+    "noDescription": "Danasîn ne li ber dest e.",
+    "reviews": "Nirxandin",
+    "featured": "Pêşniyarkirî",
+    "discount": "Dakêşandin",
+    "days": {
+      "monday": "Duşem",
+      "tuesday": "Sêşem",
+      "wednesday": "Çarşem",
+      "thursday": "Pêncşem",
+      "friday": "Înî",
+      "saturday": "Şemî",
+      "sunday": "Yekşem"
+    }
+  },
+  "footer": {
+    "description": "Platformek pirziman ji bo dîtina bazirganiyên Kurdî li Almanyayê.",
+    "quickLinks": "Lînkên bilez",
+    "contact": "Têkilî",
+    "rights": "Hemû maf parastî ne."
+  },
+  "policy": {
+    "title": "Polîtîkaya Nepeniyê",
+    "intro": {
+      "title": "Polîtîkaya Nepeniyê",
+      "text": "KurdMap nepeniya we rêz digêre. Ev polîtîka rave dike ka em çawa daneên we yên kesane berhev, bi kar tînin û diparêzin."
+    },
+    "dataCollection": {
+      "title": "Berhevkirina Daneyan",
+      "text": "Em tenê ew daneên berhev dikin ku ji bo xizmetguzariyên me hewce ne: lîstên bazirganiyê, lêgerînên, û agahiyên hesabê ji bo xwediyên bazirganiyên qeydkirî."
+    },
+    "cookies": {
+      "title": "Cookie",
+      "text": "Em cookie yên bingehîn ji bo tercihên ziman û birêvebiriya daniştînê bi kar tînin. Em cookie yên śopêkirinê bi kar naînin û daneên we bi torên reklamê re parve nakin."
+    },
+    "thirdParty": {
+      "title": "Xizmetguzariyên Alî Sisyan",
+      "text": "Em OpenStreetMap ji bo nîśandana nexŞeyê û Google Fonts ji bo tîpografiyê bi kar tînin. Ev xizmetguzarî dibe ku daneên bi kar anîna nezan berhev bikin li gor polîtîkayên xwe."
+    },
+    "rights": {
+      "title": "Mafên We",
+      "text": "Li gor GDPR, mafê we heye ku bigihîjin, ras bikin an daneên xwe yên kesane jê bibin. Hûn dikarin hemû van mafan bi kar bînin bi têkiliya me."
+    },
+    "contact": {
+      "title": "Têkilî",
+      "text": "Ji bo pirsên nepeniyê, ji kerema xwe li info@kurdmap.de bi me re têkiliyê deynin."
+    },
+    "accountDeletion": {
+      "title": "Jêbirina Hesabê",
+      "text": "Hûn dikarin hesabê xwe her dem ji mîhengên Profîlê di sepanê de jê bibin. Dema ku jê bike, hemû daneên we yên kesane tevî nirxandin, bijare û agahiyên têketinê di nav 30 rojan de ji serverên me bi awayekî daîmî têne jêbirin. Ji bo jêbirina bi destan, bi info@kurdmap.de re têkilî deynin."
+    },
+    "lastUpdated": "Dema dawî hate nûkirin"
+  },
+  "common": {
+    "loading": "Tê barkirin...",
+    "error": "Çewtiyekê çêbû",
+    "retry": "Dîsa biceribîne",
+    "back": "Vegere",
+    "viewAll": "Hemûyan bibîne",
+    "readMore": "Bêtir bixwîne",
+    "language": "Ziman"
+  },
+  "howItWorks": {
+    "title": "KurdMap Çawa Dixebite",
+    "subtitle": "Gavên Hasan",
+    "step1Title": "Lêgerîn",
+    "step1Desc": "Navê bazirganiyê, kategoriyê an bajarê binivîse da ku bazirganiyên Kurdî li nêzê xwe bibînin.",
+    "step2Title": "Keşf Bike",
+    "step2Desc": "Di nav lîstên bazirganiyên pejirandî de bi nirxandin, wêne û demên vekirtinê bigere.",
+    "step3Title": "Têkiliyê Deyne",
+    "step3Desc": "Rêsê bi bazirganiyê re têkilî bikin, rênumy bistînin an bi hevalan re parve bikin."
+  },
+  "trustStats": {
+    "title": "Bawerî ji Civata Kurd",
+    "subtitle": "Girdanîna bazirganiyên Kurdî bi civata wan re li seranserê Almanyayê.",
+    "cities": "Bajarên Dagirtî",
+    "categories": "Kategoriyên Bazirganiyê",
+    "languages": "Zimanên Piştgirîkirî",
+    "free": "Belaş"
+  },
+  "newsletter": {
+    "title": "Bi Agahiyê Bimînin",
+    "subtitle": "Agahdariyan der barê bazirganiyên nû û taybetmendiyan bistînin. Bê spam, tenê nûvekirinayên bikarhatin.",
+    "placeholder": "E-nameya xwe",
+    "button": "Abonê bibe",
+    "success": "Spas! Hûn abonê bûn.",
+    "disclaimer": "Em nepeniya we rêz dikêrin. Her dem dikarin berastkirinê rawestînin."
+  },
+  "appCta": {
+    "badge": "Nêzîk e",
+    "title": "KurdMap di bêrîka we de",
+    "subtitle": "Nêzîk e ku wek appê mobilê peyda bibe. Bazirganiyên Kurdî di rêyê de bi lêgerina li gor cêh û agahdariyan bibînin.",
+    "downloadOn": "Daxistina ji",
+    "getItOn": "Bistînin li",
+    "comingSoon": "Nêzîk e"
+  },
+  "about": {
+    "badge": "Derbarê me",
+    "title": "Derbarê KurdMap",
+    "subtitle": "Platformek pirzimanî ku bazirganiyên kurdî li Almanyayê xuya dike.",
+    "mission": {
+      "title": "Armanca me",
+      "text": "KurdMap civaka kurdî bi bazirganiyên herêmî li seranserê Almanyayê girêdide. Em platformek belaş û pirzimanî pêşkêş dikin ku xwaringeh, berber, otel û karûbarên kurdî bi hêsanî werin dîtin."
+    },
+    "features": {
+      "multilingual": {
+        "title": "4 Ziman",
+        "text": "Bi Kurdî (Soranî), Kurdî (Kurmancî), Almanî û Îngilîzî peyda dibe."
+      },
+      "map": {
+        "title": "Lêgerîna nexşeyê",
+        "text": "Bazirganiyên nêzîkê xwe bi nexşeya înteraktîf û lêgerîna cîhê bibînin."
+      },
+      "mobile": {
+        "title": "Ji bo mobîlê guncaw",
+        "text": "Ji bo hemû amûran baştir kiriye — KurdMap li ser têlefona xwe bikar bînin."
+      },
+      "verified": {
+        "title": "Tomarên pejirandî",
+        "text": "Tomarên bazirganiyê yên kontrol kirine bi agahdariyên nûvekirî û demên vekirinê."
+      }
+    },
+    "openSource": {
+      "title": "Projeya civakê",
+      "text": "KurdMap projeyek civakê ye ku xuyabûna bazirganiyên kurdî li Almanyayê xurt dike."
+    }
+  },
+  "contact": {
+    "badge": "Têkilî",
+    "title": "Bi me re têkilî daynin",
+    "subtitle": "Pirsên we hene an hûn dixwazin bazirganiya xwe tomar bikin? Em amade ne ji bo alîkariyê.",
+    "email": {
+      "title": "E-peyam",
+      "text": "info@kurdmap.de"
+    },
+    "location": {
+      "title": "Cih",
+      "text": "Li seranserê Almanyayê"
+    },
+    "response": {
+      "title": "Dema bersivê",
+      "text": "Em bi gelemperî di 24 saetan de bersiv didin."
+    },
+    "form": {
+      "name": "Navê we",
+      "email": "Navnîşana e-peyamê",
+      "message": "Peyama we",
+      "send": "Peyamê bişînin",
+      "success": "Peyam hat şandin!",
+      "successText": "Spas ji bo peyama we. Em ê di demek nêzîk de bi we re têkilî daynin.",
+      "sending": "Tê şandin...",
+      "error": "Di dema şandina peyama te de çewtîyek derket. Ji kerema xwe dîsa biceribîne."
+    }
+  },
+  "categories": {
+    "badge": "Beş",
+    "title": "Hemû beş",
+    "subtitle": "Bazirganiyên kurdî li gorî beşan bigerin — ji xwaringehan heya karûbaran.",
+    "explore": "Bazirganiyên bigerin →",
+    "empty": "Hîn ti beş tune ne."
+  },
+  "faq": {
+    "title": "Pirsên Hêrî Gelek Pirsyarî",
+    "q1": {
+      "q": "KurdMap çi ye?",
+      "a": "KurdMap platformek pirziman a belaş e ji bo dîtina bazirganiyên Kurdî li seranserê Almanyayê. Kurdî (Soranî), Kurdî (Kurmanjî), Almanî û Îngilîzî piştgirî dike."
+    },
+    "q2": {
+      "q": "Çawa dikarim bazirganiya xwe lê zêde bikim?",
+      "a": "Niha hûn dikarin bazirganiya xwe lê zêde bikin bi têkiliya me li info@kurdmap.de. Qeydkirina xweser nêzîk e ku peyda bibe."
+    },
+    "q3": {
+      "q": "Ma KurdMap belaş e?",
+      "a": "Belê! KurdMap bi tevahiya belaş e hem ji bo bikarhinerên ku li bazirganiyê digerin û hem ji bo xwediyên bazirganiyê."
+    },
+    "q4": {
+      "q": "Kîjan bajar dagirtî ne?",
+      "a": "KurdMap bazirganiyên Kurdî li seranserê Almanyayê dagir dike. Em berdewam lîstên xwe berfireh dikin."
+    },
+    "q5": {
+      "q": "Çawa ez agahiyê çewt rapôr bikim?",
+      "a": "Eger hûn agahdariya çewt der barê bazirganiyê bibînin, ji kerema xwe li info@kurdmap.de bi me re têkiliyê deynin û emê zû rast bikin."
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Li kar, kategoriyan, bajaran bigerin...",
+    "hint": "Esc ji bo girtinê",
+    "noResults": "Tu encam nehatin dîtin",
+    "businesses": "Kar",
+    "categories": "Kategorî",
+    "cities": "Bajar",
+    "recentSearches": "Lêgerînên dawî",
+    "clearRecent": "Paqij bike",
+    "typeToSearch": "Ji bo lêgerînê binivîse..."
+  },
+  "directions": {
+    "title": "Rêwerzan",
+    "getDirections": "Rê hesab bike",
+    "yourLocation": "Cihê te",
+    "destination": "Armanc",
+    "distance": "Dûrî",
+    "duration": "Dem",
+    "steps": "Gavên rê",
+    "close": "Rê bigire",
+    "calculating": "Rê tê hesibandin...",
+    "noRoute": "Rê nehat dîtin",
+    "allowLocation": "Ji bo rêwerzanê destûra cihê bide",
+    "km": "km",
+    "min": "deq",
+    "arrived": "Tu gihaştî"
+  },
+  "notification": {
+    "routeReady": "Rê amade ye",
+    "routeUpdated": "Rê hate nûkirin",
+    "businessNearby": "Kar li nêzîk e",
+    "locationGranted": "Destûra cihê hat dayîn",
+    "copied": "Li clipboard hat kopîkirin",
+    "favoriteAdded": "Li bijareyan hat zêdekirin",
+    "favoriteRemoved": "Ji bijareyan hat derxistin"
+  },
+  "aria": {
+    "close": "Bigire",
+    "closeMenu": "Menuyê bigire",
+    "previousImage": "Wêneya berê",
+    "nextImage": "Wêneya pêş",
+    "previousPage": "Rûpela berê",
+    "nextPage": "Rûpela pêş",
+    "backToTop": "Vegere jor",
+    "searchInput": "Lêgerîn",
+    "emailInput": "Navnîşana e-nameyê",
+    "pagination": "Rêbernameya rûpelan"
+  }
+}

@@ -1,0 +1,311 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "search": "Suche",
+    "categories": "Kategorien",
+    "about": "Über uns",
+    "login": "Anmelden"
+  },
+  "home": {
+    "title": "KurdMap",
+    "subtitle": "Kurdische Geschäfte in ganz Deutschland",
+    "heroText": "Finden Sie kurdische Restaurants, Friseure, Hotels und Dienstleistungen in Ihrer Nähe.",
+    "searchPlaceholder": "Geschäftsname oder Kategorie eingeben...",
+    "searchButton": "Suchen",
+    "nearMe": "In meiner Nähe",
+    "featuredTitle": "Verifizierte Geschäfte",
+    "discountedTitle": "Sonderangebote",
+    "categoriesTitle": "Kategorien",
+    "selectCity": "Stadt auswählen",
+    "exploreCities": "Städte entdecken",
+    "viewAllBusinesses": "Alle Geschäfte anzeigen"
+  },
+  "business": {
+    "verified": "Verifiziert",
+    "openNow": "Jetzt geöffnet",
+    "closed": "Geschlossen",
+    "menu": "Speisekarte",
+    "services": "Dienstleistungen",
+    "openingHours": "Öffnungszeiten",
+    "contact": "Kontakt",
+    "address": "Adresse",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "website": "Webseite",
+    "shareOnWhatsApp": "Auf WhatsApp teilen",
+    "shareOnTelegram": "Auf Telegram teilen",
+    "copyLink": "Link kopieren",
+    "linkCopied": "Link kopiert!",
+    "openInMaps": "In Karten öffnen",
+    "share": "Teilen",
+    "favorite": "Merken",
+    "favorited": "Gemerkt",
+    "description": "Beschreibung",
+    "location": "Standort",
+    "loading": "Geschäft wird geladen...",
+    "notFound": "Geschäft nicht gefunden",
+    "notFoundHint": "Das gesuchte Geschäft existiert nicht oder wurde entfernt.",
+    "backToSearch": "Zurück zur Suche",
+    "today": "Heute",
+    "price": "Preis",
+    "noDescription": "Keine Beschreibung verfügbar.",
+    "reviews": "Bewertungen",
+    "featured": "Empfohlen",
+    "discount": "Rabatt",
+    "days": {
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
+      "sunday": "Sonntag"
+    }
+  },
+  "footer": {
+    "description": "Eine mehrsprachige Plattform zum Entdecken kurdischer Geschäfte in Deutschland.",
+    "quickLinks": "Schnelllinks",
+    "contact": "Kontakt",
+    "rights": "Alle Rechte vorbehalten."
+  },
+  "policy": {
+    "title": "Datenschutzerklärung",
+    "intro": {
+      "title": "Datenschutzerklärung",
+      "text": "KurdMap respektiert Ihre Privatsphäre. Diese Erklärung erläutert, wie wir Ihre personenbezogenen Daten erheben, verwenden und schützen, wenn Sie unsere Plattform nutzen."
+    },
+    "dataCollection": {
+      "title": "Datenerhebung",
+      "text": "Wir erheben nur die für unsere Dienste notwendigen Daten: Geschäftseinträge, Suchanfragen und Kontoinformationen für registrierte Geschäftsinhaber. Unnötige personenbezogene Daten werden nicht erhoben."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "text": "Wir verwenden essenzielle Cookies für Spracheinstellungen und Sitzungsverwaltung. Wir verwenden keine Tracking-Cookies und geben Ihre Daten nicht an Werbenetzwerke weiter."
+    },
+    "thirdParty": {
+      "title": "Drittanbieter-Dienste",
+      "text": "Wir nutzen OpenStreetMap für die Kartenanzeige und Google Fonts für die Typografie. Diese Dienste können anonyme Nutzungsdaten gemäß ihren eigenen Datenschutzrichtlinien erheben."
+    },
+    "rights": {
+      "title": "Ihre Rechte",
+      "text": "Gemäß der DSGVO haben Sie das Recht auf Zugang, Berichtigung oder Löschung Ihrer personenbezogenen Daten. Sie können auch Datenübertragbarkeit anfordern oder der Verarbeitung widersprechen. Kontaktieren Sie uns, um diese Rechte auszuüben."
+    },
+    "contact": {
+      "title": "Kontakt",
+      "text": "Für datenschutzbezogene Fragen kontaktieren Sie uns bitte unter info@kurdmap.de."
+    },
+    "accountDeletion": {
+      "title": "Kontolöschung",
+      "text": "Sie können Ihr Konto jederzeit in den Profileinstellungen der App löschen. Bei der Löschung werden alle Ihre persönlichen Daten einschließlich Bewertungen, Favoriten und Anmeldedaten innerhalb von 30 Tagen dauerhaft von unseren Servern entfernt. Für manuelle Löschung kontaktieren Sie info@kurdmap.de."
+    },
+    "lastUpdated": "Zuletzt aktualisiert"
+  },
+  "common": {
+    "loading": "Wird geladen...",
+    "error": "Ein Fehler ist aufgetreten",
+    "retry": "Erneut versuchen",
+    "back": "Zurück",
+    "viewAll": "Alle anzeigen",
+    "readMore": "Mehr lesen",
+    "language": "Sprache"
+  },
+  "howItWorks": {
+    "title": "So funktioniert KurdMap",
+    "subtitle": "Einfache Schritte",
+    "step1Title": "Suchen",
+    "step1Desc": "Geben Sie einen Geschäftsnamen, eine Kategorie oder Stadt ein, um kurdische Geschäfte in Ihrer Nähe zu finden.",
+    "step2Title": "Entdecken",
+    "step2Desc": "Stöbern Sie durch verifizierte Geschäftseinträge mit Bewertungen, Fotos und Öffnungszeiten.",
+    "step3Title": "Verbinden",
+    "step3Desc": "Kontaktieren Sie Geschäfte direkt, erhalten Sie Wegbeschreibungen oder teilen Sie mit Freunden."
+  },
+  "trustStats": {
+    "title": "Vertraut von der kurdischen Gemeinschaft",
+    "subtitle": "Wir verbinden kurdische Geschäfte mit ihrer Gemeinschaft in ganz Deutschland.",
+    "cities": "Städte abgedeckt",
+    "categories": "Geschäftskategorien",
+    "languages": "Unterstützte Sprachen",
+    "free": "Kostenlos"
+  },
+  "newsletter": {
+    "title": "Bleiben Sie informiert",
+    "subtitle": "Erhalten Sie Benachrichtigungen über neue Geschäfte und Funktionen. Kein Spam, nur nützliche Updates.",
+    "placeholder": "Ihre E-Mail-Adresse",
+    "button": "Abonnieren",
+    "success": "Danke! Sie sind abonniert.",
+    "disclaimer": "Wir respektieren Ihre Privatsphäre. Jederzeit abmeldbar."
+  },
+  "appCta": {
+    "badge": "Bald verfügbar",
+    "title": "KurdMap in Ihrer Tasche",
+    "subtitle": "Bald als mobile App verfügbar. Finden Sie kurdische Geschäfte unterwegs mit standortbasierter Suche und Benachrichtigungen.",
+    "downloadOn": "Laden im",
+    "getItOn": "Jetzt bei",
+    "comingSoon": "Bald verfügbar"
+  },
+  "about": {
+    "badge": "Über uns",
+    "title": "Über KurdMap",
+    "subtitle": "Eine mehrsprachige Plattform, die kurdische Geschäfte in Deutschland sichtbar macht.",
+    "mission": {
+      "title": "Unsere Mission",
+      "text": "KurdMap verbindet die kurdische Gemeinschaft mit lokalen Geschäften in ganz Deutschland. Wir bieten eine kostenlose, mehrsprachige Plattform, auf der kurdische Restaurants, Friseure, Hotels und Dienstleistungen leicht gefunden werden können."
+    },
+    "features": {
+      "multilingual": {
+        "title": "4 Sprachen",
+        "text": "Verfügbar in Kurdisch (Sorani), Kurdisch (Kurmanji), Deutsch und Englisch."
+      },
+      "map": {
+        "title": "Kartenbasierte Suche",
+        "text": "Finden Sie Geschäfte in Ihrer Nähe mit interaktiver Kartenansicht und Standortsuche."
+      },
+      "mobile": {
+        "title": "Mobilfreundlich",
+        "text": "Optimiert für alle Geräte — nutzen Sie KurdMap unterwegs auf Ihrem Smartphone."
+      },
+      "verified": {
+        "title": "Verifizierte Einträge",
+        "text": "Geprüfte Geschäftseinträge mit aktuellen Informationen und Öffnungszeiten."
+      }
+    },
+    "openSource": {
+      "title": "Gemeinschaftsprojekt",
+      "text": "KurdMap ist ein Gemeinschaftsprojekt, das die Sichtbarkeit kurdischer Geschäfte in Deutschland stärkt."
+    }
+  },
+  "contact": {
+    "badge": "Kontakt",
+    "title": "Kontaktieren Sie uns",
+    "subtitle": "Haben Sie Fragen oder möchten Sie Ihr Geschäft eintragen? Wir helfen Ihnen gerne.",
+    "email": {
+      "title": "E-Mail",
+      "text": "info@kurdmap.de"
+    },
+    "location": {
+      "title": "Standort",
+      "text": "Bundesweit, Deutschland"
+    },
+    "response": {
+      "title": "Antwortzeit",
+      "text": "Wir antworten in der Regel innerhalb von 24 Stunden."
+    },
+    "form": {
+      "name": "Ihr Name",
+      "email": "E-Mail-Adresse",
+      "message": "Ihre Nachricht",
+      "send": "Nachricht senden",
+      "success": "Nachricht gesendet!",
+      "successText": "Vielen Dank für Ihre Nachricht. Wir melden uns so bald wie möglich.",
+      "sending": "Wird gesendet...",
+      "error": "Beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+    }
+  },
+  "categories": {
+    "badge": "Kategorien",
+    "title": "Alle Kategorien",
+    "subtitle": "Entdecken Sie kurdische Geschäfte nach Kategorie — von Restaurants bis zu Dienstleistungen.",
+    "explore": "Geschäfte entdecken →",
+    "empty": "Noch keine Kategorien vorhanden."
+  },
+  "faq": {
+    "title": "Häufig gestellte Fragen",
+    "q1": {
+      "q": "Was ist KurdMap?",
+      "a": "KurdMap ist eine kostenlose mehrsprachige Plattform zum Entdecken kurdischer Geschäfte in ganz Deutschland. Sie unterstützt Kurdisch (Sorani), Kurdisch (Kurmanji), Deutsch und Englisch."
+    },
+    "q2": {
+      "q": "Wie kann ich mein Geschäft hinzufügen?",
+      "a": "Derzeit können Geschäfte hinzugefügt werden, indem Sie uns unter info@kurdmap.de kontaktieren. Eine Selbstregistrierung wird bald verfügbar sein."
+    },
+    "q3": {
+      "q": "Ist KurdMap kostenlos?",
+      "a": "Ja! KurdMap ist völlig kostenlos – sowohl für Nutzer, die nach Geschäften suchen, als auch für Geschäftsinhaber."
+    },
+    "q4": {
+      "q": "Welche Städte sind abgedeckt?",
+      "a": "KurdMap deckt kurdische Geschäfte in ganz Deutschland ab. Wir erweitern unsere Einträge kontinuierlich."
+    },
+    "q5": {
+      "q": "Wie melde ich falsche Informationen?",
+      "a": "Wenn Sie falsche Informationen über ein Geschäft finden, kontaktieren Sie uns bitte unter info@kurdmap.de und wir korrigieren es umgehend."
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Geschäfte, Kategorien, Städte suchen...",
+    "hint": "Esc zum Schließen",
+    "noResults": "Keine Ergebnisse",
+    "businesses": "Geschäfte",
+    "categories": "Kategorien",
+    "cities": "Städte",
+    "recentSearches": "Letzte Suchen",
+    "clearRecent": "Löschen",
+    "typeToSearch": "Suchbegriff eingeben..."
+  },
+  "directions": {
+    "title": "Wegbeschreibung",
+    "getDirections": "Route berechnen",
+    "yourLocation": "Dein Standort",
+    "destination": "Ziel",
+    "distance": "Entfernung",
+    "duration": "Dauer",
+    "steps": "Routenschritte",
+    "close": "Route schließen",
+    "calculating": "Route wird berechnet...",
+    "noRoute": "Route konnte nicht berechnet werden",
+    "allowLocation": "Standortzugriff für Wegbeschreibung erlauben",
+    "km": "km",
+    "min": "Min.",
+    "arrived": "Sie sind angekommen"
+  },
+  "notification": {
+    "routeReady": "Route berechnet",
+    "routeUpdated": "Route aktualisiert",
+    "businessNearby": "Geschäft in der Nähe",
+    "locationGranted": "Standortzugriff erteilt",
+    "copied": "In die Zwischenablage kopiert",
+    "favoriteAdded": "Zu Favoriten hinzugefügt",
+    "favoriteRemoved": "Aus Favoriten entfernt"
+  },
+  "search": {
+    "title": "Suchergebnisse",
+    "noResults": "Keine Ergebnisse gefunden",
+    "noResultsHint": "Versuche andere Filter oder einen anderen Suchbegriff.",
+    "filters": "Filter",
+    "sortBy": "Sortieren",
+    "relevance": "Relevanz",
+    "newest": "Neueste",
+    "name": "Name",
+    "verifiedFirst": "Verifizierte zuerst",
+    "placeholder": "Geschäftsname oder Kategorie eingeben...",
+    "allCategories": "Alle Kategorien",
+    "allCities": "Alle Städte",
+    "resultsCount": "{{count}} Ergebnisse gefunden",
+    "showMap": "Karte anzeigen",
+    "hideMap": "Karte ausblenden",
+    "nearMe": "In meiner Nähe",
+    "nearestFirst": "Nächste zuerst",
+    "locationDenied": "Standortzugriff verweigert. Bitte in Browsereinstellungen erlauben.",
+    "page": "Seite",
+    "of": "von",
+    "featuredFirst": "Empfohlen zuerst",
+    "discountedFirst": "Rabatt zuerst",
+    "splitView": "Geteilte Ansicht",
+    "listView": "Listenansicht",
+    "mapView": "Kartenansicht",
+    "activeFilters": "Aktive Filter",
+    "clearAll": "Alle löschen"
+  },
+  "aria": {
+    "close": "Schließen",
+    "closeMenu": "Menü schließen",
+    "previousImage": "Vorheriges Bild",
+    "nextImage": "Nächstes Bild",
+    "previousPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
+    "backToTop": "Nach oben",
+    "searchInput": "Suche",
+    "emailInput": "E-Mail-Adresse",
+    "pagination": "Seitennavigation"
+  }
+}

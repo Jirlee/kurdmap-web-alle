@@ -1,0 +1,160 @@
+# KurdMap — Production Overlay
+# Usage: podman-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Requires .env file with all secrets set. See .env.example
+
+services:
+  postgres:
+    ports: !override []
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    networks:
+      - backend-net
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: '2.0'
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  redis:
+    ports: !override []
+    networks:
+      - backend-net
+    read_only: true
+    tmpfs:
+      - /data:size=128m
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+          cpus: '0.5'
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+  api:
+    image: ghcr.io/${GHCR_USERNAME}/kurdmap-api:latest
+    ports: !override
+      - "127.0.0.1:8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      ConnectionStrings__Redis: "redis:6379,password=${REDIS_PASSWORD}"
+      Jwt__Secret: ${JWT_SECRET}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      Cors__AllowedOrigins__0: ${FRONTEND_URL}
+      Cors__AllowedOrigins__1: ${ADMIN_URL}
+      AllowedHosts: "${API_DOMAIN:-api.kurdmap.de}"
+      Serilog__MinimumLevel__Default: "Warning"
+    networks:
+      - frontend-net
+      - backend-net
+    read_only: true
+    tmpfs:
+      - /tmp:size=100m
+      - /app/Logs:size=50m
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+          cpus: '2.0'
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+  admin:
+    image: ghcr.io/${GHCR_USERNAME}/kurdmap-admin:latest
+    ports: !override
+      - "127.0.0.1:8081:8081"
+    networks:
+      - frontend-net
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+          cpus: '0.5'
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
+
+  frontend:
+    image: ghcr.io/${GHCR_USERNAME}/kurdmap-frontend:latest
+    ports: !override
+      - "127.0.0.1:4000:4000"
+    networks:
+      - frontend-net
+    read_only: true
+    tmpfs:
+      - /tmp:size=100m
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+          cpus: '1.0'
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ─── NOTE: Caddy runs on the HOST (not in Docker) ────────
+  # The Hetzner server hosts multiple websites sharing ports 80/443.
+  # Caddy is installed system-wide: sudo dnf install caddy
+  # Import KurdMap config in /etc/caddy/Caddyfile:
+  #   import /opt/kurdmap/docker/Caddyfile
+  # After changes: sudo systemctl reload caddy
+
+networks:
+  frontend-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
+    internal: true
+
+volumes: {}

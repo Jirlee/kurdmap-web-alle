@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1284 2778" width="1284" height="2778">
+  <defs>
+    <!-- Background: deep emerald gradient -->
+    <linearGradient id="splashBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B"/>
+      <stop offset="50%" stop-color="#065F46"/>
+      <stop offset="100%" stop-color="#064E3B"/>
+    </linearGradient>
+
+    <!-- Sun glow -->
+    <radialGradient id="splashSunGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.25"/>
+      <stop offset="50%" stop-color="#F59E0B" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Sun body gradient -->
+    <radialGradient id="splashSunBody" cx="45%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="40%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </radialGradient>
+
+    <!-- Pin gradient -->
+    <linearGradient id="splashPinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="50%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <filter id="splashShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="24" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Full background -->
+  <rect width="1284" height="2778" fill="url(#splashBg)"/>
+
+  <!-- Subtle map grid -->
+  <g opacity="0.03" stroke="#FFFFFF" stroke-width="1">
+    <line x1="0" y1="460" x2="1284" y2="460"/>
+    <line x1="0" y1="920" x2="1284" y2="920"/>
+    <line x1="0" y1="1389" x2="1284" y2="1389"/>
+    <line x1="0" y1="1850" x2="1284" y2="1850"/>
+    <line x1="0" y1="2310" x2="1284" y2="2310"/>
+    <line x1="214" y1="0" x2="214" y2="2778"/>
+    <line x1="428" y1="0" x2="428" y2="2778"/>
+    <line x1="642" y1="0" x2="642" y2="2778"/>
+    <line x1="856" y1="0" x2="856" y2="2778"/>
+    <line x1="1070" y1="0" x2="1070" y2="2778"/>
+  </g>
+
+  <!-- Large sun glow centered -->
+  <circle cx="642" cy="1180" r="480" fill="url(#splashSunGlow)"/>
+
+  <!-- Background 21 rays -->
+  <g transform="translate(642, 1180)" opacity="0.12">
+    <g fill="#FBBF24">
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(0)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(17.14)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(34.28)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(51.43)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(68.57)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(85.71)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(102.86)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(120)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(137.14)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(154.28)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(171.43)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(188.57)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(205.71)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(222.86)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(240)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(257.14)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(274.28)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(291.43)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(308.57)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(325.71)"/>
+      <polygon points="0,-420 12,-240 -12,-240" transform="rotate(342.86)"/>
+    </g>
+  </g>
+
+  <!-- Decorative rings -->
+  <circle cx="642" cy="1180" r="260" fill="none" stroke="#FBBF24" stroke-width="2" opacity="0.1"/>
+  <circle cx="642" cy="1180" r="310" fill="none" stroke="#FBBF24" stroke-width="1.5" opacity="0.06"/>
+
+  <!-- Main location pin -->
+  <g filter="url(#splashShadow)">
+    <path d="M642 870 C500 870 388 982 388 1124 C388 1300 642 1560 642 1560 C642 1560 896 1300 896 1124 C896 982 784 870 642 870 Z" 
+          fill="url(#splashPinGrad)"/>
+    <path d="M642 890 C512 890 408 994 408 1124 C408 1200 460 1300 520 1400" 
+          fill="none" stroke="#6EE7B7" stroke-width="10" stroke-linecap="round" opacity="0.25"/>
+  </g>
+
+  <!-- Golden sun inside pin -->
+  <circle cx="642" cy="1128" r="165" fill="url(#splashSunBody)" opacity="0.95"/>
+  <circle cx="642" cy="1128" r="130" fill="none" stroke="#FDE68A" stroke-width="2.5" opacity="0.4"/>
+
+  <!-- 21 sun rays inside pin -->
+  <g transform="translate(642, 1128)" opacity="0.5">
+    <g fill="#D97706">
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(0)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(17.14)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(34.28)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(51.43)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(68.57)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(85.71)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(102.86)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(120)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(137.14)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(154.28)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(171.43)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(188.57)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(205.71)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(222.86)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(240)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(257.14)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(274.28)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(291.43)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(308.57)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(325.71)"/>
+      <polygon points="0,-158 6,-132 -6,-132" transform="rotate(342.86)"/>
+    </g>
+  </g>
+
+  <!-- K letter -->
+  <g transform="translate(642, 1128)">
+    <g fill="none" stroke="#064E3B" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="-32" y1="-58" x2="-32" y2="58"/>
+      <line x1="-32" y1="0" x2="32" y2="-58"/>
+      <line x1="-32" y1="0" x2="32" y2="58"/>
+    </g>
+  </g>
+
+  <!-- App name -->
+  <text x="642" y="1720" text-anchor="middle" 
+        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" 
+        font-weight="700" font-size="120" fill="#FFFFFF" letter-spacing="8" opacity="0.95">
+    Kurd<tspan fill="#FBBF24">Map</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="642" y="1800" text-anchor="middle" 
+        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" 
+        font-weight="400" font-size="42" fill="#A7F3D0" letter-spacing="6" opacity="0.5">
+    DISCOVER LOCAL BUSINESSES
+  </text>
+
+  <!-- Very subtle tri-color accent at bottom -->
+  <g opacity="0.1">
+    <rect x="442" y="2620" width="133" height="5" rx="2.5" fill="#374151"/>
+    <rect x="575" y="2620" width="133" height="5" rx="2.5" fill="#DC2626"/>
+    <rect x="708" y="2620" width="133" height="5" rx="2.5" fill="#FBBF24"/>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+<div class="flex flex-col min-h-screen">
+  <!-- Scroll progress bar (Idea 3) -->
+  <div class="scroll-progress" [style.width.%]="scrollProgress()" aria-hidden="true"></div>
+
+  <app-header />
+  <main id="main-content" class="flex-1">
+    <router-outlet />
+  </main>
+  <app-footer />
+
+  <!-- Bottom navigation for mobile -->
+  <app-bottom-nav />
+
+  <!-- Modal overlay for search and business detail -->
+  <app-modal-overlay />
+
+  <!-- Ad splash on first visit -->
+  <app-ad-splash />
+
+  <!-- Command palette (Ctrl+K) -->
+  <app-command-palette />
+
+  <!-- Toast notifications -->
+  <app-toast />
+
+  <!-- Back-to-top FAB (Idea 7) -->
+  @if (showBackToTop()) {
+    <button
+      (click)="scrollToTop()"
+      class="fixed bottom-6 end-6 z-50 size-12 rounded-full bg-primary-600 text-white shadow-elevated hover:bg-primary-700 hover:shadow-glow active:scale-95 transition-all duration-300 flex items-center justify-center animate-scale-in focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 outline-none print:hidden"
+      [attr.aria-label]="'aria.backToTop' | translate"
+    >
+      <svg class="size-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/>
+      </svg>
+    </button>
+  }
+</div>

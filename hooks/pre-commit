@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# KurdMap — Pre-commit hook for secret scanning
+# Install: cp hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+# Or: ln -sf ../../hooks/pre-commit .git/hooks/pre-commit
+set -euo pipefail
+
+# ── Secret patterns to reject ──────────────────────────────
+PATTERNS=(
+  'password\s*[:=]\s*["\x27][^"\x27]{4,}'
+  'POSTGRES_PASSWORD\s*[:=]\s*["\x27][^$\{"\x27]'
+  'JWT_SECRET\s*[:=]\s*["\x27][^$\{"\x27]'
+  'PRIVATE.KEY'
+  'BEGIN RSA PRIVATE KEY'
+  'BEGIN OPENSSH PRIVATE KEY'
+  'sk-[a-zA-Z0-9]{20,}'
+  'ghp_[a-zA-Z0-9]{36}'
+  'AKIA[0-9A-Z]{16}'
+)
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+if [[ -z "$STAGED" ]]; then
+  exit 0
+fi
+
+FOUND=0
+for pattern in "${PATTERNS[@]}"; do
+  MATCHES=$(echo "$STAGED" | xargs grep -lPi "$pattern" 2>/dev/null || true)
+  if [[ -n "$MATCHES" ]]; then
+    for file in $MATCHES; do
+      # Skip documentation, examples, and this hook itself
+      if [[ "$file" == Docs/* || "$file" == *.md || "$file" == .env.example || "$file" == hooks/* ]]; then
+        continue
+      fi
+      echo "🔴 SECRET DETECTED in: $file (pattern: $pattern)"
+      FOUND=1
+    done
+  fi
+done
+
+if [[ "$FOUND" -eq 1 ]]; then
+  echo ""
+  echo "❌ Commit blocked — remove secrets before committing."
+  echo "   Use environment variables or .env (gitignored) instead."
+  echo "   To bypass (emergency only): git commit --no-verify"
+  exit 1
+fi
+
+exit 0

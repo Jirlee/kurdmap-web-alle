@@ -1,0 +1,58 @@
+# ══════════════════════════════════════════════════
+#  KurdMap — .gitignore
+# ══════════════════════════════════════════════════
+
+# ── Environment variables ──
+.env
+.env.*
+!.env.example
+
+# ── .NET ──
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.DotSettings.user
+out/
+
+# ── Node.js ──
+node_modules/
+
+# ── Angular ──
+.angular/
+dist/
+
+# ── IDE ──
+.idea/
+.vs/
+*.swp
+*.swo
+*.code-workspace
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+
+# ── Testing ──
+test-results/
+playwright-report/
+coverage/
+
+# ── Misc ──
+*.bak
+*.ipynb
+*.log
+
+# ── Generic reference docs (study notes, not project-specific) ──
+Docs/Angular/
+Docs/Asp.net.core-10/
+Docs/CQRS/
+Docs/Podman/
+Docs/Tailwind/
+Docs/UI-UX/
+Docs/Security/
+Docs/Security-v1/
+
+# ── Old / deprecated config ──
+docker/nginx-proxy.conf

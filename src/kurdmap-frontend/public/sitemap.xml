@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://kurdmap.de/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="ku" href="https://kurdmap.de/?lang=ku" />
+    <xhtml:link rel="alternate" hreflang="kmr" href="https://kurdmap.de/?lang=kmr" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://kurdmap.de/?lang=de" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://kurdmap.de/?lang=en" />
+  </url>
+
+  <!-- Categories -->
+  <url>
+    <loc>https://kurdmap.de/categories</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- About -->
+  <url>
+    <loc>https://kurdmap.de/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://kurdmap.de/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Privacy / Policy -->
+  <url>
+    <loc>https://kurdmap.de/policy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

@@ -1,0 +1,106 @@
+# KurdMap — Docker Compose (Podman-compatible)
+# Usage:
+#   podman-compose up -d          — Start all services
+#   podman-compose up -d --build  — Rebuild and start
+#   podman-compose down           — Stop all services
+#   podman-compose logs -f api    — Follow API logs
+
+services:
+  # ─── PostgreSQL ───────────────────────────────────────────
+  postgres:
+    image: docker.io/library/postgres:17-alpine
+    container_name: kurdmap-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-kurdmap_dev}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-kurdmap_dev}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ─── Redis ────────────────────────────────────────────────
+  redis:
+    image: docker.io/library/redis:7-alpine
+    container_name: kurdmap-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:-changeme}
+      --rename-command FLUSHDB ""
+      --rename-command FLUSHALL ""
+      --rename-command DEBUG ""
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-changeme}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── KurdMap API (.NET 10) ────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    container_name: kurdmap-api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8080}:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT:-Production}
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-kurdmap_dev};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?required}"
+      ConnectionStrings__Redis: "redis:6379,password=${REDIS_PASSWORD:-changeme}"
+      Jwt__Secret: ${JWT_SECRET:?JWT_SECRET is required - use openssl rand -base64 48}
+      Jwt__Issuer: ${JWT_ISSUER:-KurdMap}
+      Jwt__Audience: ${JWT_AUDIENCE:-KurdMapClient}
+      Cors__AllowedOrigins__0: ${FRONTEND_URL:-http://localhost:4000}
+      Cors__AllowedOrigins__1: ${ADMIN_URL:-http://localhost:8081}
+      Cors__AllowedOrigins__2: "http://localhost:4200"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # ─── KurdMap Admin Panel (Angular 21 SPA + Nginx) ──────────
+  admin:
+    build:
+      context: .
+      dockerfile: docker/admin.Dockerfile
+    container_name: kurdmap-admin
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    depends_on:
+      - api
+
+  # ─── KurdMap Frontend (Angular SSR) ───────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    container_name: kurdmap-frontend
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      API_URL: "http://api:8080"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+  redisdata:

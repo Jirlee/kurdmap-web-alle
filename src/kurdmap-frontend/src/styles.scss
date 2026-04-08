@@ -1,0 +1,334 @@
+@import "tailwindcss";
+
+/* ===== KurdMap Design System — Modern 2026 ===== */
+
+/* --- Theme Tokens --- */
+@theme {
+  /* Brand Colors — warm emerald with depth */
+  --color-primary: oklch(0.65 0.19 160);
+  --color-primary-50: oklch(0.97 0.02 160);
+  --color-primary-100: oklch(0.93 0.05 160);
+  --color-primary-200: oklch(0.87 0.1 160);
+  --color-primary-300: oklch(0.78 0.14 160);
+  --color-primary-400: oklch(0.72 0.17 160);
+  --color-primary-500: oklch(0.65 0.19 160);
+  --color-primary-600: oklch(0.55 0.17 160);
+  --color-primary-700: oklch(0.47 0.15 160);
+  --color-primary-800: oklch(0.39 0.12 160);
+  --color-primary-900: oklch(0.32 0.09 160);
+  --color-primary-950: oklch(0.22 0.06 160);
+
+  /* Accent — warm gold for highlights */
+  --color-accent: oklch(0.82 0.16 80);
+  --color-accent-50: oklch(0.97 0.03 80);
+  --color-accent-100: oklch(0.94 0.06 80);
+  --color-accent-200: oklch(0.89 0.1 80);
+  --color-accent-400: oklch(0.82 0.16 80);
+  --color-accent-500: oklch(0.73 0.17 80);
+  --color-accent-600: oklch(0.63 0.16 80);
+
+  /* Surface Colors for layered glass look */
+  --color-surface: oklch(0.99 0.002 250);
+  --color-surface-dim: oklch(0.96 0.005 250);
+  --color-surface-bright: oklch(1 0 0);
+
+  /* Fonts */
+  --font-sans: 'DM Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'DM Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-rtl: 'Vazirmatn', 'NotoSansArabic', 'Tahoma', 'Arial', sans-serif;
+
+  /* Radius — modern rounded with pill option */
+  --radius-card: 1rem;
+  --radius-button: 0.75rem;
+  --radius-pill: 9999px;
+  --radius-input: 0.75rem;
+
+  /* Shadows — soft layered for depth */
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.03), 0 2px 6px -1px rgb(0 0 0 / 0.05);
+  --shadow-card-hover: 0 8px 24px -4px rgb(0 0 0 / 0.08), 0 4px 8px -4px rgb(0 0 0 / 0.04);
+  --shadow-elevated: 0 16px 40px -8px rgb(0 0 0 / 0.1), 0 8px 16px -8px rgb(0 0 0 / 0.06);
+  --shadow-glow: 0 0 20px -4px oklch(0.65 0.19 160 / 0.25);
+  --shadow-inner-glow: inset 0 1px 0 0 rgb(255 255 255 / 0.1);
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.5s ease-out both;
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  --animate-fade-in-up: fade-in-up 0.6s ease-out both;
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  --animate-scale-in: scale-in 0.25s ease-out both;
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  --animate-slide-down: slide-down 0.25s ease-out both;
+  @keyframes slide-down {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  --animate-slide-up: slide-up 0.5s ease-out both;
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  --animate-float: float 6s ease-in-out infinite;
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  --animate-shimmer: shimmer 2s linear infinite;
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+
+  /* Easing */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* --- Custom Utilities --- */
+@utility scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar { display: none; }
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility glass {
+  background: rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+@utility glass-dark {
+  background: rgb(15 23 42 / 0.8);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+@utility gradient-text {
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-accent-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility shimmer-bg {
+  background: linear-gradient(90deg, var(--color-gray-100) 25%, var(--color-gray-200) 50%, var(--color-gray-100) 75%);
+  background-size: 200% 100%;
+}
+
+/* Dark mode overrides for common patterns */
+.dark .dark\:card {
+  background: oklch(0.20 0.01 250);
+  border-color: oklch(0.25 0.01 250);
+}
+
+/* Scroll progress bar */
+@utility scroll-progress {
+  position: fixed;
+  top: 0;
+  inset-inline-start: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary-500), var(--color-accent-400));
+  z-index: 60;
+  transition: width 0.1s linear;
+}
+
+/* Noise texture */
+@utility noise-overlay {
+  position: relative;
+}
+
+/* Section reveal animation */
+@utility reveal-section {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+@utility reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- RTL Font Faces --- */
+/* --- Dark Mode Colors --- */
+.dark {
+  color-scheme: dark;
+  --color-surface: oklch(0.15 0.01 250);
+  --color-surface-dim: oklch(0.12 0.01 250);
+  --color-surface-bright: oklch(0.20 0.01 250);
+}
+
+/* DM Sans — modern geometric sans-serif for Latin text */
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAop-hSA.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAkJ-hSA.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAfJihSA.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwARZihSA.woff2') format('woff2');
+}
+
+/* Vazirmatn — beautiful Kurdish/Arabic/Persian font */
+@font-face {
+  font-family: 'Vazirmatn';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/vazirmatn/v13/Dxx78j6PP2D_kU2mukvRPe5MN9iBL6fN.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/vazirmatn/v13/Dxx78j6PP2D_kU2mukvRPe5MK9uBL6fN.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Vazirmatn';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/vazirmatn/v13/Dxx78j6PP2D_kU2mukvRPe5MH9WBL6fN.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCfyGyfuXsn.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSansArabic';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCf0myfuXsn.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSansArabic';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCfPmufuXsn.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSansArabic';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCfB2ufuXsn.woff2') format('woff2');
+}
+
+/* --- Base Layer --- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-surface);
+    color: var(--color-gray-800);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .dark body {
+    color: var(--color-gray-200);
+  }
+
+  [dir="rtl"] {
+    text-align: right;
+  }
+
+  [dir="rtl"] body {
+    font-family: var(--font-rtl);
+  }
+
+  [dir="rtl"] select {
+    background-position: left 0.5rem center;
+    padding-right: 1rem;
+    padding-left: 2rem;
+  }
+
+  [dir="rtl"] input[type="tel"],
+  [dir="rtl"] input[type="number"] {
+    direction: ltr;
+    text-align: right;
+  }
+
+  [dir="rtl"] .leaflet-container,
+  [dir="rtl"] .leaflet-control-zoom {
+    direction: ltr;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 3px;
+    border-radius: 0.375rem;
+    transition: outline-offset 0.15s ease;
+  }
+
+  /* Reduce motion for a11y */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Smooth selection */
+  ::selection {
+    background: oklch(0.65 0.19 160 / 0.2);
+  }
+}

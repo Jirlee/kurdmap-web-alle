@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* === KurdMap Admin Design System === */
+@theme {
+  /* Primary — Blue */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  /* Success — Green */
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+  --color-success-900: #14532d;
+
+  /* Warning — Amber */
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-800: #92400e;
+  --color-warning-900: #78350f;
+
+  /* Danger — Red */
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-200: #fecaca;
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
+
+  /* Semantic surfaces */
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-text: #1e293b;
+  --color-text-secondary: #64748b;
+
+  /* Typography */
+  --font-sans: 'Noto Sans Arabic', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+/* === Dark Mode === */
+.dark {
+  --color-bg: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-alt: #334155;
+  --color-border: #475569;
+  --color-text: #f1f5f9;
+  --color-text-secondary: #a1b1c4;
+}
+
+/* === CSS Animations (Angular 21 animate.enter/leave) === */
+.animate-enter {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+
+.animate-leave {
+  opacity: 0;
+  transform: translateY(8px) scale(0.98);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+[animate] {
+  transition: opacity 250ms ease-out, transform 250ms ease-out;
+}
+
+/* Toast animations */
+.toast-enter {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.toast-leave {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+/* === Scrollbar Styling === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* === Focus Visible === */
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* === Custom Animations === */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+/* === Selection Color === */
+::selection {
+  background-color: var(--color-primary-200);
+  color: var(--color-primary-900);
+}

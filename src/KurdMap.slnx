@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="KurdMap.API/KurdMap.API.csproj" />
+  <Project Path="KurdMap.Application/KurdMap.Application.csproj" />
+  <Project Path="KurdMap.Domain/KurdMap.Domain.csproj" />
+  <Project Path="KurdMap.Infrastructure/KurdMap.Infrastructure.csproj" />
+  <Project Path="KurdMap.Migrator/KurdMap.Migrator.csproj" />
+  <Project Path="KurdMap.Shared/KurdMap.Shared.csproj" />
+  <Project Path="KurdMap.Tests/KurdMap.Tests.csproj" />
+</Solution>
