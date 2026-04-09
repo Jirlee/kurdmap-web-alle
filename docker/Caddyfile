@@ -1,6 +1,7 @@
 # KurdMap — Caddy Site Config (Importable Snippet)
 # Import this from the host's main /etc/caddy/Caddyfile:
-#   import /opt/kurdmap/docker/Caddyfile
+#   import /opt/kurdmap/docker/Caddyfile*
+# The trailing * (glob) ensures Caddy won't crash if the file doesn't exist yet.
 #
 # The global options block (email, acme_ca, servers, log) belongs
 # in the HOST's /etc/caddy/Caddyfile, NOT here — since this

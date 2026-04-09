@@ -164,8 +164,9 @@ services:
   # The Hetzner server hosts multiple websites sharing ports 80/443.
   # Caddy is installed system-wide: sudo dnf install caddy
   # Import KurdMap config in /etc/caddy/Caddyfile:
-  #   import /opt/kurdmap/docker/Caddyfile
-  # After changes: sudo systemctl reload caddy
+  #   import /opt/kurdmap/docker/Caddyfile*
+  # The trailing * (glob) ensures Caddy won't crash if the file is missing.
+  # After changes: sudo systemctl restart caddy
 
 # Networks and volumes are defined in docker-compose.yml (base) and inherited here.
 # frontend-net: bridge (API, Admin, Frontend — host-reachable via 127.0.0.1)

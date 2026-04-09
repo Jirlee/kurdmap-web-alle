@@ -215,8 +215,10 @@ jobs:
             chmod o+rx . docker 2>/dev/null || true
             chmod 644 docker/Caddyfile 2>/dev/null || true
 
-            # Restart Caddy to pick up Caddyfile changes (restart, not reload — admin API is disabled)
-            sudo systemctl restart caddy 2>/dev/null || echo "⚠️ Caddy restart skipped (sudo not configured)"
+            # NOTE: We do NOT restart Caddy here — each project must be independent.
+            # Caddy uses glob import (import /opt/kurdmap/docker/Caddyfile*)
+            # so it won't crash if the file doesn't exist yet.
+            # After first deploy, run ONCE on server: sudo systemctl restart caddy
 
             # Wait for startup chain: postgres → redis → api (30-60s total)
             echo "⏳ Waiting for services to start..."
