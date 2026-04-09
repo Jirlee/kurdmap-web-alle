@@ -109,13 +109,11 @@ services:
         max-file: "5"
 
   # ─── Admin Panel (frontend-net ONLY) ──
+  # NOTE: read_only not used — Podman tmpfs doesn't support uid= option,
+  # and nginx needs writable /var/cache/nginx + /var/run. Admin is a static
+  # SPA with no user data, so the risk is minimal.
   admin:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-admin:latest
-    read_only: true
-    tmpfs:
-      - /tmp:noexec,nosuid
-      - /var/cache/nginx:noexec,nosuid,uid=101,gid=101
-      - /var/run:noexec,nosuid,uid=101,gid=101
     deploy:
       resources:
         limits:
