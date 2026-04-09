@@ -217,14 +217,20 @@ jobs:
             # Wait for startup chain: postgres → redis → api (30-60s total)
             echo "⏳ Waiting for services to start..."
             for i in $(seq 1 12); do
-              if curl -sf http://localhost:8080/health > /dev/null 2>&1; then
-                echo "✅ API healthy after ~$((i * 5))s"
+              code=$(curl -sf -o /dev/null -w "%{http_code}" http://localhost:8080/health 2>/dev/null) || true
+              if [ "$code" = "200" ]; then
+                echo "✅ API healthy after ~$((i * 5))s (HTTP $code)"
                 break
               fi
+              echo "  Attempt $i/12: HTTP $code"
               if [ "$i" = "12" ]; then
                 echo "❌ Health check failed after 60s"
+                echo "--- curl verbose ---"
+                curl -v http://localhost:8080/health 2>&1 || true
+                echo "--- container status ---"
                 podman compose -f docker-compose.yml -f docker-compose.prod.yml ps
-                podman compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=30
+                echo "--- container logs (last 50) ---"
+                podman compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=50
                 exit 1
               fi
               sleep 5

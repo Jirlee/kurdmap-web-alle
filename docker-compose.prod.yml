@@ -114,8 +114,8 @@ services:
     read_only: true
     tmpfs:
       - /tmp:noexec,nosuid
-      - /var/cache/nginx:noexec,nosuid
-      - /var/run:noexec,nosuid
+      - /var/cache/nginx:noexec,nosuid,uid=101,gid=101
+      - /var/run:noexec,nosuid,uid=101,gid=101
     deploy:
       resources:
         limits:
