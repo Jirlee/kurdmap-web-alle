@@ -214,12 +214,23 @@ jobs:
             # Reload host Caddy to pick up any Caddyfile changes
             sudo systemctl reload caddy
 
-            # Wait and check
-            sleep 10
-            podman compose -f docker-compose.yml -f docker-compose.prod.yml ps
+            # Wait for startup chain: postgres → redis → api (30-60s total)
+            echo "⏳ Waiting for services to start..."
+            for i in $(seq 1 12); do
+              if curl -sf http://localhost:8080/health > /dev/null 2>&1; then
+                echo "✅ API healthy after ~$((i * 5))s"
+                break
+              fi
+              if [ "$i" = "12" ]; then
+                echo "❌ Health check failed after 60s"
+                podman compose -f docker-compose.yml -f docker-compose.prod.yml ps
+                podman compose -f docker-compose.yml -f docker-compose.prod.yml logs --tail=30
+                exit 1
+              fi
+              sleep 5
+            done
 
-            # Health check
-            curl -f http://localhost:8080/health || exit 1
+            podman compose -f docker-compose.yml -f docker-compose.prod.yml ps
 
             # Cleanup old images
             podman image prune -f || true
