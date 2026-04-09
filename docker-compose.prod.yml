@@ -48,7 +48,9 @@ services:
 
   # ─── Redis (backend-net ONLY — no internet, no host exposure) ──
   # Volume redisdata:/data from base is writable even with read_only: true
+  # user: "999" runs as redis user directly, bypassing gosu (no SETUID needed)
   redis:
+    user: "999:999"
     read_only: true
     deploy:
       resources:
