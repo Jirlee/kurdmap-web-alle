@@ -146,77 +146,93 @@ sudo systemctl enable --now caddy
 sudo dnf install -y git
 ```
 
-### مرحله ۲: کلون و تنظیم
+### مرحله ۲: آماده‌سازی دایرکتوری سرور
 
-> **مهم:** سرور فقط به فایل‌های deployment نیاز دارد (compose, docker/, Makefile).  
-> سورس‌کد (src/, Docs/) **نباید** روی سرور باشد — ایمیج‌ها از GHCR پول می‌شوند.
+> **مهم:** سرور فقط به فایل‌های deployment نیاز دارد (compose, Caddyfile, backup.sh).  
+> سورس‌کد (src/, Docs/) و Dockerfileها **نباید** روی سرور باشند — ایمیج‌ها از GHCR پول می‌شوند.  
+> **نیازی به Git روی سرور نیست** — CI/CD خودش فایل‌ها را با SCP می‌فرستد.
 
 ```bash
-# ۱. ساخت SSH Key برای GitHub (یکبار — اگر قبلاً ندارید)
-ssh-keygen -t ed25519 -C "deploy@hetzner" -f ~/.ssh/github_deploy -N ""
-cat ~/.ssh/github_deploy.pub
-# → این کلید عمومی را به GitHub اضافه کنید:
-#   GitHub → Settings → SSH and GPG keys → New SSH key
+# ۱. ساخت دایرکتوری
+sudo mkdir -p /opt/kurdmap/docker
+sudo chown -R $(whoami):$(whoami) /opt/kurdmap
 
-# تنظیم SSH config
-cat >> ~/.ssh/config << 'EOF'
-Host github.com
-    IdentityFile ~/.ssh/github_deploy
-    IdentitiesOnly yes
+# ۲. ایجاد .env (یکبار — CI/CD هرگز این فایل را overwrite نمی‌کند)
+cd /opt/kurdmap
+cat > .env << 'EOF'
+# ── Database ──
+POSTGRES_DB=kurdmap
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=CHANGE_ME
+REDIS_PASSWORD=CHANGE_ME
+
+# ── JWT ──
+JWT_SECRET=CHANGE_ME
+JWT_ISSUER=KurdMap
+JWT_AUDIENCE=KurdMapClient
+
+# ── URLs ──
+FRONTEND_URL=https://kurdmap.de
+ADMIN_URL=https://admin.kurdmap.de
+API_DOMAIN=api.kurdmap.de
+
+# ── GHCR ──
+GHCR_USERNAME=your-github-username-lowercase
 EOF
-chmod 600 ~/.ssh/config
 
-# تست اتصال
-ssh -T git@github.com
-# باید بگوید: Hi NestCodeGIT! You've been successfully authenticated
+# ۳. تولید رمزهای قوی
+sed -i "s|JWT_SECRET=CHANGE_ME|JWT_SECRET=$(openssl rand -base64 48)|" .env
+sed -i "s|POSTGRES_PASSWORD=CHANGE_ME|POSTGRES_PASSWORD=$(openssl rand -base64 32)|" .env
+sed -i "s|REDIS_PASSWORD=CHANGE_ME|REDIS_PASSWORD=$(openssl rand -base64 32)|" .env
 
-# ۲. کلون با Sparse Checkout (فقط فایل‌های deployment)
-mkdir -p /opt/kurdmap && cd /opt/kurdmap
-git init
-git remote add origin git@github.com:NestCodeGIT/KurdMap-web-alle.git
-git sparse-checkout init --cone
-git sparse-checkout set docker docker-compose.yml docker-compose.prod.yml Makefile .env.example .dockerignore
-git pull origin main
-
-# بررسی — فقط این فایل‌ها باید باشند:
-ls -a
-# .git  docker/  docker-compose.yml  docker-compose.prod.yml
-# Makefile  .env.example  .dockerignore
-
-# ۳. ایجاد .env
-cp .env.example .env
-
-# ۴. تولید رمزهای قوی
-echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env
-echo "POSTGRES_PASSWORD=$(openssl rand -base64 32)" >> .env
-echo "REDIS_PASSWORD=$(openssl rand -base64 32)" >> .env
-echo "SEED_ADMIN_PASSWORD=$(openssl rand -base64 16)" >> .env
-
-# ۵. ویرایش مقادیر
+# ۴. ویرایش GHCR_USERNAME
 nano .env
 ```
 
-> **چرا Sparse Checkout؟**  
-> `git clone` معمولی تمام فایل‌ها را می‌آورد (src/, Docs/, ...) که روی سرور لازم نیستند.  
-> Sparse Checkout فقط فایل‌های مشخص‌شده را checkout می‌کند.  
-> `git pull` بعدی هم فقط همان فایل‌ها را آپدیت می‌کند.
+> **چگونه فایل‌های deployment به سرور می‌رسند؟**  
+> CI/CD (GitHub Actions) خودش فایل‌های `docker-compose.yml`، `docker-compose.prod.yml`، `docker/Caddyfile`، `docker/backup.sh` و `docker/seed-data.sql` را با SCP به سرور می‌فرستد.  
+> شما فقط `.env` را یکبار دستی می‌سازید — بقیه خودکار است.
 
-### مرحله ۳: ساخت و اجرا
+> **ساختار نهایی سرور:**
+> ```
+> /opt/kurdmap/
+> ├── docker-compose.yml       ← از CI/CD (SCP)
+> ├── docker-compose.prod.yml  ← از CI/CD (SCP)
+> ├── .env                     ← دستی (فقط یکبار)
+> ├── .env.example             ← از CI/CD (مرجع)
+> └── docker/
+>     ├── Caddyfile            ← از CI/CD (import در Caddy هاست)
+>     ├── backup.sh            ← از CI/CD (cron backup)
+>     └── seed-data.sql        ← از CI/CD (داده اولیه)
+> ```
+> **توجه:** هیچ Dockerfile، سورس‌کد، یا `.git` روی سرور وجود ندارد.
+
+### مرحله ۳: اولین اجرا (دستی — فقط یکبار)
+
+> **توجه:** بعد از اولین دپلوی موفق از CI/CD، این مرحله خودکار می‌شود.  
+> اگر هنوز CI/CD اجرا نشده، اولین بار را دستی انجام دهید.
 
 ```bash
-# ۱. ساخت تصاویر
-podman-compose -f docker-compose.yml -f docker-compose.prod.yml build
+cd /opt/kurdmap
 
-# ۲. اجرا
-podman-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ۱. لاگین به GHCR
+echo "YOUR_GHCR_TOKEN" | podman login ghcr.io -u YOUR_USERNAME --password-stdin
 
-# ۳. بررسی سلامت
+# ۲. پول ایمیج‌ها از GHCR
+podman pull ghcr.io/YOUR_USERNAME/kurdmap-api:latest
+podman pull ghcr.io/YOUR_USERNAME/kurdmap-admin:latest
+podman pull ghcr.io/YOUR_USERNAME/kurdmap-frontend:latest
+
+# ۳. اجرا (--no-build: ایمیج‌ها از GHCR هستند، Dockerfile روی سرور نیست)
+podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
+
+# ۴. بررسی سلامت
 curl -f http://localhost:8080/health
 curl -f http://localhost:4000
 curl -f http://localhost:8081
 
-# ۴. Seed دیتابیس (اختیاری: داده تستی)
-make seed
+# ۵. Seed دیتابیس (اختیاری: داده تستی)
+podman compose exec -T postgres psql -U postgres -d kurdmap < docker/seed-data.sql
 ```
 
 ### مرحله ۴: SSL و Reverse Proxy (Caddy روی هاست)
@@ -548,9 +564,11 @@ GitHub → Settings → Developer settings → Personal access tokens → Tokens
 | `DEPLOY_USER` | نام کاربری SSH (مثلاً `deploy`) | ✅ مشترک |
 | `DEPLOY_SSH_KEY` | کلید خصوصی SSH (کامل) | ✅ مشترک |
 | `DEPLOY_PORT` | پورت SSH (معمولاً `22`) | ✅ مشترک |
+| `DEPLOY_PATH` | مسیر پروژه روی سرور (**الزامی**) | ⚠️ **متفاوت** بین پروژه‌ها |
 | `GHCR_USERNAME` | نام کاربری GitHub (حروف کوچک) | ✅ مشترک |
 | `GHCR_TOKEN` | Personal Access Token | ✅ مشترک |
-| `DEPLOY_PATH` | مسیر پروژه روی سرور | ⚠️ **متفاوت** بین پروژه‌ها |
+
+> **توجه:** دیگری نیازی به **SSH Key سرور ← GitHub** نیست. CI/CD خودش فایل‌ها را با SCP می‌فرستد — سرور مستقیماً به GitHub وصل نمی‌شود.
 
 مقادیر `DEPLOY_PATH` بین پروژه‌ها:
 
@@ -576,21 +594,23 @@ Organization → Settings → Secrets and variables → Actions
 ### خلاصه سریع دپلوی
 
 ```bash
-# روی سرور (Rocky Linux + Podman):
-# Sparse checkout — فقط فایل‌های deployment:
-mkdir -p /opt/kurdmap && cd /opt/kurdmap
-git init
-git remote add origin git@github.com:NestCodeGIT/KurdMap-web-alle.git
-git sparse-checkout init --cone
-git sparse-checkout set docker docker-compose.yml docker-compose.prod.yml Makefile .env.example .dockerignore
-git pull origin main
+# ── روی سرور (یکبار — آماده‌سازی اولیه): ──
+sudo mkdir -p /opt/kurdmap/docker
+sudo chown -R $(whoami):$(whoami) /opt/kurdmap
+cd /opt/kurdmap
 
-cp .env.example .env
-nano .env  # رمزها + GHCR_USERNAME را تنظیم کنید
-podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ایجاد .env با رمزهای قوی:
+nano .env  # مقادیر: POSTGRES_PASSWORD, REDIS_PASSWORD, JWT_SECRET, GHCR_USERNAME, ...
 
-# Caddy روی هاست (فایل جداگانه):
-# import /opt/kurdmap/docker/Caddyfile در /etc/caddy/Caddyfile
+# ── بعد از push به main: CI/CD خودکار انجام می‌دهد: ──
+# 1. Build + Push ایمیج‌ها به GHCR
+# 2. SCP فایل‌های deployment به سرور (compose, Caddyfile, backup.sh)
+# 3. SSH → podman pull + podman compose up -d
+# 4. Health check
+
+# ── Caddy روی هاست (یکبار): ──
+# اضافه کردن import به /etc/caddy/Caddyfile:
+#   import /opt/kurdmap/docker/Caddyfile
 sudo systemctl reload caddy
 
 # ۲ دقیقه صبر کنید → Caddy خودکار SSL می‌گیرد
