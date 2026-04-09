@@ -2,6 +2,7 @@
 # Usage: podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
 #
 # Requires .env file with all secrets set. See .env.example
+# Compatible with podman-compose (Python) — no !override tags used.
 #
 # Security Architecture (Defense-in-Depth):
 #   Layer 0: Rootless Podman (no root daemon)
@@ -16,7 +17,6 @@
 services:
   # ─── PostgreSQL (backend-net ONLY — no internet, no host exposure) ──
   postgres:
-    ports: !override []
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -47,11 +47,9 @@ services:
         max-file: "3"
 
   # ─── Redis (backend-net ONLY — no internet, no host exposure) ──
+  # Volume redisdata:/data from base is writable even with read_only: true
   redis:
-    ports: !override []
     read_only: true
-    tmpfs:
-      - /data:size=128m,noexec,nosuid
     deploy:
       resources:
         limits:
@@ -73,8 +71,6 @@ services:
   # ─── API (bridges frontend-net + backend-net) ──
   api:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-api:latest
-    ports: !override
-      - "127.0.0.1:8080:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
@@ -113,8 +109,6 @@ services:
   # ─── Admin Panel (frontend-net ONLY) ──
   admin:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-admin:latest
-    ports: !override
-      - "127.0.0.1:8081:8081"
     read_only: true
     tmpfs:
       - /tmp:noexec,nosuid
@@ -143,8 +137,6 @@ services:
   # ─── Frontend SSR (frontend-net ONLY) ──
   frontend:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-frontend:latest
-    ports: !override
-      - "127.0.0.1:4000:4000"
     read_only: true
     tmpfs:
       - /tmp:size=100m,noexec,nosuid
@@ -175,8 +167,6 @@ services:
   #   import /opt/kurdmap/docker/Caddyfile
   # After changes: sudo systemctl reload caddy
 
-# Networks are defined in docker-compose.yml (base) and inherited here.
+# Networks and volumes are defined in docker-compose.yml (base) and inherited here.
 # frontend-net: bridge (API, Admin, Frontend — host-reachable via 127.0.0.1)
 # backend-net:  internal (API ↔ PostgreSQL ↔ Redis — ZERO internet access)
-
-volumes: {}

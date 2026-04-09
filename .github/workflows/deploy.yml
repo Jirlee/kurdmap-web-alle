@@ -208,14 +208,15 @@ jobs:
 
             # Start services (--no-build: images are pre-built, no Dockerfiles on server)
             echo "🚀 Starting services..."
-            podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build --remove-orphans
+            podman compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans 2>/dev/null || true
+            podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
 
             # Reload host Caddy to pick up any Caddyfile changes
             sudo systemctl reload caddy
 
             # Wait and check
             sleep 10
-            podman compose ps
+            podman compose -f docker-compose.yml -f docker-compose.prod.yml ps
 
             # Health check
             curl -f http://localhost:8080/health || exit 1

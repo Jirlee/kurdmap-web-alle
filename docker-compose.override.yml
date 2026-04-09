@@ -1,0 +1,43 @@
+# KurdMap — Development Override (auto-loaded by `podman compose up`)
+#
+# This file is automatically merged when you run:
+#   podman compose up -d --build
+#
+# It is NOT loaded with explicit -f flags (production):
+#   podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# Adds: dev ports, 0.0.0.0 binding, build contexts, debug environment
+
+services:
+  # Dev: expose DB/Redis ports for local tools (DBeaver, RedisInsight, etc.)
+  postgres:
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+  redis:
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+
+  # Dev: build from local Dockerfiles, listen on all interfaces
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    ports:
+      - "0.0.0.0:${API_PORT:-8080}:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+
+  admin:
+    build:
+      context: .
+      dockerfile: docker/admin.Dockerfile
+    ports:
+      - "0.0.0.0:8081:8081"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    ports:
+      - "0.0.0.0:4000:4000"

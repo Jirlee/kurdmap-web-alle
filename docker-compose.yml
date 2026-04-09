@@ -1,9 +1,13 @@
 # KurdMap — Docker Compose (Podman-compatible)
-# Usage:
-#   podman compose up -d          — Start all services
-#   podman compose up -d --build  — Rebuild and start
-#   podman compose down           — Stop all services
-#   podman compose logs -f api    — Follow API logs
+#
+# Development:
+#   podman compose up -d --build     — auto-loads docker-compose.override.yml (dev ports)
+#   podman compose down              — Stop all services
+#   podman compose logs -f api       — Follow API logs
+#
+# Production:
+#   podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
+#   (override.yml is NOT loaded when -f is explicit)
 #
 # Network Architecture (Enterprise):
 #   frontend-net (bridge)     — API, Admin, Frontend exposed to host (127.0.0.1)
@@ -20,8 +24,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-kurdmap_dev}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
-    ports:
-      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -46,8 +48,6 @@ services:
       --rename-command DEBUG ""
       --maxmemory 128mb
       --maxmemory-policy allkeys-lru
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redisdata:/data
     networks:
@@ -60,13 +60,11 @@ services:
 
   # ─── KurdMap API (.NET 10) ────────────────────────────────
   api:
-    build:
-      context: .
-      dockerfile: docker/api.Dockerfile
+    image: ${API_IMAGE:-kurdmap-api:local}
     container_name: kurdmap-api
     restart: unless-stopped
     ports:
-      - "${API_PORT:-8080}:8080"
+      - "127.0.0.1:${API_PORT:-8080}:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT:-Production}
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-kurdmap_dev};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?required}"
@@ -88,13 +86,11 @@ services:
 
   # ─── KurdMap Admin Panel (Angular 21 SPA + Nginx) ──────────
   admin:
-    build:
-      context: .
-      dockerfile: docker/admin.Dockerfile
+    image: ${ADMIN_IMAGE:-kurdmap-admin:local}
     container_name: kurdmap-admin
     restart: unless-stopped
     ports:
-      - "8081:8081"
+      - "127.0.0.1:8081:8081"
     networks:
       - frontend-net
     depends_on:
@@ -102,13 +98,11 @@ services:
 
   # ─── KurdMap Frontend (Angular SSR) ───────────────────────
   frontend:
-    build:
-      context: .
-      dockerfile: docker/frontend.Dockerfile
+    image: ${FRONTEND_IMAGE:-kurdmap-frontend:local}
     container_name: kurdmap-frontend
     restart: unless-stopped
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
     environment:
       NODE_ENV: production
       API_URL: "http://api:8080"
