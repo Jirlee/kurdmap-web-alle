@@ -211,8 +211,11 @@ jobs:
             podman compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans 2>/dev/null || true
             podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
 
-            # Reload host Caddy to pick up any Caddyfile changes (non-fatal: needs sudoers config)
-            sudo systemctl reload caddy 2>/dev/null || echo "⚠️ Caddy reload skipped (sudo not configured)"
+            # Ensure Caddyfile is readable by caddy service
+            chmod 644 docker/Caddyfile 2>/dev/null || true
+
+            # Restart Caddy to pick up Caddyfile changes (restart, not reload — admin API is disabled)
+            sudo systemctl restart caddy 2>/dev/null || echo "⚠️ Caddy restart skipped (sudo not configured)"
 
             # Wait for startup chain: postgres → redis → api (30-60s total)
             echo "⏳ Waiting for services to start..."
