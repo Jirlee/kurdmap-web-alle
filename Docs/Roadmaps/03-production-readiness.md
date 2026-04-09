@@ -148,23 +148,58 @@ sudo dnf install -y git
 
 ### مرحله ۲: کلون و تنظیم
 
-```bash
-# ۱. کلون پروژه
-git clone https://github.com/YOUR_ORG/KurdMap-web-all.git /opt/kurdmap
-cd /opt/kurdmap
+> **مهم:** سرور فقط به فایل‌های deployment نیاز دارد (compose, docker/, Makefile).  
+> سورس‌کد (src/, Docs/) **نباید** روی سرور باشد — ایمیج‌ها از GHCR پول می‌شوند.
 
-# ۲. ایجاد .env
+```bash
+# ۱. ساخت SSH Key برای GitHub (یکبار — اگر قبلاً ندارید)
+ssh-keygen -t ed25519 -C "deploy@hetzner" -f ~/.ssh/github_deploy -N ""
+cat ~/.ssh/github_deploy.pub
+# → این کلید عمومی را به GitHub اضافه کنید:
+#   GitHub → Settings → SSH and GPG keys → New SSH key
+
+# تنظیم SSH config
+cat >> ~/.ssh/config << 'EOF'
+Host github.com
+    IdentityFile ~/.ssh/github_deploy
+    IdentitiesOnly yes
+EOF
+chmod 600 ~/.ssh/config
+
+# تست اتصال
+ssh -T git@github.com
+# باید بگوید: Hi NestCodeGIT! You've been successfully authenticated
+
+# ۲. کلون با Sparse Checkout (فقط فایل‌های deployment)
+mkdir -p /opt/kurdmap && cd /opt/kurdmap
+git init
+git remote add origin git@github.com:NestCodeGIT/KurdMap-web-alle.git
+git sparse-checkout init --cone
+git sparse-checkout set docker docker-compose.yml docker-compose.prod.yml Makefile .env.example .dockerignore
+git pull origin main
+
+# بررسی — فقط این فایل‌ها باید باشند:
+ls -a
+# .git  docker/  docker-compose.yml  docker-compose.prod.yml
+# Makefile  .env.example  .dockerignore
+
+# ۳. ایجاد .env
 cp .env.example .env
 
-# ۳. تولید رمزهای قوی
+# ۴. تولید رمزهای قوی
 echo "JWT_SECRET=$(openssl rand -base64 48)" >> .env
 echo "POSTGRES_PASSWORD=$(openssl rand -base64 32)" >> .env
 echo "REDIS_PASSWORD=$(openssl rand -base64 32)" >> .env
 echo "SEED_ADMIN_PASSWORD=$(openssl rand -base64 16)" >> .env
 
-# ۴. ویرایش مقادیر
+# ۵. ویرایش مقادیر
 nano .env
 ```
+
+> **چرا Sparse Checkout؟**  
+> `git clone` معمولی تمام فایل‌ها را می‌آورد (src/, Docs/, ...) که روی سرور لازم نیستند.  
+> Sparse Checkout فقط فایل‌های مشخص‌شده را checkout می‌کند.  
+> `git pull` بعدی هم فقط همان فایل‌ها را آپدیت می‌کند.
 
 ### مرحله ۳: ساخت و اجرا
 
@@ -466,24 +501,90 @@ podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 ### GitHub Secrets برای CI/CD
 
-در Settings → Secrets → Actions این مقادیر را اضافه کنید:
+#### آنچه **یکبار** تنظیم می‌شود (سطح سرور)
 
-| Secret | توضیح |
-|--------|--------|
-| `DEPLOY_HOST` | آدرس IP سرور Hetzner |
-| `DEPLOY_USER` | نام کاربری SSH (مثلاً `deploy`) |
-| `DEPLOY_SSH_KEY` | کلید خصوصی SSH |
-| `DEPLOY_PORT` | پورت SSH (معمولاً `22`) |
-| `DEPLOY_PATH` | مسیر پروژه (مثلاً `/opt/kurdmap`) |
-| `GHCR_USERNAME` | نام کاربری GitHub (حروف کوچک) — برای pull ایمیج روی سرور |
-| `GHCR_TOKEN` | Personal Access Token با دسترسی `read:packages` |
+این مقادیر بین **همه پروژه‌ها** مشترک هستند — فقط یکبار ساخته می‌شوند:
+
+| مورد | تعداد | توضیح |
+|------|--------|--------|
+| **SSH Key** | ۱ عدد | یک کلید روی سرور Hetzner — همه پروژه‌ها از همان استفاده می‌کنند |
+| **GHCR Token** | ۱ عدد | یک PAT با دسترسی `write:packages` + `read:packages` — برای همه repo ها |
+| **GHCR Username** | ۱ عدد | نام کاربری GitHub شما (حروف کوچک) |
+
+#### ساخت SSH Key (یکبار — اگر قبلاً ندارید)
+
+```bash
+# روی کامپیوتر خودتان:
+ssh-keygen -t ed25519 -C "deploy@kurdmap" -f ~/.ssh/kurdmap_deploy
+
+# کلید عمومی را به سرور اضافه کنید:
+ssh-copy-id -i ~/.ssh/kurdmap_deploy.pub <USER>@<SERVER_IP>
+
+# محتوای کلید خصوصی → مقدار DEPLOY_SSH_KEY
+cat ~/.ssh/kurdmap_deploy
+```
+
+> **نکته:** اگر قبلاً برای پروژه دیگر (مثلاً Jirlee) SSH Key ساخته‌اید، **همان کلید** کافی است.
+
+#### ساخت GHCR Token (یکبار)
+
+```
+GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
+→ Generate new token
+→ Scopes: ✅ write:packages, ✅ read:packages
+→ Expiration: حداقل 90 روز یا No expiration
+→ Generate token → کپی کنید
+```
+
+> **نکته:** همین token برای همه پروژه‌ها (KurdMap, Jirlee, ...) استفاده می‌شود.
+
+#### تنظیم Secrets در هر Repo
+
+هر repo در GitHub → **Settings → Secrets and variables → Actions** باید این مقادیر را داشته باشد:
+
+| Secret | مقدار | مشترک؟ |
+|--------|--------|---------|
+| `DEPLOY_HOST` | آدرس IP سرور Hetzner | ✅ مشترک بین همه پروژه‌ها |
+| `DEPLOY_USER` | نام کاربری SSH (مثلاً `deploy`) | ✅ مشترک |
+| `DEPLOY_SSH_KEY` | کلید خصوصی SSH (کامل) | ✅ مشترک |
+| `DEPLOY_PORT` | پورت SSH (معمولاً `22`) | ✅ مشترک |
+| `GHCR_USERNAME` | نام کاربری GitHub (حروف کوچک) | ✅ مشترک |
+| `GHCR_TOKEN` | Personal Access Token | ✅ مشترک |
+| `DEPLOY_PATH` | مسیر پروژه روی سرور | ⚠️ **متفاوت** بین پروژه‌ها |
+
+مقادیر `DEPLOY_PATH` بین پروژه‌ها:
+
+| پروژه | DEPLOY_PATH |
+|--------|-------------|
+| KurdMap | `/opt/kurdmap` |
+| Jirlee | `/opt/jirlee` |
+
+> **مهم:** مقادیر یکسان هستند، فقط باید در هر repo جداگانه paste کنید — چون GitHub Secrets به هر repo محدود است.
+
+#### راه بهتر: Organization Secrets
+
+اگر GitHub Organization دارید، می‌توانید **یکبار** تنظیم کنید:
+
+```
+Organization → Settings → Secrets and variables → Actions
+→ New organization secret
+→ Repository access: "All repositories" یا "Selected repositories"
+```
+
+اینطوری فقط **یکبار** ۶ secret مشترک را وارد می‌کنید و همه repo ها دسترسی دارند. فقط `DEPLOY_PATH` باید در هر repo جداگانه تنظیم شود.
 
 ### خلاصه سریع دپلوی
 
 ```bash
 # روی سرور (Rocky Linux + Podman):
-git clone <repo> /opt/kurdmap
-cd /opt/kurdmap
+# Sparse checkout — فقط فایل‌های deployment:
+mkdir -p /opt/kurdmap && cd /opt/kurdmap
+git init
+git remote add origin git@github.com:NestCodeGIT/KurdMap-web-alle.git
+git sparse-checkout init --cone
+git sparse-checkout set docker docker-compose.yml docker-compose.prod.yml Makefile .env.example .dockerignore
+git pull origin main
+
 cp .env.example .env
 nano .env  # رمزها + GHCR_USERNAME را تنظیم کنید
 podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d
