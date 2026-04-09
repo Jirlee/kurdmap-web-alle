@@ -51,7 +51,7 @@ kurdmap.de, www.kurdmap.de {
 }
 
 # ── Admin Panel: admin.kurdmap.de ───────────────────────────
-admin.kurdmap.de {
+x7b4admin.kurdmap.de {
 	import kurdmap_security_headers
 	import kurdmap_compression
 
@@ -72,7 +72,7 @@ admin.kurdmap.de {
 }
 
 # ── API: api.kurdmap.de ─────────────────────────────────────
-api.kurdmap.de {
+x7b4api.kurdmap.de {
 	import kurdmap_security_headers
 	import kurdmap_compression
 
