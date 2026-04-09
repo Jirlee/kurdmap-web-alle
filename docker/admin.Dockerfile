@@ -37,7 +37,7 @@ USER nginx
 
 EXPOSE 8081
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8081/ || exit 1
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget -q --spider http://localhost:8081/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
