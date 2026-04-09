@@ -82,7 +82,7 @@ services:
       Jwt__Audience: ${JWT_AUDIENCE}
       Cors__AllowedOrigins__0: ${FRONTEND_URL}
       Cors__AllowedOrigins__1: ${ADMIN_URL}
-      AllowedHosts: "${API_DOMAIN:-api.kurdmap.de}"
+      AllowedHosts: "${API_DOMAIN:-api.kurdmap.de};kurdmap-api;localhost"
       Serilog__MinimumLevel__Default: "Warning"
     read_only: true
     tmpfs:
