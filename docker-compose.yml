@@ -1,9 +1,14 @@
 # KurdMap — Docker Compose (Podman-compatible)
 # Usage:
-#   podman-compose up -d          — Start all services
-#   podman-compose up -d --build  — Rebuild and start
-#   podman-compose down           — Stop all services
-#   podman-compose logs -f api    — Follow API logs
+#   podman compose up -d          — Start all services
+#   podman compose up -d --build  — Rebuild and start
+#   podman compose down           — Stop all services
+#   podman compose logs -f api    — Follow API logs
+#
+# Network Architecture (Enterprise):
+#   frontend-net (bridge)     — API, Admin, Frontend exposed to host (127.0.0.1)
+#   backend-net  (internal)   — API ↔ PostgreSQL ↔ Redis only, NO internet access
+#   API bridges both networks; DB/Redis are completely isolated.
 
 services:
   # ─── PostgreSQL ───────────────────────────────────────────
@@ -19,6 +24,8 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend-net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-kurdmap_dev}"]
       interval: 10s
@@ -43,6 +50,8 @@ services:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redisdata:/data
+    networks:
+      - backend-net
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-changeme}", "ping"]
       interval: 10s
@@ -68,6 +77,9 @@ services:
       Cors__AllowedOrigins__0: ${FRONTEND_URL:-http://localhost:4000}
       Cors__AllowedOrigins__1: ${ADMIN_URL:-http://localhost:8081}
       Cors__AllowedOrigins__2: "http://localhost:4200"
+    networks:
+      - frontend-net
+      - backend-net
     depends_on:
       postgres:
         condition: service_healthy
@@ -83,6 +95,8 @@ services:
     restart: unless-stopped
     ports:
       - "8081:8081"
+    networks:
+      - frontend-net
     depends_on:
       - api
 
@@ -98,8 +112,19 @@ services:
     environment:
       NODE_ENV: production
       API_URL: "http://api:8080"
+    networks:
+      - frontend-net
     depends_on:
       - api
+
+# ─── Networks ─────────────────────────────────────────────
+# Two-zone isolation: frontend (exposed) + backend (internal)
+networks:
+  frontend-net:
+    driver: bridge
+  backend-net:
+    driver: bridge
+    internal: true  # No internet access — DB/Redis completely isolated
 
 volumes:
   pgdata:

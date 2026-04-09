@@ -11,7 +11,7 @@
 
 1. [نتیجه نهایی](#1-نتیجه-نهایی)
 2. [چک‌لیست بحرانی قبل از دپلوی](#2-چک‌لیست-بحرانی-قبل-از-دپلوی)
-3. [ساختار سرور پیشنهادی](#3-ساختار-سرور-پیشنهادی)
+3. [ساختار سرور پیشنهادی](#3-ساختار-سرور-پیشنهادی) — شبکه + امنیت کانتینرها (Defense-in-Depth)
 4. [گام‌به‌گام دپلوی](#4-گام‌به‌گام-دپلوی)
 5. [وضعیت هر سرویس](#5-وضعیت-هر-سرویس)
 6. [امتیاز تفصیلی](#6-امتیاز-تفصیلی)
@@ -97,31 +97,131 @@
 | Admin Panel | `admin.kurdmap.de` | `:8081` |
 | API | `api.kurdmap.de` | `:8080` |
 
-### معماری شبکه
+### معماری شبکه (Podman — Enterprise Network Isolation)
 
 ```
 Internet
     │
     ▼
-┌──────────────────────┐
-│   Caddy (Host-level) │  ← SSL termination (shared with other sites)
-│   Ports 80/443       │
-└────┬────┬────┬───────┘
-     │    │    │         127.0.0.1 only
-     ▼    ▼    ▼
-   ┌──┐ ┌──┐ ┌──┐     frontend-net (bridge)
-   │FE│ │AD│ │AP│
-   │:4k│ │:8081│ │:8080│
-   └──┘ └──┘ └┬─┘
-              │
-         ┌────┴────┐    backend-net (internal)
-         ▼         ▼
-      ┌────┐    ┌─────┐
-      │ PG │    │Redis│
-      └────┘    └─────┘
+┌──────────────────────────────┐
+│    Caddy (Host-level)        │  ← Auto-TLS 1.3, Security Headers
+│    Ports 80/443 (shared)     │  ← مشترک با سایر وبسایت‌ها
+└────┬────────┬────────┬───────┘
+     │        │        │           127.0.0.1 only
+     ▼        ▼        ▼
+┌────────────────────────────────────────────────────────────┐
+│              frontend-net (bridge)                          │
+│                                                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────────────────────┐ │
+│  │ Frontend │  │  Admin   │  │         API              │ │
+│  │  :4000   │  │  :8081   │  │        :8080             │ │
+│  │ (SSR)    │  │ (Nginx)  │  │  (.NET 10)               │ │
+│  └──────────┘  └──────────┘  └────────────┬─────────────┘ │
+│                                            │               │
+└────────────────────────────────────────────│───────────────┘
+                                             │
+┌────────────────────────────────────────────│───────────────┐
+│              backend-net (INTERNAL)         │               │
+│              ❌ بدون دسترسی اینترنت         │               │
+│                                            │               │
+│  ┌──────────────────────┐  ┌──────────────┴────────────┐  │
+│  │    PostgreSQL 17     │  │         Redis 7            │  │
+│  │    :5432             │  │         :6379              │  │
+│  │    (Alpine)          │  │         (Alpine)           │  │
+│  │    ❌ پورت بسته      │  │         ❌ پورت بسته       │  │
+│  └──────────────────────┘  └───────────────────────────┘  │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
 ```
 
-> **مهم:** سرویس‌های Docker فقط به `127.0.0.1` bind شده‌اند — فقط Caddy روی هاست می‌تواند به آنها دسترسی داشته باشد.
+**جداسازی شبکه (Defense-in-Depth):**
+
+| شبکه | نوع | اینترنت | کانتینرها | دسترسی خارجی |
+|------|------|---------|-----------|---------------|
+| `frontend-net` | bridge | ✅ | API, Admin, Frontend | فقط `127.0.0.1` (Caddy) |
+| `backend-net` | **internal** | ❌ | API, PostgreSQL, Redis | **هیچ** — کاملاً ایزوله |
+
+> **مهم:** 
+> - سرویس‌ها فقط به `127.0.0.1` bind شده‌اند — فقط Caddy روی هاست دسترسی دارد
+> - `backend-net` با `internal: true` ساخته شده — DB و Redis **هیچ دسترسی به اینترنت** ندارند
+> - API تنها سرویسی است که در **هر دو شبکه** عضو است (bridge بین zones)
+> - Rootless Podman: حتی اگر container escape بشود → فقط دسترسی user بدون root
+
+### امنیت کانتینرها (Podman Enterprise — Defense-in-Depth)
+
+تمام لایه‌های امنیتی در `docker-compose.prod.yml` پیکربندی شده‌اند:
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    8 لایه دفاعی (Defense-in-Depth)                  │
+│                                                                     │
+│  Layer 0 │ Rootless Podman      بدون daemon root — user namespace  │
+│  Layer 1 │ Network Isolation    frontend-net + backend-net internal │
+│  Layer 2 │ Read-Only FS         read_only: true + tmpfs محدود       │
+│  Layer 3 │ Capability Drop      cap_drop: ALL + فقط cap لازم       │
+│  Layer 4 │ No-New-Privileges    جلوگیری از setuid/setgid escalation │
+│  Layer 5 │ Resource Limits      memory + cpu + pids_limit           │
+│  Layer 6 │ 127.0.0.1 Binding    فقط Caddy روی هاست دسترسی دارد     │
+│  Layer 7 │ Internal Network     DB/Redis: صفر دسترسی به اینترنت    │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+#### محدودیت منابع هر سرویس
+
+| سرویس | حافظه حداکثر | حافظه رزرو | CPU | pids_limit |
+|--------|-------------|------------|-----|------------|
+| **API** | 512 MB | 256 MB | 2.0 | 256 |
+| **PostgreSQL** | 512 MB | 256 MB | 2.0 | 256 |
+| **Frontend** | 256 MB | 128 MB | 1.0 | 128 |
+| **Admin** | 128 MB | 64 MB | 0.5 | 64 |
+| **Redis** | 128 MB | 64 MB | 0.5 | 64 |
+
+> `pids_limit` جلوی حمله Fork Bomb را می‌گیرد — هر کانتینر فقط تعداد محدودی process می‌تواند بسازد.
+
+#### Capability ها
+
+| سرویس | cap_drop | cap_add | دلیل |
+|--------|----------|---------|-------|
+| **API** | ALL | `NET_BIND_SERVICE` | باید به پورت `:8080` bind شود |
+| **Admin** | ALL | `NET_BIND_SERVICE` | Nginx باید به پورت `:8081` bind شود |
+| **Frontend** | ALL | `NET_BIND_SERVICE` | Node.js باید به پورت `:4000` bind شود |
+| **PostgreSQL** | ALL | `CHOWN`, `SETUID`, `SETGID`, `FOWNER`, `DAC_OVERRIDE` | مورد نیاز init دیتابیس |
+| **Redis** | ALL | — | هیچ capability اضافی ندارد |
+
+> `cap_drop: ALL` تمام ۴۰+ capability لینوکس را حذف می‌کند. فقط حداقل مورد نیاز اضافه شده.
+
+#### فایل‌سیستم فقط-خواندنی (Read-Only FS)
+
+| سرویس | read_only | tmpfs مجاز |
+|--------|-----------|------------|
+| **API** | ✅ | `/tmp:100m`, `/app/Logs:50m` — هر دو `noexec,nosuid` |
+| **Admin** | ✅ | `/tmp`, `/var/cache/nginx`, `/var/run` — همه `noexec,nosuid` |
+| **Frontend** | ✅ | `/tmp:100m` — `noexec,nosuid` |
+| **Redis** | ✅ | `/data:128m` — `noexec,nosuid` |
+| **PostgreSQL** | ❌ | — (volume برای data directory لازم است) |
+
+> `noexec`: اجرای باینری در tmpfs ممنوع. `nosuid`: جلوگیری از setuid escalation.
+
+#### سایر تنظیمات امنیتی
+
+| تنظیم | توضیح |
+|-------|--------|
+| `security_opt: no-new-privileges:true` | حتی اگر باینری setuid داشته باشد → اجرا نمی‌شود |
+| `POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256` | احراز هویت قوی PostgreSQL (نه MD5) |
+| `redis --rename-command FLUSHDB ""` | دستورات خطرناک Redis غیرفعال |
+| `Serilog MinimumLevel: Warning` | فقط خطاها و هشدارها لاگ می‌شوند (نه اطلاعات debug) |
+| `ports: 127.0.0.1:PORT:PORT` | هیچ سرویسی روی `0.0.0.0` bind نیست |
+| `ports: !override []` (DB/Redis) | پورت‌های دیتابیس و ردیس **کاملاً بسته** هستند |
+| `logging: max-size + max-file` | جلوگیری از پر شدن دیسک توسط لاگ‌ها |
+
+> **خلاصه:** حتی اگر مهاجم بتواند به داخل یک کانتینر نفوذ کند:
+> - فایل‌سیستم فقط خواندنی است → نمی‌تواند فایل بنویسد
+> - هیچ capability ندارد → نمی‌تواند تنظیمات شبکه یا سیستم را تغییر دهد
+> - pids محدود است → نمی‌تواند fork bomb بزند
+> - حافظه محدود است → نمی‌تواند DoS کند
+> - backend-net internal است → نمی‌تواند به اینترنت وصل شود
+> - Rootless Podman → حتی با container escape فقط یک user عادی است
 
 ---
 
@@ -133,17 +233,22 @@ Internet
 # ۱. به‌روزرسانی سیستم (Rocky Linux / RHEL)
 sudo dnf update -y
 
-# ۲. نصب Podman (یا Docker)
+# ۲. نصب Podman + Compose (Rootless — بدون root daemon)
 sudo dnf install -y podman podman-compose
+# Rootless بودن را تأیید کنید:
+podman info --format '{{.Host.Security.Rootless}}'
+# باید true باشد
 
-# ۳. نصب Caddy (روی هاست — نه داخل Docker)
+# ۳. Lingering فعال کنید (سرویس‌ها بدون لاگین بمانند)
+sudo loginctl enable-linger $(whoami)
+
+# ۴. نصب Caddy (روی هاست — نه داخل Container)
 sudo dnf install -y 'dnf-command(copr)'
 sudo dnf copr enable -y @caddy/caddy
 sudo dnf install -y caddy
 sudo systemctl enable --now caddy
 
-# ۴. نصب Git
-sudo dnf install -y git
+# توجه: نیازی به Git روی سرور نیست — CI/CD فایل‌ها را SCP می‌کند
 ```
 
 ### مرحله ۲: آماده‌سازی دایرکتوری سرور

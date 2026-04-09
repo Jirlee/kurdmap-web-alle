@@ -179,6 +179,11 @@ jobs:
               exit 1
             fi
 
+            # Ensure GHCR_USERNAME is in .env (needed by compose for image names)
+            if ! grep -q "^GHCR_USERNAME=" .env; then
+              echo "GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}" >> .env
+            fi
+
             # Ensure backup script is executable
             chmod +x docker/backup.sh
 

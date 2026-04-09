@@ -1,9 +1,20 @@
-# KurdMap — Production Overlay
-# Usage: podman-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# KurdMap — Production Overlay (Podman Enterprise)
+# Usage: podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
 #
 # Requires .env file with all secrets set. See .env.example
+#
+# Security Architecture (Defense-in-Depth):
+#   Layer 0: Rootless Podman (no root daemon)
+#   Layer 1: Network isolation (frontend-net bridge + backend-net internal)
+#   Layer 2: Read-only filesystem + tmpfs
+#   Layer 3: Dropped capabilities (--cap-drop ALL)
+#   Layer 4: no-new-privileges (no setuid/setgid escalation)
+#   Layer 5: Resource limits (memory, cpu, pids)
+#   Layer 6: 127.0.0.1 binding (only Caddy on host can reach services)
+#   Layer 7: Backend-net is --internal (DB/Redis have ZERO internet access)
 
 services:
+  # ─── PostgreSQL (backend-net ONLY — no internet, no host exposure) ──
   postgres:
     ports: !override []
     environment:
@@ -11,45 +22,55 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
-    networks:
-      - backend-net
     deploy:
       resources:
         limits:
           memory: 512m
           cpus: '2.0'
+        reservations:
+          memory: 256m
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    cap_add:
+      - CHOWN
+      - SETUID
+      - SETGID
+      - FOWNER
+      - DAC_OVERRIDE
+    pids_limit: 256
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
 
+  # ─── Redis (backend-net ONLY — no internet, no host exposure) ──
   redis:
     ports: !override []
-    networks:
-      - backend-net
     read_only: true
     tmpfs:
-      - /data:size=128m
+      - /data:size=128m,noexec,nosuid
     deploy:
       resources:
         limits:
           memory: 128m
           cpus: '0.5'
+        reservations:
+          memory: 64m
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    pids_limit: 64
     logging:
       driver: json-file
       options:
         max-size: "5m"
         max-file: "3"
 
+  # ─── API (bridges frontend-net + backend-net) ──
   api:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-api:latest
     ports: !override
@@ -65,78 +86,82 @@ services:
       Cors__AllowedOrigins__1: ${ADMIN_URL}
       AllowedHosts: "${API_DOMAIN:-api.kurdmap.de}"
       Serilog__MinimumLevel__Default: "Warning"
-    networks:
-      - frontend-net
-      - backend-net
     read_only: true
     tmpfs:
-      - /tmp:size=100m
-      - /app/Logs:size=50m
+      - /tmp:size=100m,noexec,nosuid
+      - /app/Logs:size=50m,noexec,nosuid
     deploy:
       resources:
         limits:
           memory: 512m
           cpus: '2.0'
+        reservations:
+          memory: 256m
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
     cap_add:
       - NET_BIND_SERVICE
+    pids_limit: 256
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "5"
 
+  # ─── Admin Panel (frontend-net ONLY) ──
   admin:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-admin:latest
     ports: !override
       - "127.0.0.1:8081:8081"
-    networks:
-      - frontend-net
     read_only: true
     tmpfs:
-      - /tmp
-      - /var/cache/nginx
-      - /var/run
+      - /tmp:noexec,nosuid
+      - /var/cache/nginx:noexec,nosuid
+      - /var/run:noexec,nosuid
     deploy:
       resources:
         limits:
           memory: 128m
           cpus: '0.5'
+        reservations:
+          memory: 64m
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
     cap_add:
       - NET_BIND_SERVICE
+    pids_limit: 64
     logging:
       driver: json-file
       options:
         max-size: "5m"
         max-file: "3"
 
+  # ─── Frontend SSR (frontend-net ONLY) ──
   frontend:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-frontend:latest
     ports: !override
       - "127.0.0.1:4000:4000"
-    networks:
-      - frontend-net
     read_only: true
     tmpfs:
-      - /tmp:size=100m
+      - /tmp:size=100m,noexec,nosuid
     deploy:
       resources:
         limits:
           memory: 256m
           cpus: '1.0'
+        reservations:
+          memory: 128m
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
     cap_add:
       - NET_BIND_SERVICE
+    pids_limit: 128
     logging:
       driver: json-file
       options:
@@ -150,11 +175,8 @@ services:
   #   import /opt/kurdmap/docker/Caddyfile
   # After changes: sudo systemctl reload caddy
 
-networks:
-  frontend-net:
-    driver: bridge
-  backend-net:
-    driver: bridge
-    internal: true
+# Networks are defined in docker-compose.yml (base) and inherited here.
+# frontend-net: bridge (API, Admin, Frontend — host-reachable via 127.0.0.1)
+# backend-net:  internal (API ↔ PostgreSQL ↔ Redis — ZERO internet access)
 
 volumes: {}
