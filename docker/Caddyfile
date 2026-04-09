@@ -36,10 +36,7 @@ kurdmap.de, www.kurdmap.de {
 	redir @www https://kurdmap.de{uri} permanent
 
 	reverse_proxy localhost:4000 {
-		header_up Host              {host}
-		header_up X-Real-IP         {remote_host}
-		header_up X-Forwarded-For   {remote_host}
-		header_up X-Forwarded-Proto {scheme}
+		header_up X-Real-IP {remote_host}
 
 		health_uri  /
 		health_interval 30s
@@ -63,10 +60,7 @@ admin.kurdmap.de {
 	# respond @blocked 403
 
 	reverse_proxy localhost:8081 {
-		header_up Host              {host}
-		header_up X-Real-IP         {remote_host}
-		header_up X-Forwarded-For   {remote_host}
-		header_up X-Forwarded-Proto {scheme}
+		header_up X-Real-IP {remote_host}
 	}
 
 	log {
@@ -88,10 +82,7 @@ api.kurdmap.de {
 	}
 
 	reverse_proxy localhost:8080 {
-		header_up Host              {host}
-		header_up X-Real-IP         {remote_host}
-		header_up X-Forwarded-For   {remote_host}
-		header_up X-Forwarded-Proto {scheme}
+		header_up X-Real-IP {remote_host}
 
 		health_uri  /health
 		health_interval 30s
