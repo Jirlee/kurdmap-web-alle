@@ -1,6 +1,6 @@
 # KurdMap API — Multi-stage build
 # Build: podman build -f docker/api.Dockerfile -t kurdmap-api .
-FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy csproj files first for layer caching
@@ -17,7 +17,7 @@ COPY src/ .
 RUN dotnet publish KurdMap.API/KurdMap.API.csproj -c Release -o /app/publish --no-restore
 
 # Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
 # Npgsql requires libgssapi for PostgreSQL GSSAPI/Kerberos negotiation
