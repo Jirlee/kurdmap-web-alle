@@ -211,7 +211,8 @@ jobs:
             podman compose -f docker-compose.yml -f docker-compose.prod.yml down --remove-orphans 2>/dev/null || true
             podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
 
-            # Ensure Caddyfile is readable by caddy service
+            # Ensure Caddyfile is readable by caddy service (runs as user 'caddy')
+            chmod o+rx . docker 2>/dev/null || true
             chmod 644 docker/Caddyfile 2>/dev/null || true
 
             # Restart Caddy to pick up Caddyfile changes (restart, not reload — admin API is disabled)
