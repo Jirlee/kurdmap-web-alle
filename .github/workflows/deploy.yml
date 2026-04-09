@@ -148,6 +148,15 @@ jobs:
             docker/seed-data.sql
             .env.example
 
+      - name: Create target directory on server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_PORT }}
+          script: mkdir -p ${{ secrets.DEPLOY_PATH }}/docker
+
       - name: Copy deployment files to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -157,6 +166,7 @@ jobs:
           port: ${{ secrets.DEPLOY_PORT }}
           source: "docker-compose.yml,docker-compose.prod.yml,docker/Caddyfile,docker/backup.sh,docker/seed-data.sql,.env.example"
           target: ${{ secrets.DEPLOY_PATH }}
+          overwrite: true
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
