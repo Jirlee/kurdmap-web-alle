@@ -1,5 +1,8 @@
 # KurdMap — Docker Compose (Podman-compatible)
 #
+# Run all commands from this folder (docker/):
+#   cd docker && podman compose up -d --build
+#
 # Development:
 #   podman compose up -d --build     — auto-loads docker-compose.override.yml (dev ports)
 #   podman compose down              — Stop all services
@@ -13,6 +16,9 @@
 #   frontend-net (bridge)     — API, Admin, Frontend exposed to host (127.0.0.1)
 #   backend-net  (internal)   — API ↔ PostgreSQL ↔ Redis only, NO internet access
 #   API bridges both networks; DB/Redis are completely isolated.
+
+# Stable project name so containers/volumes survive folder moves
+name: kurdmap
 
 services:
   # ─── PostgreSQL ───────────────────────────────────────────

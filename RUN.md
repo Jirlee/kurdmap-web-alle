@@ -12,14 +12,19 @@ For server / CI / TLS details, see [Docs/Roadmaps/04-server-deployment-guide.md]
 | Podman | ≥ 4.x | `podman --version` |
 | podman-compose **or** `podman compose` | any | `podman compose version` |
 | openssl | any | `openssl version` |
+| Free disk | ≥ 8 GB | `df -h /` |
 
 Optional for local builds: `dotnet 10 SDK`, `node 22`, `npm`.
+
+> **All compose commands run from the [docker/](docker/) folder.**
 
 ---
 
 ## 2. First-time setup
 
 ```bash
+cd docker
+
 # 1. Create .env from the template (one-time)
 cp .env.example .env
 
@@ -40,12 +45,14 @@ sed -i "s|^POSTGRES_USER=.*|POSTGRES_USER=postgres|" .env
 
 ## 3. Start
 
+All commands below assume `cd docker` first.
+
 ### A) Database + Redis only (fastest — for local API dev)
 ```bash
 podman compose up -d postgres redis
 ```
 
-### B) Full stack (builds API + Admin + Frontend on first run — slow)
+### B) Full stack (builds API + Admin + Frontend on first run — needs ~6 GB free disk)
 ```bash
 podman compose up -d --build
 ```
@@ -179,19 +186,20 @@ make clean           # down -v + remove build artifacts
 ## 10. File map (deployment artifacts)
 
 ```
-.env.example                  ← template; copy to .env (gitignored)
-docker-compose.yml            ← base stack (5 services + 2 networks)
-docker-compose.override.yml   ← dev: build contexts + 0.0.0.0 ports (auto-loaded)
-docker-compose.prod.yml       ← prod: GHCR images + 8 security layers
-Makefile                      ← shortcuts wrapping the commands above
-hooks/pre-commit              ← secret scanner (install: see file header)
-docker/
+docker/                       ← run all `podman compose` commands from here
+├── .env.example              ← template; copy to .env (gitignored)
+├── docker-compose.yml        ← base stack (5 services + 2 networks)
+├── docker-compose.override.yml ............ dev: build contexts + 0.0.0.0 (auto-loaded)
+├── docker-compose.prod.yml   ← prod: GHCR images + 8 security layers
+├── Makefile                  ← shortcuts (run from docker/)
 ├── api.Dockerfile            ← .NET 10 multi-stage
 ├── admin.Dockerfile          ← Angular 21 SPA + nginx
 ├── frontend.Dockerfile       ← Angular SSR (Node)
 ├── admin-nginx.conf          ← nginx config for admin SPA
 ├── Caddyfile                 ← host-side reverse proxy (production only)
 ├── backup.sh                 ← pg_dump + gzip + retention
-├── seed-data.sql             ← test fixtures
-└── README.md                 ← what each file does
+└── seed-data.sql             ← test fixtures
+
+.dockerignore                 ← at repo root (build context root)
+hooks/pre-commit              ← secret scanner (install: see file header)
 ```
