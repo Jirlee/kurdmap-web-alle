@@ -29,42 +29,37 @@ import { Category } from '../../core/models';
         </div>
 
         @if (loading()) {
-          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             @for (_ of [1, 2, 3, 4, 5, 6]; track $index) {
-              <div class="h-32 rounded-2xl bg-gray-100 dark:bg-gray-800 animate-pulse"></div>
+              <div class="h-[5.5rem] rounded-2xl bg-gray-100 dark:bg-gray-800 animate-pulse"></div>
             }
           </div>
         } @else {
-          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @for (category of categories(); track category.id) {
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            @for (category of categories(); track category.id; let i = $index) {
               <button
                 (click)="onCategoryClick(category)"
-                class="group bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-6 shadow-sm hover:shadow-md hover:border-primary-200 dark:hover:border-primary-800 transition-all duration-200 text-start cursor-pointer"
+                class="cat-card group"
+                [style.--cat-delay.ms]="i * 45"
               >
-                <div class="flex items-start gap-4">
+                <span class="cat-card__icon" aria-hidden="true">
                   @if (category.icon) {
-                    <div class="size-12 rounded-xl bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center text-2xl shrink-0 group-hover:scale-110 transition-transform">
-                      {{ category.icon }}
-                    </div>
+                    <span class="text-2xl leading-none">{{ category.icon }}</span>
                   } @else {
-                    <div class="size-12 rounded-xl bg-primary-50 dark:bg-primary-900/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                      <svg class="size-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                      </svg>
-                    </div>
+                    <svg class="size-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                    </svg>
                   }
-                  <div class="min-w-0">
-                    <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors truncate">
-                      {{ getLocalizedName(category) }}
-                    </h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      {{ 'categories.explore' | translate }}
-                    </p>
-                  </div>
-                  <svg class="size-5 text-gray-400 group-hover:text-primary-500 shrink-0 ms-auto group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-all" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                  </svg>
-                </div>
+                </span>
+
+                <span class="cat-card__body">
+                  <span class="cat-card__name">{{ getLocalizedName(category) }}</span>
+                  <span class="cat-card__meta">{{ 'categories.explore' | translate }}</span>
+                </span>
+
+                <svg class="cat-card__arrow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
               </button>
             }
           </div>
@@ -83,6 +78,134 @@ import { Category } from '../../core/models';
       </div>
     </section>
   `,
+  styles: [`
+    .cat-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      padding: 1.125rem 1.25rem;
+      text-align: start;
+      background: #ffffff;
+      border: 1px solid var(--color-gray-100, #f3f4f6);
+      border-radius: 1.25rem;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+      cursor: pointer;
+      overflow: hidden;
+      isolation: isolate;
+      transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1),
+                  box-shadow 0.28s ease, border-color 0.28s ease;
+      animation: cat-in 0.5s ease-out both;
+      animation-delay: var(--cat-delay, 0ms);
+    }
+
+    @keyframes cat-in {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Soft gradient wash that fades in on hover */
+    .cat-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(135deg,
+        color-mix(in oklch, var(--color-primary-500) 9%, transparent),
+        transparent 62%);
+      opacity: 0;
+      transition: opacity 0.28s ease;
+    }
+
+    .cat-card:hover,
+    .cat-card:focus-visible {
+      transform: translateY(-4px);
+      border-color: var(--color-primary-200, #a7f3d0);
+      box-shadow: 0 14px 30px -10px rgba(16, 24, 40, 0.18),
+                  0 6px 12px -8px rgba(16, 24, 40, 0.1);
+    }
+    .cat-card:hover::before,
+    .cat-card:focus-visible::before { opacity: 1; }
+    .cat-card:active { transform: translateY(-1px) scale(0.99); }
+    .cat-card:focus-visible {
+      outline: 2px solid var(--color-primary-500);
+      outline-offset: 2px;
+    }
+
+    .cat-card__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      flex-shrink: 0;
+      border-radius: 0.9rem;
+      color: var(--color-primary-600, #059669);
+      background: linear-gradient(135deg,
+        color-mix(in oklch, var(--color-primary-500) 16%, transparent),
+        color-mix(in oklch, var(--color-accent-400) 16%, transparent));
+      transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .cat-card:hover .cat-card__icon { transform: scale(1.08) rotate(-4deg); }
+
+    .cat-card__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      min-width: 0;
+      flex: 1;
+    }
+    .cat-card__name {
+      font-weight: 600;
+      font-size: 0.975rem;
+      color: var(--color-gray-900, #111827);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.2s ease;
+    }
+    .cat-card:hover .cat-card__name { color: var(--color-primary-600, #059669); }
+    .cat-card__meta {
+      font-size: 0.75rem;
+      color: var(--color-gray-500, #6b7280);
+    }
+
+    .cat-card__arrow {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex-shrink: 0;
+      color: var(--color-gray-300, #d1d5db);
+      transition: transform 0.28s ease, color 0.28s ease;
+    }
+    .cat-card:hover .cat-card__arrow {
+      color: var(--color-primary-500, #10b981);
+      transform: translateX(4px);
+    }
+    :host-context([dir="rtl"]) .cat-card__arrow { transform: scaleX(-1); }
+    :host-context([dir="rtl"]) .cat-card:hover .cat-card__arrow { transform: scaleX(-1) translateX(4px); }
+
+    /* Dark mode — soft surfaces, no pure black */
+    :host-context(.dark) .cat-card {
+      background: #1f2937;             /* card token */
+      border-color: #374151;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    :host-context(.dark) .cat-card:hover,
+    :host-context(.dark) .cat-card:focus-visible {
+      border-color: var(--color-primary-700, #047857);
+      box-shadow: 0 16px 32px -12px rgba(0, 0, 0, 0.55);
+    }
+    :host-context(.dark) .cat-card__name { color: #e5e7eb; }
+    :host-context(.dark) .cat-card:hover .cat-card__name { color: var(--color-primary-400, #34d399); }
+    :host-context(.dark) .cat-card__meta { color: #9ca3af; }
+    :host-context(.dark) .cat-card__arrow { color: #4b5563; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cat-card { animation: none; }
+      .cat-card, .cat-card__icon, .cat-card__arrow { transition: none; }
+    }
+  `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class CategoriesComponent implements OnInit {

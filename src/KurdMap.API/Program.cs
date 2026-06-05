@@ -371,18 +371,27 @@ using (var scope = app.Services.CreateScope())
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
     if (!userManager.Users.Any())
     {
+        var adminEmail = app.Configuration["SEED_ADMIN_EMAIL"] ?? "admin@kurdmap.de";
+        var adminPassword = app.Configuration["SEED_ADMIN_PASSWORD"] ?? "Admin123!@#";
+        var adminFullName = app.Configuration["SEED_ADMIN_FULLNAME"] ?? "Aram Hossaini";
+
         var admin = new ApplicationUser
         {
-            UserName = "admin@kurdmap.de",
-            Email = "admin@kurdmap.de",
-            FullName = "Aram Hossaini",
+            UserName = adminEmail,
+            Email = adminEmail,
+            FullName = adminFullName,
             EmailConfirmed = true
         };
-        var result = await userManager.CreateAsync(admin, "Admin123!@#");
+        var result = await userManager.CreateAsync(admin, adminPassword);
         if (result.Succeeded)
         {
             await userManager.AddToRolesAsync(admin, [KurdMap.Shared.AppRoles.SuperAdmin, KurdMap.Shared.AppRoles.Admin]);
             Log.Information("Default admin user seeded: {Email}", admin.Email);
+        }
+        else
+        {
+            Log.Error("Failed to seed default admin user: {Errors}",
+                string.Join("; ", result.Errors.Select(e => e.Description)));
         }
     }
 }

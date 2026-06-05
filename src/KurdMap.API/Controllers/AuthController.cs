@@ -35,11 +35,25 @@ public class AuthController(
         var ip = GetClientIp();
         var ua = GetUserAgent();
 
+        // If a confirmation password is supplied, it must match.
+        if (request.ConfirmPassword is not null && request.ConfirmPassword != request.Password)
+        {
+            return ValidationProblem(new ValidationProblemDetails(new Dictionary<string, string[]>
+            {
+                ["ConfirmPassword"] = ["The password and confirmation password do not match."]
+            }));
+        }
+
+        // FullName is optional in the request; fall back to the local-part of the email.
+        var fullName = string.IsNullOrWhiteSpace(request.FullName)
+            ? request.Email.Split('@')[0]
+            : request.FullName.Trim();
+
         var user = new ApplicationUser
         {
             UserName = request.Email,
             Email = request.Email,
-            FullName = request.FullName
+            FullName = fullName
         };
 
         var result = await userManager.CreateAsync(user, request.Password);
@@ -502,7 +516,8 @@ public class AuthController(
 public sealed record RegisterRequest(
     [Required] string Email,
     [Required] string Password,
-    [Required] string FullName);
+    string? FullName = null,
+    string? ConfirmPassword = null);
 
 public sealed record LoginRequest(
     [Required] string Email,

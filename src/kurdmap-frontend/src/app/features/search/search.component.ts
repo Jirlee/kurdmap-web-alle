@@ -399,9 +399,19 @@ type ViewMode = 'list' | 'split' | 'map';
   styles: [`
     .search-section {
       padding: 1rem 1rem 2.5rem;
+      width: 100%;
+      max-width: 80rem;
+      margin-inline: auto;
+      box-sizing: border-box;
+      /* Never let inner content force horizontal scrolling on mobile */
+      overflow-x: clip;
     }
     @media (min-width: 640px) { .search-section { padding: 1.5rem 1.5rem 2.5rem; } }
     @media (min-width: 1024px) { .search-section { padding: 1.5rem 2rem 2.5rem; } }
+
+    /* Allow grid/flex children to shrink instead of overflowing their track */
+    .search-section :where(.grid, .flex) { min-width: 0; }
+    .search-section app-business-card { display: block; min-width: 0; max-width: 100%; }
 
     .filter-chip {
       flex-shrink: 0;
@@ -415,7 +425,7 @@ type ViewMode = 'list' | 'split' | 'map';
       cursor: pointer;
       transition: all 0.15s ease;
       white-space: nowrap;
-      min-height: 2.5rem;
+      min-height: 2.75rem;
       appearance: none;
       -webkit-appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
@@ -448,7 +458,7 @@ type ViewMode = 'list' | 'split' | 'map';
       cursor: pointer;
       transition: all 0.15s ease;
       white-space: nowrap;
-      min-height: 2.5rem;
+      min-height: 2.75rem;
     }
     .filter-chip-btn:active {
       transform: scale(0.95);
@@ -634,13 +644,16 @@ type ViewMode = 'list' | 'split' | 'map';
       color: var(--color-primary-400);
     }
 
-    /* Split view layout */
+    /* Split view layout — stacks to single column on smaller viewports */
     .split-container {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 1.5rem;
       height: 65vh;
       min-height: 28rem;
+    }
+    @media (min-width: 1024px) {
+      .split-container { grid-template-columns: 1fr 1fr; }
     }
     .split-list {
       overflow-y: auto;

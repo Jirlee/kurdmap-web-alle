@@ -141,8 +141,8 @@
 
 /* Dark mode overrides for common patterns */
 .dark .dark\:card {
-  background: oklch(0.20 0.01 250);
-  border-color: oklch(0.25 0.01 250);
+  background: #1f2937;
+  border-color: #374151;
 }
 
 /* Scroll progress bar */
@@ -174,11 +174,31 @@
 }
 
 /* --- Dark Mode Colors --- */
+/* Soft dark theme (NOT pure black). Unified tokens applied across every
+   component because all dark utilities (`dark:bg-gray-950/900/800`,
+   `dark:text-gray-200/400`) resolve to these CSS variables.
+     Background  #0f172a  (page)
+     Surface     #111827  (nav, sticky bars, sections)
+     Card        #1f2937  (cards, inputs, modals)
+     Text        #e5e7eb  (primary)
+     Secondary   #9ca3af  (muted text) */
 .dark {
   color-scheme: dark;
-  --color-surface: oklch(0.15 0.01 250);
-  --color-surface-dim: oklch(0.12 0.01 250);
-  --color-surface-bright: oklch(0.20 0.01 250);
+
+  /* Map the gray scale used by dark: utilities to the soft-dark palette.
+     950 normally renders near-black (#030712) — we lift it to slate #0f172a. */
+  --color-gray-950: #0f172a; /* page background  */
+  --color-gray-900: #111827; /* surface          */
+  --color-gray-800: #1f2937; /* card / input     */
+  --color-gray-700: #374151; /* borders / hover  */
+  --color-gray-200: #e5e7eb; /* primary text     */
+  --color-gray-300: #d1d5db; /* primary text alt */
+  --color-gray-400: #9ca3af; /* secondary text   */
+
+  /* CSS-var driven surfaces (body, custom components) */
+  --color-surface: #0f172a;
+  --color-surface-dim: #0b1120;
+  --color-surface-bright: #1f2937;
 }
 
 /* Web fonts (DM Sans / Vazirmatn / Noto Sans Arabic) are self-hosted via

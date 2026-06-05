@@ -11,8 +11,8 @@ import { Category } from '../../../core/models';
   template: `
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
       <div class="text-center mb-12">
-        <p class="text-xs font-semibold text-primary-600 tracking-widest uppercase mb-3">{{ 'home.categoriesTitle' | translate }}</p>
-        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-balance">
+        <p class="text-xs font-semibold text-primary-600 dark:text-primary-400 tracking-widest uppercase mb-3">{{ 'home.categoriesTitle' | translate }}</p>
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 text-balance">
           {{ 'home.categoriesTitle' | translate }}
         </h2>
       </div>
@@ -28,16 +28,16 @@ import { Category } from '../../../core/models';
           @for (category of categories(); track category.id; let i = $index) {
             <button
               (click)="onCategoryClick(category)"
-              class="group relative flex flex-col items-center justify-center gap-2.5 p-5 bg-white dark:bg-gray-900 rounded-2xl border border-gray-100/80 dark:border-gray-800 shadow-card hover:shadow-card-hover hover:-translate-y-1 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-300 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 outline-none overflow-hidden motion-reduce:transition-none"
+              class="group relative flex flex-col items-center justify-center gap-2.5 p-5 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100/80 dark:border-gray-700 shadow-card hover:shadow-card-hover hover:-translate-y-1 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-300 cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 outline-none overflow-hidden motion-reduce:transition-none"
               [style.animation-delay]="(i * 60) + 'ms'"
               style="animation: fade-in-up 0.5s ease-out both;"
             >
               <!-- Subtle gradient on hover -->
-              <div class="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50 group-hover:to-primary-100/50 transition-all duration-300 rounded-2xl"></div>
-              <div class="relative size-10 rounded-xl bg-primary-50 group-hover:bg-primary-100 flex items-center justify-center transition-colors duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-primary-50/0 to-primary-100/0 group-hover:from-primary-50 group-hover:to-primary-100/50 dark:group-hover:from-primary-900/25 dark:group-hover:to-primary-800/10 transition-all duration-300 rounded-2xl"></div>
+              <div class="relative size-10 rounded-xl bg-primary-50 dark:bg-primary-900/25 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/40 flex items-center justify-center transition-colors duration-300">
                 <span class="text-xl motion-safe:group-hover:scale-110 motion-safe:group-hover:-rotate-3 transition-transform duration-300">{{ getEmoji(category.icon) }}</span>
               </div>
-              <span class="relative text-[13px] font-medium text-gray-700 group-hover:text-primary-700 transition-colors text-center leading-snug line-clamp-2">
+              <span class="relative text-[13px] font-medium text-gray-700 dark:text-gray-300 group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors text-center leading-snug line-clamp-2">
                 {{ langService.getLocalizedField(category) }}
               </span>
             </button>
