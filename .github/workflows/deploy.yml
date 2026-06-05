@@ -158,7 +158,7 @@ jobs:
           script: mkdir -p ${{ secrets.DEPLOY_PATH }}/docker
 
       - name: Copy deployment files to server
-        uses: appleboy/scp-action@v0.1.7
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
