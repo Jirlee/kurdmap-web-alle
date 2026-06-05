@@ -1,6 +1,7 @@
  import { ChangeDetectionStrategy, Component, inject, OnInit, signal, computed, effect, input, PLATFORM_ID, DestroyRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
@@ -11,6 +12,7 @@ import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ModalService, SearchModalParams } from '../../core/services/modal.service';
 import { GeolocationService, GeoStatus } from '../../core/services/geolocation.service';
+import { SearchHistoryService } from '../../core/services/search-history.service';
 import { BusinessSummary, BusinessSortOption, Category, City, PaginatedList } from '../../core/models';
 import { BusinessCardComponent } from '../../shared/components/business-card/business-card.component';
 import { PaginationComponent } from '../../shared/components/pagination/pagination.component';
@@ -205,6 +207,57 @@ type ViewMode = 'list' | 'split' | 'map';
         }
       </div>
 
+      <!-- Predictive suggestions — recent searches + popular categories -->
+      @if (showSuggestions()) {
+        <div class="suggestions-panel">
+          @if (recentSearches().length > 0) {
+            <div class="mb-5">
+              <div class="flex items-center justify-between mb-2.5">
+                <h3 class="suggestions-heading">
+                  <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  {{ 'search.recentSearches' | translate }}
+                </h3>
+                <button (click)="clearSearchHistory()" class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 font-medium cursor-pointer">
+                  {{ 'search.clearAll' | translate }}
+                </button>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                @for (q of recentSearches(); track q) {
+                  <button (click)="applyRecentSearch(q)" class="recent-chip">
+                    <svg class="size-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="truncate max-w-[12rem]">{{ q }}</span>
+                    <span (click)="removeRecentSearch($event, q)" class="recent-chip-x" role="button" tabindex="-1" [attr.aria-label]="'common.remove' | translate">×</span>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+
+          @if (popularCategories().length > 0) {
+            <div>
+              <h3 class="suggestions-heading mb-2.5">
+                <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
+                </svg>
+                {{ 'search.browseCategories' | translate }}
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                @for (cat of popularCategories(); track cat.id) {
+                  <button (click)="applyCategorySuggestion(cat.slug)" class="category-suggestion-chip">
+                    @if (cat.icon) { <span aria-hidden="true">{{ cat.icon }}</span> }
+                    <span>{{ langService.getLocalizedField(cat) }}</span>
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
       <!-- Results count & location status -->
       <div class="flex items-center justify-between mb-4 mt-2" aria-live="polite" aria-atomic="true">
         <div class="text-sm text-gray-500 dark:text-gray-400 font-medium">
@@ -316,6 +369,14 @@ type ViewMode = 'list' | 'split' | 'map';
             <p class="text-gray-500 dark:text-gray-400 text-sm max-w-sm mx-auto">
               {{ 'search.noResultsHint' | translate }}
             </p>
+            @if (hasActiveFilters()) {
+              <button (click)="clearAllFilters()" class="mt-6 inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-xl transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 outline-none">
+                <svg class="size-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                {{ 'search.clearAll' | translate }}
+              </button>
+            }
           </div>
         } @else {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -474,6 +535,105 @@ type ViewMode = 'list' | 'split' | 'map';
       color: var(--color-primary-400);
     }
 
+    /* Suggestions panel */
+    .suggestions-panel {
+      padding: 0.75rem 0 0.5rem;
+      animation: suggestions-fade 0.25s ease-out;
+    }
+    @keyframes suggestions-fade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .suggestions-heading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-gray-500, #6b7280);
+    }
+    :host-context(.dark) .suggestions-heading {
+      color: var(--color-gray-400, #9ca3af);
+    }
+    .recent-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+      background: var(--color-gray-50, #f9fafb);
+      border: 1px solid var(--color-gray-200, #e5e7eb);
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-gray-700, #374151);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      max-width: 18rem;
+    }
+    .recent-chip:hover {
+      background: var(--color-gray-100, #f3f4f6);
+      border-color: var(--color-gray-300, #d1d5db);
+    }
+    .recent-chip:focus-visible {
+      outline: 2px solid var(--color-primary-500);
+      outline-offset: 2px;
+    }
+    .recent-chip-x {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.125rem;
+      height: 1.125rem;
+      border-radius: 50%;
+      color: var(--color-gray-400, #9ca3af);
+      font-size: 1rem;
+      line-height: 1;
+      transition: all 0.15s ease;
+    }
+    .recent-chip-x:hover {
+      background: var(--color-gray-300, #d1d5db);
+      color: var(--color-gray-700, #374151);
+    }
+    .category-suggestion-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.875rem;
+      background: var(--color-primary-50, rgba(16, 185, 129, 0.08));
+      border: 1px solid var(--color-primary-100, rgba(16, 185, 129, 0.15));
+      border-radius: 9999px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--color-primary-700, #047857);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .category-suggestion-chip:hover {
+      background: var(--color-primary-100, rgba(16, 185, 129, 0.15));
+      border-color: var(--color-primary-300);
+      transform: translateY(-1px);
+    }
+    .category-suggestion-chip:active {
+      transform: scale(0.96);
+    }
+    .category-suggestion-chip:focus-visible {
+      outline: 2px solid var(--color-primary-500);
+      outline-offset: 2px;
+    }
+    :host-context(.dark) .recent-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: var(--color-gray-300);
+    }
+    :host-context(.dark) .recent-chip:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+    :host-context(.dark) .category-suggestion-chip {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.2);
+      color: var(--color-primary-400);
+    }
+
     /* Split view layout */
     .split-container {
       display: grid;
@@ -509,6 +669,8 @@ export default class SearchComponent implements OnInit {
   private readonly modalService = inject(ModalService);
   protected readonly langService = inject(LanguageService);
   protected readonly geoService = inject(GeolocationService);
+  protected readonly searchHistory = inject(SearchHistoryService);
+  private readonly route = inject(ActivatedRoute);
 
   /** Modal input params from ModalService */
   readonly modalParams = input<SearchModalParams | undefined>(undefined);
@@ -551,6 +713,12 @@ export default class SearchComponent implements OnInit {
     return city ? this.langService.getLocalizedField(city) : slug;
   });
 
+  /** Predictive suggestions surface: shown only when nothing is typed/filtered. */
+  protected readonly showSuggestions = computed(() => !this.hasActiveFilters());
+  protected readonly recentSearches = this.searchHistory.recent;
+  /** Top categories to surface as quick "trending" chips. */
+  protected readonly popularCategories = computed(() => this.categories().slice(0, 8));
+
   constructor() {
     // Debounced search input
     this.searchSubject.pipe(
@@ -560,6 +728,7 @@ export default class SearchComponent implements OnInit {
     ).subscribe(text => {
       this.searchText.set(text);
       this.currentPage.set(1);
+      this.searchHistory.add(text);
       this.executeSearch();
     });
   }
@@ -583,6 +752,12 @@ export default class SearchComponent implements OnInit {
         this.activateNearMe();
         return; // search triggered after location acquired
       }
+    } else {
+      // Standalone /search route — hydrate from query params for deep links.
+      const qp = this.route.snapshot.queryParamMap;
+      this.searchText.set(qp.get('q') ?? '');
+      this.selectedCategory.set(qp.get('category') ?? '');
+      this.selectedCity.set(qp.get('city') ?? '');
     }
     this.executeSearch();
 
@@ -594,6 +769,29 @@ export default class SearchComponent implements OnInit {
 
   protected onSearchInput(text: string): void {
     this.searchSubject.next(text);
+  }
+
+  /** Apply a recent search query from the suggestions panel. */
+  protected applyRecentSearch(query: string): void {
+    this.searchText.set(query);
+    this.searchSubject.next(query);
+    this.currentPage.set(1);
+    this.searchHistory.add(query);
+    this.executeSearch();
+  }
+
+  protected removeRecentSearch(event: Event, query: string): void {
+    event.stopPropagation();
+    this.searchHistory.remove(query);
+  }
+
+  protected clearSearchHistory(): void {
+    this.searchHistory.clear();
+  }
+
+  /** Apply a category chip from the suggestions panel. */
+  protected applyCategorySuggestion(slug: string): void {
+    this.onCategoryChange(slug);
   }
 
   protected onCategoryChange(slug: string): void {

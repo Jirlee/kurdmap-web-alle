@@ -6,16 +6,89 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="KurdMap - Finden Sie kurdische Geschäfte, Restaurants und Dienstleistungen in ganz Deutschland">
-  <meta name="theme-color" content="#059669">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#059669">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f3460">
   <meta name="robots" content="index, follow">
+  <meta name="application-name" content="KurdMap">
+  <meta name="apple-mobile-web-app-title" content="KurdMap">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Open Graph -->
   <meta property="og:site_name" content="KurdMap">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_DE">
+  <meta property="og:title" content="KurdMap - Kurdische Geschäfte in Deutschland">
+  <meta property="og:description" content="Finden Sie kurdische Geschäfte, Restaurants und Dienstleistungen in ganz Deutschland.">
+  <meta property="og:url" content="https://kurdmap.de/">
+  <meta property="og:image" content="https://kurdmap.de/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="KurdMap">
+
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="twitter:title" content="KurdMap - Kurdische Geschäfte in Deutschland">
+  <meta name="twitter:description" content="Finden Sie kurdische Geschäfte, Restaurants und Dienstleistungen in ganz Deutschland.">
+  <meta name="twitter:image" content="https://kurdmap.de/og-image.png">
+
+  <!-- Icons & PWA -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
   <link rel="canonical" href="https://kurdmap.de/">
+
+  <!-- Structured Data: Organization + Website with SearchAction -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://kurdmap.de/#organization",
+        "name": "KurdMap",
+        "url": "https://kurdmap.de/",
+        "logo": "https://kurdmap.de/icon-512.png",
+        "description": "Finden Sie kurdische Geschäfte, Restaurants und Dienstleistungen in ganz Deutschland.",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Germany"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://kurdmap.de/#website",
+        "url": "https://kurdmap.de/",
+        "name": "KurdMap",
+        "publisher": { "@id": "https://kurdmap.de/#organization" },
+        "inLanguage": ["de", "ku", "kmr", "en"],
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://kurdmap.de/search?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
+  <script>
+    // Apply the persisted theme before first paint to avoid a flash of light mode.
+    (function () {
+      try {
+        var stored = localStorage.getItem('kurdmap-theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
-<body class="bg-gray-50 text-gray-900 antialiased">
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100 antialiased">
   <!-- Skip to content (Accessibility) -->
   <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-primary-600 focus:text-white focus:rounded-xl focus:shadow-elevated focus:font-semibold focus:text-sm focus:outline-none focus:ring-2 focus:ring-white">
     Skip to content

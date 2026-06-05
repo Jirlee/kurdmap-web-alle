@@ -47,7 +47,8 @@
     "listView": "Dîtina lîstê",
     "mapView": "Dîtina nexşê",
     "activeFilters": "Fîlterên çalak",
-    "clearAll": "Hemû paqij bike"
+    "clearAll": "Hemû paqij bike",
+    "browseCategories": "Li kategoriyan bigere"
   },
   "business": {
     "verified": "Pejirandî",
@@ -136,7 +137,8 @@
     "back": "Vegere",
     "viewAll": "Hemûyan bibîne",
     "readMore": "Bêtir bixwîne",
-    "language": "Ziman"
+    "language": "Ziman",
+    "remove": "Rake"
   },
   "howItWorks": {
     "title": "KurdMap Çawa Dixebite",

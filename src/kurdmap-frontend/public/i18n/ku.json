@@ -47,7 +47,8 @@
     "listView": "بینینی لیست",
     "mapView": "بینینی نەخشە",
     "activeFilters": "فلتەری چالاک",
-    "clearAll": "سڕینەوەی هەموو"
+    "clearAll": "سڕینەوەی هەموو",
+    "browseCategories": "گەڕان بەناو پۆلەکان"
   },
   "business": {
     "verified": "سەلمێنراو",
@@ -136,7 +137,8 @@
     "back": "گەڕانەوە",
     "viewAll": "بینینی هەمووی",
     "readMore": "زیاتر بخوێنەوە",
-    "language": "زمان"
+    "language": "زمان",
+    "remove": "لابردن"
   },
   "howItWorks": {
     "title": "کوردمەپ چۆن کاردەکات",

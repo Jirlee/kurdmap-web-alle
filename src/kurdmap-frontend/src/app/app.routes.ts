@@ -18,6 +18,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/categories/categories.component'),
   },
   {
+    path: 'search',
+    loadComponent: () => import('./features/search/search.component'),
+  },
+  {
     path: 'privacy',
     loadComponent: () => import('./features/privacy/privacy.component'),
   },

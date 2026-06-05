@@ -107,7 +107,8 @@
     "back": "Go back",
     "viewAll": "View all",
     "readMore": "Read more",
-    "language": "Language"
+    "language": "Language",
+    "remove": "Remove"
   },
   "howItWorks": {
     "title": "How KurdMap Works",
@@ -294,7 +295,8 @@
     "listView": "List view",
     "mapView": "Map view",
     "activeFilters": "Active filters",
-    "clearAll": "Clear all"
+    "clearAll": "Clear all",
+    "browseCategories": "Browse categories"
   },
   "aria": {
     "close": "Close",

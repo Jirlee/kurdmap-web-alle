@@ -45,13 +45,41 @@ export class SeoService {
 
     if (options.url) {
       this.meta.updateTag({ property: 'og:url', content: options.url });
-      this.meta.updateTag({ rel: 'canonical', href: options.url });
+      this.setCanonical(options.url);
     }
 
     if (options.image) {
       this.meta.updateTag({ property: 'og:image', content: options.image });
       this.meta.updateTag({ name: 'twitter:image', content: options.image });
     }
+  }
+
+  /** Set or update the canonical <link> element (Meta service cannot manage <link>). */
+  setCanonical(url: string): void {
+    const head = this.document.head;
+    if (!head) return;
+    let link = head.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (!link) {
+      link = this.document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      head.appendChild(link);
+    }
+    link.setAttribute('href', url);
+  }
+
+  /** Emit BreadcrumbList structured data for the current page. */
+  setBreadcrumbJsonLd(items: { name: string; url: string }[]): void {
+    const jsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        item: item.url,
+      })),
+    };
+    this.setJsonLd(jsonLd, 'breadcrumb-data');
   }
 
   setBusinessJsonLd(business: BusinessJsonLd): void {
@@ -80,13 +108,13 @@ export class SeoService {
     this.setJsonLd(jsonLd);
   }
 
-  private setJsonLd(data: object): void {
+  private setJsonLd(data: object, id = 'structured-data'): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    let script = this.document.getElementById('structured-data') as HTMLScriptElement | null;
+    let script = this.document.getElementById(id) as HTMLScriptElement | null;
     if (!script) {
       script = this.document.createElement('script');
-      script.id = 'structured-data';
+      script.id = id;
       script.type = 'application/ld+json';
       this.document.head.appendChild(script);
     }

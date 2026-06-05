@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   effect,
+  signal,
   PLATFORM_ID,
   DestroyRef,
   ElementRef,
@@ -31,14 +32,22 @@ import { PolicyComponent } from '../../../features/policy/policy.component';
         <div
           #modalPanel
           class="modal-sheet"
+          [class.is-dragging]="isDragging()"
+          [style.transform]="dragY() > 0 ? 'translateY(' + dragY() + 'px)' : null"
           [style.z-index]="100 + modalService.depth()"
           role="dialog"
           aria-modal="true"
           [attr.aria-label]="modalService.activeModal()?.type === 'search' ? ('nav.search' | translate) : ('business.detail' | translate)"
           (click)="$event.stopPropagation()"
         >
-          <!-- Drag handle (mobile) -->
-          <div class="modal-drag-handle" aria-hidden="true">
+          <!-- Drag handle (mobile) — draggable to dismiss -->
+          <div
+            class="modal-drag-handle"
+            (pointerdown)="onDragStart($event)"
+            role="button"
+            tabindex="-1"
+            aria-hidden="true"
+          >
             <div class="mx-auto w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></div>
           </div>
 
@@ -120,6 +129,15 @@ import { PolicyComponent } from '../../../features/policy/policy.component';
       will-change: transform;
       overflow: hidden;
     }
+    /* Smooth snap-back when the drag is released */
+    .modal-sheet:not(.is-dragging) {
+      transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+    .modal-sheet.is-dragging {
+      transition: none;
+      animation: none;
+      user-select: none;
+    }
 
     /* Mobile: bottom-sheet with rounded top */
     @media (max-width: 639px) {
@@ -162,6 +180,11 @@ import { PolicyComponent } from '../../../features/policy/policy.component';
       padding: 0.5rem 0 0.25rem;
       display: flex;
       justify-content: center;
+      cursor: grab;
+      touch-action: none;
+    }
+    .modal-drag-handle:active {
+      cursor: grabbing;
     }
     @media (min-width: 640px) {
       .modal-drag-handle { display: none; }
@@ -298,12 +321,72 @@ export class ModalOverlayComponent {
   private readonly modalPanel = viewChild<ElementRef>('modalPanel');
   private readonly modalContent = viewChild<ElementRef>('modalContent');
 
+  /** Live vertical drag offset of the bottom sheet (px, downward only). */
+  protected readonly dragY = signal(0);
+  protected readonly isDragging = signal(false);
+  private dragStartY = 0;
+  private dragStartTime = 0;
+  /** Dismiss threshold: drag past this distance (or flick fast) to close. */
+  private static readonly DISMISS_DISTANCE = 120;
+  private static readonly DISMISS_VELOCITY = 0.6; // px per ms
+
+  protected onDragStart(event: PointerEvent): void {
+    // Only drag the bottom sheet on touch/small screens.
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (window.matchMedia('(min-width: 640px)').matches) return;
+
+    this.isDragging.set(true);
+    this.dragStartY = event.clientY;
+    this.dragStartTime = performance.now();
+
+    const onMove = (e: PointerEvent) => {
+      const delta = e.clientY - this.dragStartY;
+      // Downward only; add light resistance when dragging up.
+      this.dragY.set(delta > 0 ? delta : delta * 0.2);
+    };
+
+    const onEnd = (e: PointerEvent) => {
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onEnd);
+      document.removeEventListener('pointercancel', onEnd);
+
+      const delta = e.clientY - this.dragStartY;
+      const elapsed = performance.now() - this.dragStartTime;
+      const velocity = delta / Math.max(elapsed, 1);
+
+      this.isDragging.set(false);
+
+      if (delta > ModalOverlayComponent.DISMISS_DISTANCE ||
+          velocity > ModalOverlayComponent.DISMISS_VELOCITY) {
+        // Animate out then close.
+        this.dragY.set(window.innerHeight);
+        setTimeout(() => {
+          this.dragY.set(0);
+          if (this.modalService.canGoBack()) {
+            this.modalService.back();
+          } else {
+            this.modalService.close();
+          }
+        }, 220);
+      } else {
+        // Snap back to resting position.
+        this.dragY.set(0);
+      }
+    };
+
+    document.addEventListener('pointermove', onMove);
+    document.addEventListener('pointerup', onEnd);
+    document.addEventListener('pointercancel', onEnd);
+  }
+
   constructor() {
     // Lock body scroll when modal is open
     effect(() => {
       if (!isPlatformBrowser(this.platformId)) return;
       if (this.modalService.isOpen()) {
         document.body.style.overflow = 'hidden';
+        this.dragY.set(0);
+        this.isDragging.set(false);
         // Scroll modal content to top when switching
         requestAnimationFrame(() => {
           const content = this.modalContent()?.nativeElement;

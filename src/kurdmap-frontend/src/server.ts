@@ -35,8 +35,8 @@ app.use((_req, res, next) => {
     'Content-Security-Policy',
     `default-src 'self'; ` +
     `script-src 'self' 'unsafe-inline'; ` +
-    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; ` +
-    `font-src 'self' https://fonts.gstatic.com; ` +
+    `style-src 'self' 'unsafe-inline'; ` +
+    `font-src 'self'; ` +
     `img-src 'self' data: https://*.tile.openstreetmap.org; ` +
     `connect-src 'self' https://*.tile.openstreetmap.org; ` +
     `frame-ancestors 'none'; ` +

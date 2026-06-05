@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: make every `dark:` utility respond to the `.dark`
+   class toggled on <html>, instead of the OS `prefers-color-scheme` default.
+   Without this, the in-app theme toggle has no effect on `dark:` utilities. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ===== KurdMap Design System — Modern 2026 ===== */
 
 /* --- Theme Tokens --- */

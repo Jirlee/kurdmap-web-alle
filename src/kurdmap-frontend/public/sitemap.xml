@@ -20,6 +20,13 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Search -->
+  <url>
+    <loc>https://kurdmap.de/search</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- About -->
   <url>
     <loc>https://kurdmap.de/about</loc>
