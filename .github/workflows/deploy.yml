@@ -154,7 +154,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
           script: mkdir -p ${{ secrets.DEPLOY_PATH }}/docker
 
       - name: Copy deployment files to server
@@ -163,7 +163,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
-          port: ${{ secrets.DEPLOY_PORT }}
+          port: ${{ secrets.SERVER_SSH_PORT }}
           source: "docker-compose.yml,docker-compose.prod.yml,docker/Caddyfile,docker/backup.sh,docker/seed-data.sql,.env.example"
           target: ${{ secrets.DEPLOY_PATH }}
           overwrite: true
