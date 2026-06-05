@@ -9,7 +9,7 @@
 #   Prod: podman build -f docker/admin.Dockerfile --target prod-runtime -t kurdmap-admin:prod .
 
 # ── Stage 1: Build ────────────────────────────────────────
-FROM docker.io/library/node:22-alpine AS build
+FROM docker.io/library/node:26-alpine AS build
 WORKDIR /app
 
 COPY src/kurdmap-admin/package.json src/kurdmap-admin/package-lock.json ./
