@@ -35,7 +35,7 @@ services:
     networks:
       - backend-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-kurdmap_dev}"]
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:-postgres}", "-d", "${POSTGRES_DB:-kurdmap_dev}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -79,8 +79,14 @@ services:
       Jwt__Issuer: ${JWT_ISSUER:-KurdMap}
       Jwt__Audience: ${JWT_AUDIENCE:-KurdMapClient}
       Cors__AllowedOrigins__0: ${FRONTEND_URL:-http://localhost:4000}
-      Cors__AllowedOrigins__1: ${ADMIN_URL:-http://localhost:8081}
+      Cors__AllowedOrigins__1: ${ADMIN_URL:-http://localhost:4200}
       Cors__AllowedOrigins__2: "http://localhost:4200"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
     networks:
       - frontend-net
       - backend-net
@@ -90,19 +96,22 @@ services:
       redis:
         condition: service_healthy
 
-  # ─── KurdMap Admin Panel (Angular 21 SPA + Nginx) ──────────
+  # ─── KurdMap Admin Panel (Angular 21 SPA — static assets only) ──────
+  # No internal web server. Build artifacts are published to the
+  # `admin-static` named volume; an external server (Caddy on host)
+  # serves them.
   admin:
     image: ${ADMIN_IMAGE:-kurdmap-admin:local}
     container_name: kurdmap-admin
     restart: unless-stopped
-    ports:
-      - "127.0.0.1:8081:8081"
+    volumes:
+      - admin-static:/dist
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://localhost:8081/ || exit 1"]
+      test: ["CMD", "ls", "/dist/index.html"]
       interval: 15s
       timeout: 5s
       retries: 3
-      start_period: 10s
+      start_period: 5s
     networks:
       - frontend-net
     depends_on:
@@ -118,6 +127,12 @@ services:
     environment:
       NODE_ENV: production
       API_URL: "http://api:8080"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:4000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     networks:
       - frontend-net
     depends_on:
@@ -135,3 +150,4 @@ networks:
 volumes:
   pgdata:
   redisdata:
+  admin-static:

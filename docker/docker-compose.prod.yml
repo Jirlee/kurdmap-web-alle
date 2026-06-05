@@ -108,26 +108,26 @@ services:
         max-size: "10m"
         max-file: "5"
 
-  # ─── Admin Panel (frontend-net ONLY) ──
-  # NOTE: read_only not used — Podman tmpfs doesn't support uid= option,
-  # and nginx needs writable /var/cache/nginx + /var/run. Admin is a static
-  # SPA with no user data, so the risk is minimal.
+  # ─── Admin Panel (static-asset producer, no web server) ──
+  # The image only carries the compiled Angular build output. It runs no
+  # server and exposes no ports. Static files are published to the
+  # `admin-static` volume; an external server (Caddy on the host) serves them.
   admin:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-admin:latest
+    # Static-asset producer only — no listening sockets, no web server.
+    read_only: true
     deploy:
       resources:
         limits:
-          memory: 128m
-          cpus: '0.5'
-        reservations:
           memory: 64m
+          cpus: '0.25'
+        reservations:
+          memory: 32m
     security_opt:
       - no-new-privileges:true
     cap_drop:
       - ALL
-    cap_add:
-      - NET_BIND_SERVICE
-    pids_limit: 64
+    pids_limit: 32
     logging:
       driver: json-file
       options:

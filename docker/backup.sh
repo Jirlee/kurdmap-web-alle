@@ -11,11 +11,15 @@ CONTAINER_NAME="${CONTAINER_NAME:-kurdmap-postgres}"
 TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
 BACKUP_FILE="${BACKUP_DIR}/kurdmap_${TIMESTAMP}.sql.gz"
 
-# Source .env if available
-SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+# Source environment file if available.
+# Prefer docker/.env (current layout), then fall back to repo-root .env.
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 if [[ -f "${SCRIPT_DIR}/.env" ]]; then
   # shellcheck source=/dev/null
   source "${SCRIPT_DIR}/.env"
+elif [[ -f "${SCRIPT_DIR}/../.env" ]]; then
+  # shellcheck source=/dev/null
+  source "${SCRIPT_DIR}/../.env"
 fi
 
 DB_NAME="${POSTGRES_DB:-kurdmap}"

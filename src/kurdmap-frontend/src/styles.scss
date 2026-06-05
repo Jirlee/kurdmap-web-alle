@@ -35,7 +35,7 @@
   /* Fonts */
   --font-sans: 'DM Sans', 'Inter', system-ui, -apple-system, sans-serif;
   --font-display: 'DM Sans', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-rtl: 'Vazirmatn', 'NotoSansArabic', 'Tahoma', 'Arial', sans-serif;
+  --font-rtl: 'Vazirmatn', 'Noto Sans Arabic', 'Tahoma', 'Arial', sans-serif;
 
   /* Radius — modern rounded with pill option */
   --radius-card: 1rem;
@@ -168,7 +168,6 @@
   transform: translateY(0);
 }
 
-/* --- RTL Font Faces --- */
 /* --- Dark Mode Colors --- */
 .dark {
   color-scheme: dark;
@@ -177,92 +176,9 @@
   --color-surface-bright: oklch(0.20 0.01 250);
 }
 
-/* DM Sans — modern geometric sans-serif for Latin text */
-@font-face {
-  font-family: 'DM Sans';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAop-hSA.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'DM Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAkJ-hSA.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'DM Sans';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAfJihSA.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'DM Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/dmsans/v15/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwARZihSA.woff2') format('woff2');
-}
-
-/* Vazirmatn — beautiful Kurdish/Arabic/Persian font */
-@font-face {
-  font-family: 'Vazirmatn';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/vazirmatn/v13/Dxx78j6PP2D_kU2mukvRPe5MN9iBL6fN.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Vazirmatn';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/vazirmatn/v13/Dxx78j6PP2D_kU2mukvRPe5MK9uBL6fN.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Vazirmatn';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/vazirmatn/v13/Dxx78j6PP2D_kU2mukvRPe5MH9WBL6fN.woff2') format('woff2');
-}
-
-@font-face {
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCfyGyfuXsn.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'NotoSansArabic';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCf0myfuXsn.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'NotoSansArabic';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCfPmufuXsn.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'NotoSansArabic';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('https://fonts.gstatic.com/s/notosansarabic/v18/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlhQ5l3sQWIHPqzCfB2ufuXsn.woff2') format('woff2');
-}
+/* Web fonts (DM Sans / Vazirmatn / Noto Sans Arabic) are self-hosted via
+   @fontsource and registered in angular.json `styles`. This keeps the app
+   offline-safe and avoids fragile Google Fonts hashed URLs that 404 over time. */
 
 /* --- Base Layer --- */
 @layer base {

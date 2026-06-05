@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, computed, effect, input, PLATFORM_ID, DestroyRef } from '@angular/core';
+ import { ChangeDetectionStrategy, Component, inject, OnInit, signal, computed, effect, input, PLATFORM_ID, DestroyRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';

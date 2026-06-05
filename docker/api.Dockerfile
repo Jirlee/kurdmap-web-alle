@@ -20,8 +20,9 @@ RUN dotnet publish KurdMap.API/KurdMap.API.csproj -c Release -o /app/publish --n
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
-# Npgsql requires libgssapi for PostgreSQL GSSAPI/Kerberos negotiation
-RUN apt-get update && apt-get install -y --no-install-recommends libkrb5-3 && rm -rf /var/lib/apt/lists/*
+# Npgsql requires GSSAPI/Kerberos runtime libs.
+# wget is used by the compose healthcheck.
+RUN apt-get update && apt-get install -y --no-install-recommends libgssapi-krb5-2 libkrb5-3 wget && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
 

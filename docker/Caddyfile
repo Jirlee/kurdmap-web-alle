@@ -52,6 +52,10 @@ kurdmap.de, www.kurdmap.de {
 }
 
 # ── Admin Panel: admin.kurdmap.de ───────────────────────────
+# The admin container does NOT run a web server. Static files are
+# published into the `admin-static` named volume. Bind-mount or sync
+# that volume's _data directory to /var/www/kurdmap-admin on the host
+# (e.g. via a systemd path unit or a one-shot rsync after `compose up`).
 admin.kurdmap.de {
 	import kurdmap_security_headers
 	import kurdmap_compression
@@ -60,9 +64,10 @@ admin.kurdmap.de {
 	# @blocked not remote_ip 10.0.0.0/8 192.168.0.0/16
 	# respond @blocked 403
 
-	reverse_proxy localhost:8081 {
-		header_up X-Real-IP {remote_host}
-	}
+	root * /var/www/kurdmap-admin
+	encode zstd gzip
+	try_files {path} /index.html
+	file_server
 
 	log {
 		output file /var/log/caddy/kurdmap-admin.log {

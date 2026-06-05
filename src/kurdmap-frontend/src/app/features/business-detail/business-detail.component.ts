@@ -682,7 +682,9 @@ export default class BusinessDetailComponent implements OnInit {
     const container = this.mapContainer();
     if (!b || !container || !b.latitude || !b.longitude) return;
 
-    const L = await import('leaflet');
+    const leafletMod = await import('leaflet');
+    // Unwrap CommonJS/ESM interop so `L.map` is always available.
+    const L = ((leafletMod as any).default ?? leafletMod) as typeof import('leaflet');
 
     this.map = L.map(container.nativeElement, {
       center: [b.latitude, b.longitude],

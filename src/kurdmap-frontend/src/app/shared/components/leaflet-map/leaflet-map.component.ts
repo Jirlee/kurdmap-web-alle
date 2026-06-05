@@ -73,7 +73,10 @@ export class LeafletMapComponent {
   }
 
   private async initMap(): Promise<void> {
-    const L = await import('leaflet');
+    const leafletMod = await import('leaflet');
+    // Leaflet is a CommonJS module; depending on the bundler's interop the
+    // Leaflet object can live on `.default`. Unwrap so `L.map` is always defined.
+    const L = ((leafletMod as any).default ?? leafletMod) as typeof import('leaflet');
     this.L = L;
 
     this.map = L.map(this.mapContainer().nativeElement, {

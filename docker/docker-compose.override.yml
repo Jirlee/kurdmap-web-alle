@@ -12,21 +12,19 @@ services:
   # Dev: expose DB/Redis ports for local tools (DBeaver, RedisInsight, etc.)
   postgres:
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_PORT:-55432}:5432"
 
   redis:
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+      - "${REDIS_PORT:-56379}:6379"
 
-  # Dev: build from local Dockerfiles, listen on all interfaces
-  # NOTE: build context is the repo root (..) because Dockerfiles
-  #       reference src/... paths.
+  # Dev: build from local Dockerfiles. API/Frontend ports are inherited from the base
+  # compose file (127.0.0.1 binding). NOTE: podman-compose merges port
+  # lists additively, so do NOT redeclare them here.
   api:
     build:
       context: ..
       dockerfile: docker/api.Dockerfile
-    ports:
-      - "0.0.0.0:${API_PORT:-8080}:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
 
@@ -34,12 +32,17 @@ services:
     build:
       context: ..
       dockerfile: docker/admin.Dockerfile
+      target: dev-runtime
     ports:
-      - "0.0.0.0:8081:8081"
+      - "127.0.0.1:${ADMIN_DEV_PORT:-4201}:8081"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8081/"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   frontend:
     build:
       context: ..
       dockerfile: docker/frontend.Dockerfile
-    ports:
-      - "0.0.0.0:4000:4000"

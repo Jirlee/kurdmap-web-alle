@@ -309,7 +309,9 @@ export class DirectionsPanelComponent implements OnDestroy {
   private async initMap(container: HTMLElement, destLat: number, destLng: number): Promise<void> {
     if (this.map) return;
 
-    const leaflet = await import('leaflet');
+    const leafletMod = await import('leaflet');
+    // Unwrap CommonJS/ESM interop so `leaflet.map` is always available.
+    const leaflet = ((leafletMod as any).default ?? leafletMod) as typeof import('leaflet');
     this.L = leaflet;
 
     this.map = leaflet.map(container, { zoomControl: true }).setView([destLat, destLng], 14);

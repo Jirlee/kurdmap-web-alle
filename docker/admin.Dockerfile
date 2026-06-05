@@ -1,43 +1,57 @@
-# KurdMap Admin Panel (Angular 21 SPA) — Multi-stage build
-# Build: podman build -f docker/admin.Dockerfile -t kurdmap-admin .
-FROM node:22-alpine AS build
+# KurdMap Admin Panel (Angular 21 SPA)
+#
+# This Dockerfile provides two runtimes from the same build output:
+# - dev-runtime: serves admin via local HTTP (for local QA/testing)
+# - prod-runtime: static artifact publisher only (for host Caddy serving)
+#
+# Build examples:
+#   Dev:  podman build -f docker/admin.Dockerfile --target dev-runtime -t kurdmap-admin:dev .
+#   Prod: podman build -f docker/admin.Dockerfile --target prod-runtime -t kurdmap-admin:prod .
+
+# ── Stage 1: Build ────────────────────────────────────────
+FROM docker.io/library/node:22-alpine AS build
 WORKDIR /app
 
-# Copy package files first for layer caching
 COPY src/kurdmap-admin/package.json src/kurdmap-admin/package-lock.json ./
 RUN npm ci --ignore-scripts
 
-# Copy source and build
 COPY src/kurdmap-admin/ .
 RUN npx ng build --configuration production
 
-# Runtime — Nginx for SPA serving
-FROM nginx:alpine AS runtime
+# ── Stage 2a: Dev runtime (local HTTP server) ─────────────
+FROM docker.io/library/alpine:3.20 AS dev-runtime
 
-# Remove default config
-RUN rm /etc/nginx/conf.d/default.conf
+RUN apk add --no-cache python3
 
-# Copy nginx config
-COPY docker/admin-nginx.conf /etc/nginx/conf.d/default.conf
+RUN addgroup -S admin && adduser -S admin -G admin
 
-# Copy built output
-COPY --from=build /app/dist/kurdmap-admin/browser /usr/share/nginx/html
+COPY --from=build /app/dist/kurdmap-admin/browser /dist/
+COPY docker/admin-dev-server.py /usr/local/bin/admin-dev-server.py
 
-# Run as non-root (Docs/Security/16)
-RUN chown -R nginx:nginx /usr/share/nginx/html /var/cache/nginx /var/log/nginx && \
-    touch /var/run/nginx.pid && chown nginx:nginx /var/run/nginx.pid
+RUN chown -R admin:admin /dist
 
-# Pre-create nginx cache subdirs (avoids mkdir failures at runtime)
-RUN mkdir -p /var/cache/nginx/client_temp /var/cache/nginx/proxy_temp \
-             /var/cache/nginx/fastcgi_temp /var/cache/nginx/uwsgi_temp \
-             /var/cache/nginx/scgi_temp && \
-    chown -R nginx:nginx /var/cache/nginx
-
-USER nginx
+USER admin
+WORKDIR /dist
 
 EXPOSE 8081
 
-HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -q --spider http://localhost:8081/ || exit 1
+# Run a SPA-aware server that falls back to index.html for route paths.
+CMD ["python3", "/usr/local/bin/admin-dev-server.py"]
 
-CMD ["nginx", "-g", "daemon off;"]
+# ── Stage 2b: Production runtime (no web server) ──────────
+FROM docker.io/library/alpine:3.20 AS prod-runtime
+
+RUN addgroup -S admin && adduser -S admin -G admin
+
+# Build artifacts baked into the image (read-only source of truth)
+COPY --from=build /app/dist/kurdmap-admin/browser /artifacts/
+
+# Mount point for the named volume that an external server reads from
+RUN mkdir -p /dist && chown -R admin:admin /artifacts /dist
+
+USER admin
+WORKDIR /dist
+
+# On start: publish the latest build to the shared volume, then idle.
+# The container exposes no ports and runs no server.
+CMD ["sh", "-c", "cp -a /artifacts/. /dist/ && echo 'KurdMap admin static assets published to /dist (serve externally).' && exec tail -f /dev/null"]

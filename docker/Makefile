@@ -1,117 +1,113 @@
-.PHONY: help build run test stop clean scan shell-api shell-db logs
+.PHONY: help build build-no-cache run run-dev run-dev-auto stop restart down reset ps logs logs-api logs-frontend logs-admin shell-api shell-db shell-redis health test-backend seed db-reset backup restore clean prune admin-start admin-stop admin-rebuild admin-test
 
-help: ## Show this help
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+COMPOSE := podman compose
+
+help: ## Show available commands
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-22s\033[0m %s\n", $$1, $$2}'
 
 # === Build ===
-build: ## Build all Docker images
-	docker compose build
+build: ## Build all images
+	$(COMPOSE) build
 
-build-api: ## Build API only
-	cd src && dotnet build KurdMap.API/KurdMap.API.csproj -c Release
-
-build-admin: ## Build admin panel
-	cd src/kurdmap-admin && npm run build
-
-build-frontend: ## Build frontend
-	cd src/kurdmap-frontend && npm run build
+build-no-cache: ## Build all images without cache
+	$(COMPOSE) build --no-cache
 
 # === Run ===
-run: ## Start all services
-	docker compose up -d
+run: ## Start all services in background
+	$(COMPOSE) up -d
 
-run-dev: ## Start only DB + Redis for local development
-	docker compose up -d postgres redis
+run-dev: ## Start only postgres + redis
+	$(COMPOSE) up -d postgres redis
 
-stop: ## Stop all services
-	docker compose down
+run-dev-auto: ## Start full dev stack with automatic Admin port selection
+	./start-dev.sh
 
-restart: ## Restart all services
-	docker compose down && docker compose up -d
+stop: ## Stop containers (keep resources)
+	$(COMPOSE) stop
 
-# === Test ===
-test: test-backend test-admin ## Run all tests
+down: ## Stop and remove containers + networks (keep volumes)
+	$(COMPOSE) down --remove-orphans
 
-test-backend: ## Run .NET tests
-	cd src && dotnet test KurdMap.Tests/ --verbosity normal
+restart: ## Safe restart for podman-compose (down + up)
+	$(COMPOSE) down --remove-orphans
+	$(COMPOSE) up -d
 
-test-admin: ## Run Angular admin tests (Vitest)
-	cd src/kurdmap-admin && npx ng test
+reset: ## Full reset (containers+networks+volumes), then start
+	$(COMPOSE) down -v --remove-orphans
+	$(COMPOSE) up -d --build
 
-test-e2e: ## Run Playwright E2E tests
-	cd src/kurdmap-admin && npm run e2e
-
-test-coverage: ## Run backend tests with coverage
-	cd src && dotnet test KurdMap.Tests/ --collect:"XPlat Code Coverage"
-
-# === Lint ===
-lint: lint-admin ## Run all linters
-
-lint-admin: ## Lint admin panel
-	cd src/kurdmap-admin && npx ng lint
-
-# === Security ===
-scan: ## Scan Docker images with Trivy
-	@echo "Scanning API image..."
-	trivy image kurdmap-api:latest --severity HIGH,CRITICAL
-	@echo "Scanning Admin image..."
-	trivy image kurdmap-admin:latest --severity HIGH,CRITICAL
-	@echo "Scanning Frontend image..."
-	trivy image kurdmap-frontend:latest --severity HIGH,CRITICAL
-
-scan-deps: ## Scan .NET dependencies
-	cd src && dotnet list package --vulnerable --include-transitive
-
-# === Shell ===
-shell-api: ## Open shell in API container
-	docker compose exec api sh
-
-shell-db: ## Open psql in PostgreSQL container
-	docker compose exec postgres psql -U postgres -d kurdmap
-
-shell-redis: ## Open redis-cli
-	docker compose exec redis redis-cli
-
-# === Database ===
-migrate: ## Run EF Core migrations (via API startup)
-	docker compose restart api
-	@echo "API will apply pending migrations on startup."
-
-seed: ## Seed test data into PostgreSQL (run AFTER containers are up)
-	@echo "Waiting for API to apply migrations..."
-	@sleep 5
-	docker compose exec -T postgres psql -U postgres -d kurdmap_dev < docker/seed-data.sql
-	@echo "✅ Test data seeded successfully."
-
-db-reset: ## Reset database: drop volume, rebuild, restart, seed
-	docker compose down -v
-	docker compose up -d --build
-	@echo "Waiting for API to start and run migrations..."
-	@sleep 15
-	docker compose exec -T postgres psql -U postgres -d kurdmap_dev < docker/seed-data.sql
-	@echo "✅ Database reset and seeded successfully."
-
-backup: ## Backup PostgreSQL database
-	docker compose exec -T postgres pg_dump -U postgres kurdmap | gzip > backups/kurdmap_$$(date +%Y%m%d_%H%M%S).sql.gz
-
-restore: ## Restore PostgreSQL from latest backup (usage: make restore FILE=backup.sql.gz)
-	gunzip -c $(FILE) | docker compose exec -T postgres psql -U postgres kurdmap
+ps: ## Show services status
+	$(COMPOSE) ps
 
 # === Logs ===
 logs: ## Follow all logs
-	docker compose logs -f
+	$(COMPOSE) logs -f
 
 logs-api: ## Follow API logs
-	docker compose logs -f api
+	$(COMPOSE) logs -f api
 
-# === Clean ===
-clean: ## Remove containers, volumes, and build artifacts
-	docker compose down -v
-	cd src && dotnet clean
-	rm -rf src/kurdmap-admin/dist src/kurdmap-frontend/dist
+logs-frontend: ## Follow Frontend logs
+	$(COMPOSE) logs -f frontend
 
-# === Health ===
-health: ## Check health of all services
-	@echo "API:      $$(curl -sf http://localhost:8080/health && echo OK || echo FAIL)"
-	@echo "Admin:    $$(curl -sf http://localhost:8081 > /dev/null && echo OK || echo FAIL)"
-	@echo "Frontend: $$(curl -sf http://localhost:4000 > /dev/null && echo OK || echo FAIL)"
+logs-admin: ## Follow Admin logs (static publisher)
+	$(COMPOSE) logs -f admin
+
+admin-start: ## Start admin service only
+	$(COMPOSE) up -d admin
+
+admin-stop: ## Stop admin service only
+	$(COMPOSE) stop admin
+
+admin-rebuild: ## Rebuild admin and restart it
+	$(COMPOSE) build admin
+	$(COMPOSE) up -d admin
+
+admin-test: ## Test local admin HTTP endpoint
+	@PORT=$${ADMIN_DEV_PORT:-4201}; \
+	  echo "Admin URL: http://localhost:$$PORT"; \
+	  curl -fsI "http://localhost:$$PORT/login" >/dev/null || curl -fsI "http://localhost:$$PORT/" >/dev/null; \
+	  echo "Admin endpoint OK"
+
+# === Shell ===
+shell-api: ## Open shell in API container
+	podman exec -it kurdmap-api sh
+
+shell-db: ## Open psql shell in PostgreSQL container
+	podman exec -it kurdmap-postgres psql -U postgres -d kurdmap_dev
+
+shell-redis: ## Open redis-cli in Redis container
+	podman exec -it kurdmap-redis redis-cli
+
+# === Health / Verification ===
+health: ## Basic health checks for exposed endpoints
+	@echo "API:      $$(curl -sf http://localhost:8080/health >/dev/null && echo OK || echo FAIL)"
+	@echo "Frontend: $$(curl -sf http://localhost:4000 >/dev/null && echo OK || echo FAIL)"
+	@echo "Admin:    $$(podman exec kurdmap-admin sh -c 'test -f /dist/index.html' >/dev/null 2>&1 && echo OK || echo FAIL)"
+
+test-backend: ## Run backend tests
+	cd ../src && dotnet test KurdMap.Tests/ --verbosity normal
+
+# === Database ===
+seed: ## Seed test data (after API migration)
+	$(COMPOSE) exec -T postgres psql -U postgres -d kurdmap_dev < seed-data.sql
+
+db-reset: ## Reset database volume and restart
+	$(COMPOSE) down -v --remove-orphans
+	$(COMPOSE) up -d --build postgres redis api admin frontend
+
+backup: ## Backup PostgreSQL to ./backups
+	@mkdir -p ../backups
+	BACKUP_DIR=../backups ./backup.sh
+
+restore: ## Restore PostgreSQL backup (usage: make restore FILE=../backups/file.sql.gz)
+	gunzip -c $(FILE) | podman exec -i kurdmap-postgres psql -U postgres -d kurdmap_dev
+
+# === Cleanup ===
+clean: ## Remove build artifacts in source projects
+	cd ../src && dotnet clean
+	rm -rf ../src/kurdmap-admin/dist ../src/kurdmap-frontend/dist
+
+prune: ## Prune unused Podman containers/images/volumes
+	podman container prune -f
+	podman image prune -af
+	podman volume prune -f
