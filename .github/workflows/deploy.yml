@@ -173,6 +173,7 @@ jobs:
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
           command_timeout: 30m
           script: |
