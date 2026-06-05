@@ -13,7 +13,12 @@ PATTERNS=(
   'BEGIN RSA PRIVATE KEY'
   'BEGIN OPENSSH PRIVATE KEY'
   'sk-[a-zA-Z0-9]{20,}'
-  'ghp_[a-zA-Z0-9]{36}'
+  # GitHub tokens — length-agnostic to match the new stateless ghs_ format
+  # (~520 chars) as well as classic 40-char tokens. Covers personal (ghp_),
+  # OAuth (gho_), user-to-server (ghu_), server-to-server/App installation
+  # (ghs_) and refresh (ghr_) tokens, plus fine-grained PATs (github_pat_).
+  'gh[posru]_[A-Za-z0-9_]{20,}'
+  'github_pat_[A-Za-z0-9_]{20,}'
   'AKIA[0-9A-Z]{16}'
 )
 
