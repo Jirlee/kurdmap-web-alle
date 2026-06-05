@@ -141,12 +141,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            docker-compose.yml
-            docker-compose.prod.yml
+            docker/docker-compose.yml
+            docker/docker-compose.prod.yml
             docker/Caddyfile
             docker/backup.sh
             docker/seed-data.sql
-            .env.example
+            docker/.env.example
 
       - name: Create target directory on server
         uses: appleboy/ssh-action@v1
@@ -164,7 +164,7 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.SERVER_SSH_PORT }}
-          source: "docker-compose.yml,docker-compose.prod.yml,docker/Caddyfile,docker/backup.sh,docker/seed-data.sql,.env.example"
+          source: "docker/docker-compose.yml,docker/docker-compose.prod.yml,docker/Caddyfile,docker/backup.sh,docker/seed-data.sql,docker/.env.example"
           target: ${{ secrets.DEPLOY_PATH }}
           overwrite: true
 
@@ -179,7 +179,10 @@ jobs:
           script: |
             set -e
             DEPLOY_DIR="${{ secrets.DEPLOY_PATH }}"
-            cd "$DEPLOY_DIR"
+            COMPOSE_DIR="$DEPLOY_DIR/docker"
+            cd "$COMPOSE_DIR"
+
+            GHCR_USER_LC="$(echo '${{ secrets.GHCR_USERNAME }}' | tr '[:upper:]' '[:lower:]')"
 
             # First deploy: .env must be created manually
             if [ ! -f .env ]; then
@@ -190,21 +193,23 @@ jobs:
             fi
 
             # Ensure GHCR_USERNAME is in .env (needed by compose for image names)
-            if ! grep -q "^GHCR_USERNAME=" .env; then
-              echo "GHCR_USERNAME=${{ secrets.GHCR_USERNAME }}" >> .env
+            if grep -q "^GHCR_USERNAME=" .env; then
+              sed -i "s/^GHCR_USERNAME=.*/GHCR_USERNAME=${GHCR_USER_LC}/" .env
+            else
+              echo "GHCR_USERNAME=${GHCR_USER_LC}" >> .env
             fi
 
             # Ensure backup script is executable
-            chmod +x docker/backup.sh
+            chmod +x backup.sh
 
             # Login to GHCR
-            echo "${{ secrets.GHCR_TOKEN }}" | podman login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+            echo "${{ secrets.GHCR_TOKEN }}" | podman login ghcr.io -u "${GHCR_USER_LC}" --password-stdin
 
             # Pull images
             echo "⬇️ Pulling images..."
-            podman pull ghcr.io/${{ secrets.GHCR_USERNAME }}/kurdmap-api:latest
-            podman pull ghcr.io/${{ secrets.GHCR_USERNAME }}/kurdmap-admin:latest
-            podman pull ghcr.io/${{ secrets.GHCR_USERNAME }}/kurdmap-frontend:latest
+            podman pull ghcr.io/${GHCR_USER_LC}/kurdmap-api:latest
+            podman pull ghcr.io/${GHCR_USER_LC}/kurdmap-admin:latest
+            podman pull ghcr.io/${GHCR_USER_LC}/kurdmap-frontend:latest
 
             # Start services (--no-build: images are pre-built, no Dockerfiles on server)
             echo "🚀 Starting services..."
@@ -212,8 +217,8 @@ jobs:
             podman compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-build
 
             # Ensure Caddyfile is readable by caddy service (runs as user 'caddy')
-            chmod o+rx . docker 2>/dev/null || true
-            chmod 644 docker/Caddyfile 2>/dev/null || true
+            chmod o+rx "$DEPLOY_DIR" "$COMPOSE_DIR" 2>/dev/null || true
+            chmod 644 "$COMPOSE_DIR/Caddyfile" 2>/dev/null || true
 
             # NOTE: We do NOT restart Caddy here — each project must be independent.
             # Caddy uses glob import (import /opt/kurdmap/docker/Caddyfile*)

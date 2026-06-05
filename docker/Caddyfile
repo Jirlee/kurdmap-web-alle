@@ -1,14 +1,9 @@
 # KurdMap — Caddy Site Config (Importable Snippet)
 # Import this from the host's main /etc/caddy/Caddyfile:
 #   import /opt/kurdmap/docker/Caddyfile*
-# The trailing * (glob) ensures Caddy won't crash if the file doesn't exist yet.
 #
-# The global options block (email, acme_ca, servers, log) belongs
-# in the HOST's /etc/caddy/Caddyfile, NOT here — since this
-# Hetzner server runs multiple websites under one Caddy instance.
-#
-# Domains (hardcoded — change if your domains differ):
-#   kurdmap.de, admin.kurdmap.de, api.kurdmap.de
+# This file intentionally avoids global options because this host serves
+# multiple websites from one shared Caddy instance.
 
 # ── Shared snippets (prefixed to avoid collisions) ─────────
 (kurdmap_security_headers) {
@@ -17,7 +12,7 @@
 		X-Content-Type-Options "nosniff"
 		X-Frame-Options "DENY"
 		Referrer-Policy "strict-origin-when-cross-origin"
-		Permissions-Policy "camera=(), microphone=(), geolocation=(self), payment=()"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(self), payment=(), usb=(), interest-cohort=()"
 		-Server
 		-X-Powered-By
 	}
@@ -27,77 +22,112 @@
 	encode zstd gzip
 }
 
-# ── Frontend: kurdmap.de ────────────────────────────────────
-kurdmap.de, www.kurdmap.de {
-	import kurdmap_security_headers
-	import kurdmap_compression
-
-	# Redirect www → non-www (SEO canonical)
-	@www host www.kurdmap.de
-	redir @www https://kurdmap.de{uri} permanent
-
-	reverse_proxy localhost:4000 {
-		header_up X-Real-IP {remote_host}
-
-		health_uri  /
-		health_interval 30s
+(kurdmap_csp_web) {
+	header {
+		# CSP tuned for Angular/SSR and external assets over HTTPS.
+		Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: https:; font-src 'self' data: https:; style-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; connect-src 'self' https: wss:; worker-src 'self' blob:; upgrade-insecure-requests"
 	}
+}
 
+(kurdmap_proxy_headers) {
+	header_up X-Real-IP {remote_host}
+	header_up X-Forwarded-For {remote_host}
+	header_up X-Forwarded-Proto {scheme}
+	header_up X-Forwarded-Host {host}
+}
+
+(kurdmap_json_log_frontend) {
 	log {
 		output file /var/log/caddy/kurdmap-frontend.log {
 			roll_size 10mb
 			roll_keep 5
 		}
+		format json
 	}
 }
 
-# ── Admin Panel: admin.kurdmap.de ───────────────────────────
-# The admin container does NOT run a web server. Static files are
-# published into the `admin-static` named volume. Bind-mount or sync
-# that volume's _data directory to /var/www/kurdmap-admin on the host
-# (e.g. via a systemd path unit or a one-shot rsync after `compose up`).
-admin.kurdmap.de {
-	import kurdmap_security_headers
-	import kurdmap_compression
-
-	# Optional: IP allowlist (uncomment and adjust)
-	# @blocked not remote_ip 10.0.0.0/8 192.168.0.0/16
-	# respond @blocked 403
-
-	root * /var/www/kurdmap-admin
-	encode zstd gzip
-	try_files {path} /index.html
-	file_server
-
+(kurdmap_json_log_admin) {
 	log {
 		output file /var/log/caddy/kurdmap-admin.log {
 			roll_size 10mb
 			roll_keep 5
 		}
+		format json
 	}
 }
 
-# ── API: api.kurdmap.de ─────────────────────────────────────
-api.kurdmap.de {
+(kurdmap_json_log_api) {
+	log {
+		output file /var/log/caddy/kurdmap-api.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+		format json
+	}
+}
+
+# ── Frontend: kurdmap.eu ────────────────────────────────────
+kurdmap.eu, www.kurdmap.eu {
 	import kurdmap_security_headers
 	import kurdmap_compression
+	import kurdmap_csp_web
+	import kurdmap_json_log_frontend
 
-	# Request body size limit: 10MB
+	@www host www.kurdmap.eu
+	redir @www https://kurdmap.eu{uri} permanent
+
+	reverse_proxy localhost:4000 {
+		import kurdmap_proxy_headers
+		health_uri /
+		health_interval 30s
+		transport http {
+			dial_timeout 5s
+			response_header_timeout 30s
+		}
+	}
+}
+
+# ── Admin Panel: gs6x.kurdmap.eu ───────────────────────────
+# Admin static files must be synced to /var/www/kurdmap-admin on host.
+gs6x.kurdmap.eu {
+	import kurdmap_security_headers
+	import kurdmap_compression
+	import kurdmap_csp_web
+	import kurdmap_json_log_admin
+
+	root * /var/www/kurdmap-admin
+
+	@hidden path_regexp hidden ^/\.
+	respond @hidden 404
+
+	@staticAssets path *.js *.css *.png *.jpg *.jpeg *.gif *.svg *.webp *.woff *.woff2
+	header @staticAssets Cache-Control "public, max-age=31536000, immutable"
+	header /index.html Cache-Control "no-cache"
+
+	try_files {path} /index.html
+	file_server
+}
+
+# ── API: gs6xapi.kurdmap.eu ─────────────────────────────────────
+gs6xapi.kurdmap.eu {
+	import kurdmap_security_headers
+	import kurdmap_compression
+	import kurdmap_json_log_api
+
+	# JSON API does not require a document CSP header.
+	header -Content-Security-Policy
+
 	request_body {
 		max_size 10MB
 	}
 
 	reverse_proxy localhost:8080 {
-		header_up X-Real-IP {remote_host}
-
-		health_uri  /health
+		import kurdmap_proxy_headers
+		health_uri /health
 		health_interval 30s
-	}
-
-	log {
-		output file /var/log/caddy/kurdmap-api.log {
-			roll_size 10mb
-			roll_keep 5
+		transport http {
+			dial_timeout 5s
+			response_header_timeout 30s
 		}
 	}
 }
