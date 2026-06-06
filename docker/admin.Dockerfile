@@ -24,7 +24,7 @@ COPY src/kurdmap-admin/ .
 RUN npx ng build --configuration production
 
 # ── Stage 2a: Dev runtime (local SPA server) ──────────────
-FROM docker.io/library/alpine:3.20 AS dev-runtime
+FROM docker.io/library/alpine:3.23 AS dev-runtime
 
 RUN apk add --no-cache python3 \
     && addgroup -S admin && adduser -S admin -G admin
@@ -47,7 +47,7 @@ CMD ["python3", "/usr/local/bin/admin-server.py"]
 # Serves the SPA on a loopback port for the host Caddy reverse proxy.
 # Runs as a non-root user, needs no writable filesystem (read_only-safe),
 # and never lets the admin panel be indexed by search engines.
-FROM docker.io/library/alpine:3.20 AS prod-runtime
+FROM docker.io/library/alpine:3.23 AS prod-runtime
 
 RUN apk add --no-cache python3 \
     && addgroup -S admin && adduser -S admin -G admin
