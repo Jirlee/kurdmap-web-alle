@@ -68,6 +68,15 @@ import { HighlightPipe } from '../../pipes/highlight.pipe';
             </svg>
             <span class="line-clamp-1 text-[0.8125rem]">{{ business().street }}, {{ business().postalCode }}</span>
           </div>
+          @if (business().distanceKm != null) {
+            <div class="flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400">
+              <svg class="size-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11a3 3 0 100-6 3 3 0 000 6z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.6 9a9 9 0 1116.8 0c-.9 4.5-5.4 9-8.4 11.4C8.99 18 4.5 13.5 3.6 9z"/>
+              </svg>
+              <span class="text-[0.8125rem]">{{ formatDistance(business().distanceKm!) }}</span>
+            </div>
+          }
           @if (business().phone) {
             <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
               <svg class="size-3.5 shrink-0 text-gray-400 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,5 +110,13 @@ export class BusinessCardComponent {
 
   protected openDetail(): void {
     this.modalService.openBusinessDetail(this.business().slug);
+  }
+
+  /** Human-friendly distance: "450 m" under 1 km, otherwise "4.2 km". */
+  protected formatDistance(km: number): string {
+    if (km < 1) {
+      return `${Math.round(km * 1000)} m`;
+    }
+    return `${km.toFixed(1)} km`;
   }
 }

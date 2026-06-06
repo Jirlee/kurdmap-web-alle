@@ -287,6 +287,7 @@
     "nearMe": "In meiner Nähe",
     "nearestFirst": "Nächste zuerst",
     "locationDenied": "Standortzugriff verweigert. Bitte in Browsereinstellungen erlauben.",
+    "locationApproximate": "Ungefährer Standort basierend auf Ihrer IP-Adresse.",
     "page": "Seite",
     "of": "von",
     "featuredFirst": "Empfohlen zuerst",

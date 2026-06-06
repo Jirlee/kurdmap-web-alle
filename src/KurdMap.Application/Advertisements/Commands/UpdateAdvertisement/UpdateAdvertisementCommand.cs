@@ -1,4 +1,5 @@
 using KurdMap.Application.Advertisements.DTOs;
+using KurdMap.Application.Common.Interfaces;
 using KurdMap.Application.Common.Models;
 using KurdMap.Domain.Advertisements;
 using KurdMap.Application.Businesses.DTOs;
@@ -20,6 +21,7 @@ public sealed record UpdateAdvertisementCommand(
 
 public sealed class UpdateAdvertisementCommandHandler(
     IAdvertisementRepository advertisementRepository,
+    ICacheService cacheService,
     IUnitOfWork unitOfWork) : IRequestHandler<UpdateAdvertisementCommand, Result<AdvertisementDto>>
 {
     public async Task<Result<AdvertisementDto>> Handle(UpdateAdvertisementCommand request, CancellationToken ct)
@@ -39,6 +41,7 @@ public sealed class UpdateAdvertisementCommandHandler(
 
         advertisementRepository.Update(ad);
         await unitOfWork.SaveChangesAsync(ct);
+        await cacheService.RemoveByPrefixAsync("advertisements:", ct);
 
         return new AdvertisementDto(
             ad.Id,

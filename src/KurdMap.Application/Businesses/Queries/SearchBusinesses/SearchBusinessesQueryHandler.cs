@@ -119,10 +119,36 @@ public sealed class SearchBusinessesQueryHandler(
         var result = await PaginatedList<BusinessSummaryDto>.CreateAsync(
             projected, request.Page, request.PageSize, ct);
 
+        // Annotate each result on the current page with its real Haversine distance
+        // (km) from the user. Done in-memory on the page (max PageSize items) so it
+        // never affects the SQL query, and only when a location was supplied.
+        if (hasLocation)
+        {
+            var lat = request.Latitude!.Value;
+            var lng = request.Longitude!.Value;
+            for (var i = 0; i < result.Items.Count; i++)
+            {
+                var dto = result.Items[i];
+                var km = HaversineKm(lat, lng, (double)dto.Latitude, (double)dto.Longitude);
+                result.Items[i] = dto with { DistanceKm = Math.Round(km, 2) };
+            }
+        }
+
         // Cache result
         await cacheService.SetAsync(cacheKey, result, TimeSpan.FromMinutes(CacheTtlMinutes), ct);
 
         return result;
+    }
+
+    /// <summary>Great-circle distance in kilometers between two coordinates.</summary>
+    private static double HaversineKm(double lat1, double lon1, double lat2, double lon2)
+    {
+        var dLat = (lat2 - lat1) * Math.PI / 180.0;
+        var dLon = (lon2 - lon1) * Math.PI / 180.0;
+        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(lat1 * Math.PI / 180.0) * Math.Cos(lat2 * Math.PI / 180.0) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        return EarthRadiusKm * 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
     }
 
     private IQueryable<Domain.Businesses.Entities.Business> ApplySort(

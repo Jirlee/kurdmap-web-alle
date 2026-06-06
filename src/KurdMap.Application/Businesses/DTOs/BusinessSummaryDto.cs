@@ -19,4 +19,5 @@ public sealed record BusinessSummaryDto(
     string? PrimaryImageUrl,
     int? DiscountPercentage = null,
     MultilingualTextDto? DiscountDescription = null,
-    bool HasActiveDiscount = false);
+    bool HasActiveDiscount = false,
+    double? DistanceKm = null);

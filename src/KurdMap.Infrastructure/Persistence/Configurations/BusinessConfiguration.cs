@@ -42,6 +42,7 @@ public class BusinessConfiguration : IEntityTypeConfiguration<Business>
             address.Property(a => a.Street).HasColumnName("street").HasMaxLength(300).IsRequired();
             address.Property(a => a.PostalCode).HasColumnName("postal_code").HasMaxLength(10).IsRequired();
             address.Property(a => a.CityId).HasColumnName("city_id");
+            address.HasIndex(a => a.CityId).HasDatabaseName("ix_businesses_city_id");
         });
 
         builder.OwnsOne(b => b.Location, loc =>

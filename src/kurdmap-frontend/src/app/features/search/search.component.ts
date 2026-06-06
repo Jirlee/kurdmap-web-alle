@@ -82,7 +82,7 @@ type ViewMode = 'list' | 'split' | 'map';
           <!-- Radius selector (only when near-me is active) -->
           @if (nearMeActive()) {
             <select
-              class="filter-chip"
+              class="filter-chip active"
               [ngModel]="selectedRadius()"
               (ngModelChange)="onRadiusChange($event)"
             >
@@ -97,6 +97,7 @@ type ViewMode = 'list' | 'split' | 'map';
           <!-- Category filter -->
           <select
             class="filter-chip"
+            [class.active]="!!selectedCategory()"
             [ngModel]="selectedCategory()"
             (ngModelChange)="onCategoryChange($event)"
           >
@@ -109,6 +110,7 @@ type ViewMode = 'list' | 'split' | 'map';
           <!-- City filter -->
           <select
             class="filter-chip"
+            [class.active]="!!selectedCity()"
             [ngModel]="selectedCity()"
             (ngModelChange)="onCityChange($event)"
           >
@@ -121,6 +123,7 @@ type ViewMode = 'list' | 'split' | 'map';
           <!-- Sort -->
           <select
             class="filter-chip"
+            [class.active]="selectedSort() !== 0"
             [ngModel]="selectedSort()"
             (ngModelChange)="onSortChange($event)"
           >
@@ -271,6 +274,14 @@ type ViewMode = 'list' | 'split' | 'map';
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
             </svg>
             {{ 'search.locationDenied' | translate }}
+          </div>
+        }
+        @if (geoService.status() === 'approximate') {
+          <div class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+            <svg class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            {{ 'search.locationApproximate' | translate }}
           </div>
         }
       </div>
@@ -441,6 +452,19 @@ type ViewMode = 'list' | 'split' | 'map';
     .filter-chip:focus-visible {
       outline: 2px solid var(--color-primary-500);
       outline-offset: 2px;
+    }
+    /* Active state — a non-default value is selected */
+    .filter-chip.active {
+      background-color: var(--color-primary-50);
+      border-color: var(--color-primary-300);
+      color: var(--color-primary-700);
+      font-weight: 600;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    }
+    :host-context(.dark) .filter-chip.active {
+      background-color: rgba(59, 130, 246, 0.12);
+      border-color: var(--color-primary-500);
+      color: var(--color-primary-300);
     }
 
     .filter-chip-btn {

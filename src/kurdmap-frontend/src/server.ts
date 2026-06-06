@@ -38,7 +38,7 @@ app.use((_req, res, next) => {
     `style-src 'self' 'unsafe-inline'; ` +
     `font-src 'self'; ` +
     `img-src 'self' data: https://*.tile.openstreetmap.org; ` +
-    `connect-src 'self' https://*.tile.openstreetmap.org; ` +
+    `connect-src 'self' https://*.tile.openstreetmap.org https://ipapi.co; ` +
     `frame-ancestors 'none'; ` +
     `base-uri 'self'; ` +
     `form-action 'self'`

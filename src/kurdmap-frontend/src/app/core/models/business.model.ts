@@ -23,6 +23,8 @@ export interface BusinessSummary {
   discountPercentage: number | null;
   discountDescription: MultilingualText | null;
   hasActiveDiscount: boolean;
+  /** Great-circle distance in km from the user's location; only set for "near me" searches. */
+  distanceKm?: number | null;
 }
 
 export interface BusinessDetail {

@@ -1,3 +1,4 @@
+using KurdMap.Application.Common.Interfaces;
 using KurdMap.Application.Common.Models;
 using KurdMap.Domain.Advertisements;
 using KurdMap.Domain.Common;
@@ -9,6 +10,7 @@ public sealed record ToggleAdvertisementCommand(Guid Id, bool IsActive) : IReque
 
 public sealed class ToggleAdvertisementCommandHandler(
     IAdvertisementRepository advertisementRepository,
+    ICacheService cacheService,
     IUnitOfWork unitOfWork) : IRequestHandler<ToggleAdvertisementCommand, Result>
 {
     public async Task<Result> Handle(ToggleAdvertisementCommand request, CancellationToken ct)
@@ -21,6 +23,7 @@ public sealed class ToggleAdvertisementCommandHandler(
 
         advertisementRepository.Update(ad);
         await unitOfWork.SaveChangesAsync(ct);
+        await cacheService.RemoveByPrefixAsync("advertisements:", ct);
 
         return Result.Success();
     }

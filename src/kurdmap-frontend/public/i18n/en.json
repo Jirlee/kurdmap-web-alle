@@ -287,6 +287,7 @@
     "nearMe": "Near me",
     "nearestFirst": "Nearest first",
     "locationDenied": "Location access denied. Please allow in browser settings.",
+    "locationApproximate": "Approximate location based on your IP address.",
     "page": "Page",
     "of": "of",
     "featuredFirst": "Featured first",

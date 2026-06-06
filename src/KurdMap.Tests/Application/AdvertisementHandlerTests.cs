@@ -2,6 +2,7 @@ using KurdMap.Application.Advertisements.Commands.CreateAdvertisement;
 using KurdMap.Application.Advertisements.Commands.DeleteAdvertisement;
 using KurdMap.Application.Advertisements.Commands.ToggleAdvertisement;
 using KurdMap.Application.Businesses.DTOs;
+using KurdMap.Application.Common.Interfaces;
 using KurdMap.Domain.Advertisements;
 using KurdMap.Domain.Advertisements.Entities;
 using KurdMap.Domain.Businesses.ValueObjects;
@@ -13,6 +14,7 @@ namespace KurdMap.Tests.Application;
 public class AdvertisementHandlerTests
 {
     private readonly IAdvertisementRepository _adRepo = Substitute.For<IAdvertisementRepository>();
+    private readonly ICacheService _cacheService = Substitute.For<ICacheService>();
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
 
     // === CreateAdvertisement ===
@@ -20,7 +22,7 @@ public class AdvertisementHandlerTests
     [Fact]
     public async Task CreateAdvertisement_WhenValid_ShouldSucceed()
     {
-        var handler = new CreateAdvertisementCommandHandler(_adRepo, _unitOfWork);
+        var handler = new CreateAdvertisementCommandHandler(_adRepo, _cacheService, _unitOfWork);
         var command = new CreateAdvertisementCommand(
             new MultilingualTextDto("ڕیکلام", "kmr", "Werbung", "Ad"),
             new MultilingualTextDto("وەسف", "kmr", "Beschreibung", "Description"),
@@ -40,7 +42,7 @@ public class AdvertisementHandlerTests
     [Fact]
     public async Task CreateAdvertisement_WhenEndBeforeStart_ShouldThrowDomainException()
     {
-        var handler = new CreateAdvertisementCommandHandler(_adRepo, _unitOfWork);
+        var handler = new CreateAdvertisementCommandHandler(_adRepo, _cacheService, _unitOfWork);
         var command = new CreateAdvertisementCommand(
             new MultilingualTextDto("ku", "kmr", "de", "en"), null,
             "https://img.test/ad.jpg", null, null,
@@ -61,7 +63,7 @@ public class AdvertisementHandlerTests
             DateTime.UtcNow, DateTime.UtcNow.AddDays(7), 1);
         _adRepo.GetByIdAsync(ad.Id, Arg.Any<CancellationToken>()).Returns(ad);
 
-        var handler = new DeleteAdvertisementCommandHandler(_adRepo, _unitOfWork);
+        var handler = new DeleteAdvertisementCommandHandler(_adRepo, _cacheService, _unitOfWork);
         var result = await handler.Handle(new DeleteAdvertisementCommand(ad.Id), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
@@ -73,7 +75,7 @@ public class AdvertisementHandlerTests
     {
         _adRepo.GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Advertisement?)null);
 
-        var handler = new DeleteAdvertisementCommandHandler(_adRepo, _unitOfWork);
+        var handler = new DeleteAdvertisementCommandHandler(_adRepo, _cacheService, _unitOfWork);
         var result = await handler.Handle(new DeleteAdvertisementCommand(Guid.NewGuid()), CancellationToken.None);
 
         Assert.False(result.IsSuccess);
@@ -94,7 +96,7 @@ public class AdvertisementHandlerTests
 
         _adRepo.GetByIdAsync(ad.Id, Arg.Any<CancellationToken>()).Returns(ad);
 
-        var handler = new ToggleAdvertisementCommandHandler(_adRepo, _unitOfWork);
+        var handler = new ToggleAdvertisementCommandHandler(_adRepo, _cacheService, _unitOfWork);
         var result = await handler.Handle(new ToggleAdvertisementCommand(ad.Id, true), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
@@ -112,7 +114,7 @@ public class AdvertisementHandlerTests
 
         _adRepo.GetByIdAsync(ad.Id, Arg.Any<CancellationToken>()).Returns(ad);
 
-        var handler = new ToggleAdvertisementCommandHandler(_adRepo, _unitOfWork);
+        var handler = new ToggleAdvertisementCommandHandler(_adRepo, _cacheService, _unitOfWork);
         var result = await handler.Handle(new ToggleAdvertisementCommand(ad.Id, false), CancellationToken.None);
 
         Assert.True(result.IsSuccess);
@@ -124,7 +126,7 @@ public class AdvertisementHandlerTests
     {
         _adRepo.GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Advertisement?)null);
 
-        var handler = new ToggleAdvertisementCommandHandler(_adRepo, _unitOfWork);
+        var handler = new ToggleAdvertisementCommandHandler(_adRepo, _cacheService, _unitOfWork);
         var result = await handler.Handle(new ToggleAdvertisementCommand(Guid.NewGuid(), true), CancellationToken.None);
 
         Assert.False(result.IsSuccess);
