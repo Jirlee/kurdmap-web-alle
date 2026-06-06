@@ -1,0 +1,60 @@
+2026-06-06 21:40:20.415 +02:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-06-06 21:40:20.546 +02:00 [INF] [Migrator] Checking database connectivity...
+2026-06-06 21:40:21.621 +02:00 [INF] [Migrator] Database connection verified.
+2026-06-06 21:40:21.658 +02:00 [ERR] Failed executing DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-06-06 21:40:21.665 +02:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-06-06 21:40:21.666 +02:00 [INF] [Migrator] Migrations — applied: 0, pending: 6
+2026-06-06 21:40:21.666 +02:00 [INF] [Migrator]   → Will apply: 20260404020634_InitialCreate
+2026-06-06 21:40:21.666 +02:00 [INF] [Migrator]   → Will apply: 20260406012303_AddReviewsAdvertisementsFavorites
+2026-06-06 21:40:21.666 +02:00 [INF] [Migrator]   → Will apply: 20260406030012_AddIsFeaturedToBusiness
+2026-06-06 21:40:21.666 +02:00 [INF] [Migrator]   → Will apply: 20260408045036_AddBusinessDiscounts
+2026-06-06 21:40:21.666 +02:00 [INF] [Migrator]   → Will apply: 20260408053213_AddRefreshTokens
+2026-06-06 21:40:21.666 +02:00 [INF] [Migrator]   → Will apply: 20260606131009_AddBusinessSearchIndexes
+2026-06-06 21:40:21.666 +02:00 [INF] [Migrator] Applying 6 pending migration(s)...
+2026-06-06 21:40:21.669 +02:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-06-06 21:40:22.390 +02:00 [INF] [Migrator] All migrations applied successfully.
+2026-06-06 21:40:22.391 +02:00 [INF] [Migrator] Verification passed — all migrations applied.
+2026-06-06 21:40:22.392 +02:00 [INF] [Migrator] Completed in 1,845ms (success=true)
+2026-06-06 21:40:22.392 +02:00 [INF] [Migrator] Migration completed on attempt 1/5 — 6 migration(s) applied in 1,845ms
+2026-06-06 21:40:23.231 +02:00 [INF] Default admin user seeded: admin@kurdmap.eu
+2026-06-06 21:40:23.268 +02:00 [WRN] The WebRootPath was not found: /home/lolo/Desktop/Pro/KurdMap-web-alle/src/KurdMap.API/wwwroot. Static files may be unavailable.
+2026-06-06 21:40:23.304 +02:00 [INF] Now listening on: http://localhost:5110
+2026-06-06 21:40:23.304 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-06 21:40:23.304 +02:00 [INF] Hosting environment: Development
+2026-06-06 21:40:23.304 +02:00 [INF] Content root path: /home/lolo/Desktop/Pro/KurdMap-web-alle/src/KurdMap.API
+2026-06-06 21:41:29.241 +02:00 [INF] Application is shutting down...
+2026-06-06 21:41:45.030 +02:00 [WRN] You do not have a valid license key for the Lucky Penny software MediatR. This is allowed for development and testing scenarios. If you are running in production you are required to have a licensed version. Please visit https://luckypennysoftware.com to obtain a valid license.
+2026-06-06 21:41:45.157 +02:00 [INF] [Migrator] Checking database connectivity...
+2026-06-06 21:41:46.211 +02:00 [INF] [Migrator] Database connection verified.
+2026-06-06 21:41:46.270 +02:00 [INF] [Migrator] Migrations — applied: 6, pending: 0
+2026-06-06 21:41:46.273 +02:00 [INF] [Migrator] Database is up to date — no migrations to apply.
+2026-06-06 21:41:46.275 +02:00 [INF] [Migrator] Verification passed — all migrations applied.
+2026-06-06 21:41:46.275 +02:00 [INF] [Migrator] Completed in 1,117ms (success=true)
+2026-06-06 21:41:46.276 +02:00 [INF] [Migrator] Migration completed on attempt 1/5 — 0 migration(s) applied in 1,118ms
+2026-06-06 21:41:46.732 +02:00 [WRN] The WebRootPath was not found: /home/lolo/Desktop/Pro/KurdMap-web-alle/src/KurdMap.API/wwwroot. Static files may be unavailable.
+2026-06-06 21:41:46.764 +02:00 [INF] Now listening on: http://127.0.0.1:55180
+2026-06-06 21:41:46.764 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-06 21:41:46.764 +02:00 [INF] Hosting environment: Production
+2026-06-06 21:41:46.764 +02:00 [INF] Content root path: /home/lolo/Desktop/Pro/KurdMap-web-alle/src/KurdMap.API
+2026-06-06 21:41:59.033 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-06-06 21:42:27.222 +02:00 [INF] SEC_AUTH_SUCCESS userId=019e9e75-4831-7468-9523-8a384c1ab8a4 email=ad***@kurdmap.eu ip=127.0.0.1 ua=curl/8.14.1 time="2026-06-06T19:42:27.2219029Z"
+2026-06-06 21:42:27.245 +02:00 [INF] HTTP POST /api/auth/register responded 200 in 620.7842 ms
+2026-06-06 21:42:27.513 +02:00 [INF] SEC_AUTH_SUCCESS userId=019e9e75-4831-7468-9523-8a384c1ab8a4 email=ad***@kurdmap.eu ip=127.0.0.1 ua=curl/8.14.1 time="2026-06-06T19:42:27.5132785Z"
+2026-06-06 21:42:27.514 +02:00 [INF] HTTP POST /api/auth/login responded 200 in 116.2572 ms
+2026-06-06 21:42:44.404 +02:00 [WRN] SEC_AUTH_FAILURE identifier=ad***@kurdmap.eu reason=registration_failed ip=127.0.0.1 ua=curl/8.14.1 time="2026-06-06T19:42:44.4046734Z"
+2026-06-06 21:42:44.419 +02:00 [INF] HTTP POST /api/auth/register responded 400 in 95.8644 ms
+2026-06-06 21:42:44.672 +02:00 [INF] SEC_AUTH_SUCCESS userId=019e9e75-4831-7468-9523-8a384c1ab8a4 email=ad***@kurdmap.eu ip=127.0.0.1 ua=curl/8.14.1 time="2026-06-06T19:42:44.6726330Z"
+2026-06-06 21:42:44.673 +02:00 [INF] HTTP POST /api/auth/login responded 200 in 77.3234 ms
+2026-06-06 21:42:44.799 +02:00 [INF] SEC_AUTH_SUCCESS userId=019e9e75-8e30-7810-8fa1-eafb2c5cf428 email=us***@kurdmap.eu ip=127.0.0.1 ua=curl/8.14.1 time="2026-06-06T19:42:44.7992473Z"
+2026-06-06 21:42:44.799 +02:00 [INF] HTTP POST /api/auth/register responded 200 in 88.3705 ms
+2026-06-06 21:42:44.815 +02:00 [INF] HTTP POST /api/auth/login responded 429 in 0.6397 ms
+2026-06-06 21:42:59.388 +02:00 [INF] Application is shutting down...

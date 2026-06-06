@@ -243,7 +243,86 @@ Secrets/داده:
 
 ---
 
-## 11) راستی‌آزمایی بعد از Deploy
+## 11) ساخت/رجستر کاربر از ترمینال سرور (تست‌شده ✅)
+
+برای ساخت کاربر مستقیماً از ترمینال لینوکس سرور، اسکریپت
+[docker/register-user.sh](../../docker/register-user.sh) آماده است. این اسکریپت از همان
+مسیر امن API عبور می‌کند (هش پسورد، rate-limit و brute-force دقیقاً مثل اپ اعمال می‌شود) و
+در صورت نیاز نقش (Admin/SuperAdmin/Moderator) را در دیتابیس می‌دهد — چون endpoint عمومی
+`/api/auth/register` فقط نقش «User» می‌دهد (که درست و امن است).
+
+```bash
+cd /opt/kurdmap/docker
+
+# کاربر معمولی (نقش User)
+./register-user.sh user@kurdmap.eu
+
+# کاربر ادمین (ثبت + ارتقای نقش Admin در دیتابیس)
+./register-user.sh admin2@kurdmap.eu Admin
+
+# کاملاً تعاملی
+./register-user.sh
+```
+
+نکات کلیدی که در اسکریپت رعایت شده و **تست واقعی** شده‌اند:
+- پسورد با `read -s` خوانده می‌شود و **هرگز** به‌صورت آرگومان پاس نمی‌شود (به history/process
+  list لو نمی‌رود).
+- درخواست‌ها هدر `Host: localhost` دارند، چون API روی HostFiltering است؛ بدون این هدر
+  پاسخ **400** می‌گیرید (در تست تأیید شد: بدون Host → 400، با Host: localhost → 200).
+- سیاست پسورد سمت اسکریپت با Identity هماهنگ است (حداقل ۸ کاراکتر، رقم، حروف کوچک و بزرگ).
+- ارتقای نقش با psql و کوانتیزه‌سازی امن (`:'var'`) انجام می‌شود → بدون SQL injection. جداول
+  `users`/`roles`/`user_roles` و ستون‌های PascalCase (`"NormalizedEmail"`, `"UserId"`).
+- اجرای دوباره **idempotent** است (`ON CONFLICT DO NOTHING`).
+- در پایان با login واقعی، اعتبار و نقش‌ها را راستی‌آزمایی می‌کند.
+
+> هشدار: endpoint احراز هویت سقف **۵ درخواست در دقیقه** دارد. اگر چند بار پشت‌سرهم اجرا کنید
+> ممکن است `429 Too Many Requests` بگیرید (این یعنی rate-limiter درست کار می‌کند) — یک دقیقه
+> صبر کنید. کاربر در این حالت هم ساخته شده است.
+
+### روش جایگزین: اولین ادمین با Seed
+اگر جدول users خالی باشد، در اولین بوت API یک ادمین از روی متغیرهای `SEED_ADMIN_*` ساخته
+می‌شود (نقش‌های SuperAdmin + Admin). حتماً `SEED_ADMIN_PASSWORD` را قوی بگذارید و بعد از
+اولین ورود تغییر دهید.
+
+---
+
+## 12) نتیجهٔ ممیزی Build/Test (.NET 10 — انجام‌شده ✅)
+
+- SDK: `.NET 10.0.300`، همهٔ پروژه‌ها `net10.0`.
+- `dotnet build -c Release` → **0 Warning / 0 Error**.
+- `dotnet test -c Release` → **104/104 Passed** (auth, register, login، duplicate،
+  businesses، categories، advertisements caching و ...).
+- تست واقعی end-to-end رجستر روی Postgres واقعی: ثبت User، ارتقای Admin، login موفق،
+  idempotency و HostFiltering (400/200) همگی تأیید شدند.
+
+---
+
+## 13) خلاصهٔ ممیزی امنیتی کد (وضعیت فعلی)
+
+| حوزه | وضعیت | جزئیات |
+|---|---|---|
+| JWT امضا | ✅ قوی | HMAC-SHA**512**، secret حداقل ۳۲ کاراکتر (fail-fast در startup) |
+| Refresh token | ✅ | ۶۴ بایت تصادفی (RNG)، چرخشی، قابل ابطال، کوکی `HttpOnly`+`Secure`+`SameSite=Strict` |
+| سیاست پسورد | ✅ | حداقل ۸، رقم/حروف کوچک/بزرگ، ایمیل یکتا |
+| Lockout | ✅ | ۶ تلاش ناموفق → ۱۵ دقیقه قفل |
+| Brute-force | ✅ | میدلور IP-based روی endpointهای auth + لاگ امنیتی |
+| Rate limiting | ✅ | global 200/min، auth **5/min**، upload 10/min، admin 30/min |
+| CORS | ✅ | فقط origin‌های صریح، بدون wildcard |
+| HostFiltering | ✅ | `localhost;api;kurdmap-api` (تأیید: Host اشتباه → 400) |
+| هدرهای امنیتی | ✅ | میدلور اختصاصی + Caddy (HSTS/CSP/XFO/...) |
+| مدیریت خطا | ✅ | میدلور سراسری، بدون نشت stack trace |
+| Antiforgery/XSRF | ✅ | `X-XSRF-TOKEN` + کوکی `SameSite=Strict`/`Secure` |
+| Token blacklist | ✅ | JTI پس از logout بی‌اعتبار می‌شود |
+| لاگ امنیتی | ✅ | Serilog ساخت‌یافته + correlation id + IP/UA |
+| Migration | ✅ | با retry، در Production در صورت خطا fail می‌کند |
+
+نقاط بهبود باقی‌مانده (اولویت متوسط): مهاجرت CSP به nonce-based (حذف `'unsafe-inline'`)؛
+تنگ‌کردن CORS با حذف `ADMIN_URL` (چون ادمین same-origin شد)؛ مهاجرت resource limits به
+Quadlet/systemd.
+
+---
+
+## 14) راستی‌آزمایی بعد از Deploy
 
 ```bash
 # پنل ادمین: same-origin و noindex
