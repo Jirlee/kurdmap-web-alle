@@ -101,22 +101,23 @@ services:
       redis:
         condition: service_healthy
 
-  # ─── KurdMap Admin Panel (Angular 21 SPA — static assets only) ──────
-  # No internal web server. Build artifacts are published to the
-  # `admin-static` named volume; an external server (Caddy on host)
-  # serves them.
+  # ─── KurdMap Admin Panel (Angular 21 SPA) ──────────────────────────
+  # Self-served behind the host Caddy reverse proxy (like the frontend).
+  # A small SPA-aware server (admin-server.py) serves the build on port 8080
+  # and emits noindex headers so the panel is never indexed by search engines.
+  # The host port is published by the dev override / prod overlay.
   admin:
     image: ${ADMIN_IMAGE:-kurdmap-admin:local}
     container_name: kurdmap-admin
     restart: unless-stopped
-    volumes:
-      - admin-static:/dist
+    environment:
+      PORT: 8080
     healthcheck:
-      test: ["CMD", "ls", "/dist/index.html"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/"]
       interval: 15s
       timeout: 5s
       retries: 3
-      start_period: 5s
+      start_period: 10s
     networks:
       - frontend-net
     depends_on:
@@ -158,4 +159,3 @@ networks:
 volumes:
   pgdata:
   redisdata:
-  admin-static:

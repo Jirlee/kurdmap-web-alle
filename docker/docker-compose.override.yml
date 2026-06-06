@@ -34,9 +34,9 @@ services:
       dockerfile: docker/admin.Dockerfile
       target: dev-runtime
     ports:
-      - "127.0.0.1:${ADMIN_DEV_PORT:-4201}:8081"
+      - "127.0.0.1:${ADMIN_DEV_PORT:-4201}:8080"
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8081/"]
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/"]
       interval: 15s
       timeout: 5s
       retries: 5

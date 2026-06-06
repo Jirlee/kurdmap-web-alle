@@ -108,13 +108,14 @@ services:
         max-size: "10m"
         max-file: "5"
 
-  # ─── Admin Panel (static-asset producer, no web server) ──
-  # The image only carries the compiled Angular build output. It runs no
-  # server and exposes no ports. Static files are published to the
-  # `admin-static` volume; an external server (Caddy on the host) serves them.
+  # ─── Admin Panel (Angular SPA served behind host Caddy) ──
+  # Runs a small SPA-aware server (admin-server.py) on port 8080, published on
+  # the loopback interface only. The host Caddy reverse-proxies gs6x.kurdmap.eu
+  # to it. The server needs no writable filesystem, so read_only stays on.
   admin:
     image: ghcr.io/${GHCR_USERNAME}/kurdmap-admin:latest
-    # Static-asset producer only — no listening sockets, no web server.
+    ports:
+      - "127.0.0.1:${ADMIN_PORT:-4001}:8080"
     read_only: true
     deploy:
       resources:
