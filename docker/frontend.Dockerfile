@@ -1,6 +1,6 @@
 # KurdMap Frontend (Angular SSR) — Multi-stage build
 # Build: podman build -f docker/frontend.Dockerfile -t kurdmap-frontend .
-FROM docker.io/library/node:22-alpine AS build
+FROM docker.io/library/node:26-alpine AS build
 WORKDIR /app
 
 # Copy package files first for layer caching
@@ -12,7 +12,7 @@ COPY src/kurdmap-frontend/ .
 RUN npx ng build --configuration production
 
 # Runtime — Node for SSR
-FROM docker.io/library/node:22-alpine AS runtime
+FROM docker.io/library/node:26-alpine AS runtime
 WORKDIR /app
 
 RUN adduser -D -g '' appuser
