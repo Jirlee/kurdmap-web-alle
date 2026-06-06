@@ -72,7 +72,7 @@
 | 2 | **JWT Secret hardcoded در docker-compose.yml** | `docker-compose.yml:58` | `Jwt__Secret: "KurdMap_Docker..."` — باید از `.env` خوانده شود | ✅ |
 | 3 | **رمز DB hardcoded در appsettings.json** | `KurdMap.API/appsettings.json:3` | `Password=postgres` — باید `User Secrets` (dev) یا env var (prod) | ✅ |
 | 4 | **JWT Secret placeholder در appsettings.json** | `KurdMap.API/appsettings.json:7` | `CHANGE_ME_IN_PRODUCTION...` — باید env var | ✅ |
-| 5 | **AllowedHosts = "*" در appsettings.json** | `KurdMap.API/appsettings.json` | Host header injection — باید `"localhost,api.kurdmap.de"` | ✅ |
+| 5 | **AllowedHosts = "*" در appsettings.json** | `KurdMap.API/appsettings.json` | Host header injection — باید `"localhost,gs6xapi.kurdmap.eu"` | ✅ |
 | 6 | **پورت DB و Redis در docker-compose.yml** | `docker-compose.yml:20,36` | `5432:5432` و `6379:6379` باز — باید در prod حذف شوند | ✅ |
 | 7 | **`sanitizeHtml()` در فرانتاند bypass می‌کند** | `angular-security-assessment` | بررسی شد — در کد وجود ندارد (مستندات قدیمی) | ✅ |
 | 8 | **CSP: `unsafe-inline` و `unsafe-eval`** | فرانتاند index.html/server | SecurityHeadersMiddleware از قبل nonce-based + SSR CSP اضافه شد | ✅ |
@@ -159,7 +159,7 @@
 
 | # | مورد | جزئیات | اولویت | وضعیت |
 |---|------|--------|--------|--------|
-| 50 | **Production API URL خالی** | `environment.prod.ts` — از قبل `apiUrl: 'https://api.kurdmap.de/api/v1'` تنظیم شده بود | 🔴 P0 | ✅ |
+| 50 | **Production API URL خالی** | `environment.prod.ts` — از قبل `apiUrl: 'https://gs6xapi.kurdmap.eu/api/v1'` تنظیم شده بود | 🔴 P0 | ✅ |
 | 51 | **og:image و og:description** | missing در index.html — لازم برای social sharing | 🟡 P2 | ❌ |
 | 52 | **Bundle size optimization** | ۶۳۸kB > budget ۵۰۰kB — نیاز به tree-shaking و lazy loading | 🟡 P2 | ❌ |
 | 53 | **Error boundary / global error handler** | هیچ global error handler وجود ندارد | 🟡 P2 | ❌ |
@@ -174,7 +174,7 @@
 
 | # | مورد | جزئیات | اولویت | وضعیت |
 |---|------|--------|--------|--------|
-| 58 | **Production API URL خالی** | `environment.prod.ts` → `apiUrl: 'https://api.kurdmap.de'` تنظیم شد | 🔴 P0 | ✅ |
+| 58 | **Production API URL خالی** | `environment.prod.ts` → `apiUrl: 'https://gs6xapi.kurdmap.eu'` تنظیم شد | 🔴 P0 | ✅ |
 | 59 | **Unused imports حذف** | `LoadingComponent` در reviews, advertisements, cities, categories | 🟢 P3 | ❌ |
 | 60 | **Reactive Forms** | فعلاً template forms (ngModel) — نیاز به Reactive Forms + validators | 🟡 P2 | ❌ |
 | 61 | **Global error boundary** | هیچ ErrorHandler سفارشی وجود ندارد | 🟡 P2 | ❌ |
@@ -347,7 +347,7 @@
 
 ### امنیت بک‌اند
 - ✅ `appsettings.json`: حذف hardcoded `Password=postgres` و JWT Secret placeholder
-- ✅ `appsettings.json`: تغییر `AllowedHosts` از `"*"` به `"localhost;api.kurdmap.de"`
+- ✅ `appsettings.json`: تغییر `AllowedHosts` از `"*"` به `"localhost;gs6xapi.kurdmap.eu"`
 - ✅ `appsettings.Development.json`: ایجاد فایل جداگانه با مقادیر توسعه محلی
 - ✅ `appsettings.Testing.json`: ایجاد فایل برای integration tests
 - ✅ `DashboardController.cs`: اضافه `[Authorize(Roles = "SuperAdmin,Admin")]`
@@ -367,7 +367,7 @@
 - ✅ `error.interceptor.ts`: `console.error` فقط در devMode (نه production)
 - ✅ `app.config.ts` (admin): `GlobalErrorHandler` فقط در `isDevMode()` لاگ می‌کند
 - ✅ `login.component.ts`: `returnUrl` validation — اضافه بررسی `:` و `\\`
-- ✅ `environment.prod.ts` (admin): تنظیم `apiUrl: 'https://api.kurdmap.de'`
+- ✅ `environment.prod.ts` (admin): تنظیم `apiUrl: 'https://gs6xapi.kurdmap.eu'`
 
 ### زیرساخت Docker / Podman (Docs/Security/16)
 - ✅ `docker-compose.yml`: تمام secrets با `${VARIABLE:?required}` syntax

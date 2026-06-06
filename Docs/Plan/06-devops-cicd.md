@@ -285,7 +285,7 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=kurdmap;Username=${DB_USER:-kurdmap_app};Password=${DB_PASSWORD}
       - ConnectionStrings__Redis=redis:6379
       - Jwt__Secret=${JWT_SECRET}
-      - Jwt__Issuer=${JWT_ISSUER:-https://api.kurdmap.de}
+      - Jwt__Issuer=${JWT_ISSUER:-https://gs6xapi.kurdmap.eu}
       - Jwt__Audience=${JWT_AUDIENCE:-https://kurdmap.de}
     ports:
       - "5000:8080"
@@ -411,7 +411,7 @@ EXPOSE 80
 graph TB
     subgraph "DNS"
         DNS_MAIN[kurdmap.de]
-        DNS_API[api.kurdmap.de]
+        DNS_API[gs6xapi.kurdmap.eu]
         DNS_ADMIN[admin.kurdmap.de]
     end
 
@@ -430,7 +430,7 @@ graph TB
     DNS_API --> NGX
     DNS_ADMIN --> NGX
     NGX -->|kurdmap.de/*| FE
-    NGX -->|api.kurdmap.de/*| API
+    NGX -->|gs6xapi.kurdmap.eu/*| API
     NGX -->|admin.kurdmap.de/*| ADMIN
     API --> PG
     API --> REDIS
@@ -460,7 +460,7 @@ server {
 # API
 server {
     listen 443 ssl http2;
-    server_name api.kurdmap.de;
+    server_name gs6xapi.kurdmap.eu;
 
     ssl_certificate /etc/letsencrypt/live/kurdmap.de/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/kurdmap.de/privkey.pem;

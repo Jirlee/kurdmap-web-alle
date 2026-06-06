@@ -454,7 +454,7 @@ graph LR
 - [ ] Production Docker Compose configuration
 - [ ] Nginx reverse proxy with SSL (Let's Encrypt)
 - [ ] Hetzner VPS provisioning
-- [ ] Domain DNS configuration (kurdmap.de, api.kurdmap.de, admin.kurdmap.de)
+- [ ] Domain DNS configuration (kurdmap.de, gs6xapi.kurdmap.eu, admin.kurdmap.de)
 - [ ] Health check endpoints
 - [ ] Serilog production logging (rolling files, structured)
 - [ ] Database backup strategy (pg_dump cron job)

@@ -25,6 +25,8 @@
 | 13 | [Backup, Disaster Recovery & Business Continuity](13-backup-disaster-recovery.md) | Encrypted Backups, RPO/RTO, Failover, Geo-Redundanz | Resilienz |
 | 14 | [Compliance, Audit & Penetration Testing](14-compliance-audit-pentest.md) | OWASP, PCI-DSS, ISO 27001, DSGVO, Audit-Logging, Pentest-Methodik | Compliance |
 | 15 | [Production Security Checklist & Runbooks](15-security-checklist-runbooks.md) | Pre-Deployment Checklist, Härtungs-Runbook, Emergency Procedures | Operations |
+| 16 | [Hetzner/Podman Deployment Audit](16-hetzner-podman-deployment-audit.md) | Deploy-Audit, Root-Cause-Analyse, Zero-Downtime, Caddy-Ports | Deployment |
+| 17 | [Enterprise Security Config (Web + Admin)](17-enterprise-security-config.md) | Same-Origin Admin, Env-Härtung, Schritt-für-Schritt Sicherheits-Checkliste | Operations |
 
 ---
 

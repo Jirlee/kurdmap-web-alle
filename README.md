@@ -13,7 +13,7 @@ Podman-first multi-service stack with a strict Dev/Prod split for Admin.
 ## Production URLs
 
 - Frontend: https://kurdmap.de
-- API: https://api.kurdmap.de
+- API: https://gs6xapi.kurdmap.eu
 - Admin: https://admin.kurdmap.de
 
 ## Architecture

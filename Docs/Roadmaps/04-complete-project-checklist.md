@@ -323,13 +323,13 @@ REDIS_PASSWORD=<رمز-امن-تولید-کنید>
 
 # === JWT ===
 JWT_SECRET=<کلید-۶۴-کاراکتری-رندوم>
-JWT_ISSUER=https://api.kurdmap.de
+JWT_ISSUER=https://gs6xapi.kurdmap.eu
 JWT_AUDIENCE=https://kurdmap.de
 JWT_EXPIRY_MINUTES=60
 JWT_REFRESH_EXPIRY_DAYS=7
 
 # === API ===
-API_URL=https://api.kurdmap.de
+API_URL=https://gs6xapi.kurdmap.eu
 API_PORT=8080
 CORS_ORIGINS=https://kurdmap.de,https://admin.kurdmap.de
 
@@ -515,7 +515,7 @@ services:
 # Redirect HTTP to HTTPS
 server {
     listen 80;
-    server_name kurdmap.de admin.kurdmap.de api.kurdmap.de;
+    server_name kurdmap.de admin.kurdmap.de gs6xapi.kurdmap.eu;
     return 301 https://$host$request_uri;
 }
 
@@ -568,7 +568,7 @@ server {
 # API
 server {
     listen 443 ssl http2;
-    server_name api.kurdmap.de;
+    server_name gs6xapi.kurdmap.eu;
 
     ssl_certificate /etc/letsencrypt/live/kurdmap.de/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/kurdmap.de/privkey.pem;
@@ -604,7 +604,7 @@ server {
 sudo apt install certbot python3-certbot-nginx
 
 # دریافت گواهینامه
-sudo certbot --nginx -d kurdmap.de -d admin.kurdmap.de -d api.kurdmap.de
+sudo certbot --nginx -d kurdmap.de -d admin.kurdmap.de -d gs6xapi.kurdmap.eu
 
 # تمدید خودکار (هر ۱۲ ساعت)
 echo "0 */12 * * * certbot renew --quiet" | sudo crontab -

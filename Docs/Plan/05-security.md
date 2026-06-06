@@ -463,7 +463,7 @@ public class ImageService : IImageService
 # .env (never committed to git)
 KURDMAP_DB_CONNECTION=Host=localhost;Database=kurdmap;Username=kurdmap_app;Password=<strong-password>
 KURDMAP_JWT_SECRET=<64-character-random-string>
-KURDMAP_JWT_ISSUER=https://api.kurdmap.de
+KURDMAP_JWT_ISSUER=https://gs6xapi.kurdmap.eu
 KURDMAP_JWT_AUDIENCE=https://kurdmap.de
 KURDMAP_REDIS_CONNECTION=localhost:6379
 ```

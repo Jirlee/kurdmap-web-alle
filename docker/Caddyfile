@@ -4,6 +4,17 @@
 #
 # This file intentionally avoids global options because this host serves
 # multiple websites from one shared Caddy instance.
+#
+# ── Upstream ports (IMPORTANT on a multi-stack host) ───────
+# The reverse_proxy targets below use environment placeholders with safe
+# defaults. If this host publishes the containers on NON-default loopback
+# ports (because 4000/8080 are already taken by another stack), set these in
+# Caddy's environment so the upstreams match — otherwise Caddy returns 503:
+#   KURDMAP_FRONTEND_UPSTREAM  (default localhost:4000)  -> FRONTEND_PORT
+#   KURDMAP_ADMIN_UPSTREAM     (default localhost:4001)  -> ADMIN_PORT
+#   KURDMAP_API_UPSTREAM       (default localhost:8080)  -> API_PORT
+# Recommended: systemd drop-in for caddy with an EnvironmentFile. See
+# Docs/Production/16-hetzner-podman-deployment-audit.md (section "Caddy ports").
 
 # ── Shared snippets (prefixed to avoid collisions) ─────────
 (kurdmap_security_headers) {
@@ -36,7 +47,7 @@
 
 (kurdmap_noindex) {
 	# Keep the admin panel out of every search engine index. Combined with the
-	noindex robots.txt the panel is reachable only by its direct URL.
+	# noindex robots.txt the panel is reachable only by its direct URL.
 	header X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
 }
 
@@ -80,7 +91,7 @@ kurdmap.eu, www.kurdmap.eu {
 	@www host www.kurdmap.eu
 	redir @www https://kurdmap.eu{uri} permanent
 
-	reverse_proxy localhost:4000 {
+	reverse_proxy {$KURDMAP_FRONTEND_UPSTREAM:localhost:4000} {
 		import kurdmap_proxy_headers
 		# Angular SSR blocks health checks where Host resolves to an IP.
 		# health_headers forces the Host header so Angular accepts the probe.
@@ -107,13 +118,31 @@ gs6x.kurdmap.eu {
 	import kurdmap_noindex
 	import kurdmap_json_log_admin
 
-	reverse_proxy localhost:4001 {
-		import kurdmap_proxy_headers
-		health_uri /
-		health_interval 30s
-		transport http {
-			dial_timeout 5s
-			response_header_timeout 30s
+	# Admin API calls are SAME-ORIGIN under /api/* and proxied to the API
+	# container. The admin bundle ships no hardcoded API URL and makes no
+	# cross-origin requests (no CORS surface; API origin never exposed in JS).
+	handle /api/* {
+		reverse_proxy {$KURDMAP_API_UPSTREAM:localhost:8080} {
+			import kurdmap_proxy_headers
+			# ASP.NET HostFiltering accepts "localhost" (see API block below).
+			header_up Host "localhost"
+			transport http {
+				dial_timeout 5s
+				response_header_timeout 30s
+			}
+		}
+	}
+
+	# Everything else → the admin SPA server (noindex + SPA fallback).
+	handle {
+		reverse_proxy {$KURDMAP_ADMIN_UPSTREAM:localhost:4001} {
+			import kurdmap_proxy_headers
+			health_uri /
+			health_interval 30s
+			transport http {
+				dial_timeout 5s
+				response_header_timeout 30s
+			}
 		}
 	}
 }
@@ -131,7 +160,7 @@ gs6xapi.kurdmap.eu {
 		max_size 10MB
 	}
 
-	reverse_proxy localhost:8080 {
+	reverse_proxy {$KURDMAP_API_UPSTREAM:localhost:8080} {
 		import kurdmap_proxy_headers
 		# Override Host to "localhost" so ASP.NET AllowedHosts passes.
 		# The real client domain is still available via X-Forwarded-Host (set by Caddy).

@@ -72,7 +72,7 @@ Key variables (see [`docker/.env.example`](docker/.env.example) for the full lis
 | `POSTGRES_PASSWORD`    | DB password                              | **Required** — strong value                   |
 | `REDIS_PASSWORD`       | Redis password                            | **Required**                                  |
 | `JWT_SECRET`           | JWT signing key                           | **Required** — `openssl rand -base64 48`      |
-| `JWT_ISSUER` / `JWT_AUDIENCE` | Token issuer/audience              | e.g. `https://api.kurdmap.de`                 |
+| `JWT_ISSUER` / `JWT_AUDIENCE` | Token issuer/audience              | e.g. `https://gs6xapi.kurdmap.eu`                 |
 | `Cors__AllowedOrigins__0/1` | Allowed front-end origins            | Frontend + Admin URLs                         |
 | `SEED_ADMIN_EMAIL`     | First admin email                         | Seeded only on an **empty** user table        |
 | `SEED_ADMIN_PASSWORD`  | First admin password                      | Must satisfy Identity policy (see note below) |

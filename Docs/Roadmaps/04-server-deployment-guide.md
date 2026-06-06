@@ -147,13 +147,13 @@ REDIS_PASSWORD=CHANGE_ME
 
 # ── JWT ──
 JWT_SECRET=CHANGE_ME
-JWT_ISSUER=https://api.kurdmap.de
+JWT_ISSUER=https://gs6xapi.kurdmap.eu
 JWT_AUDIENCE=https://kurdmap.de
 
 # ── URLs ──
 FRONTEND_URL=https://kurdmap.de
 ADMIN_URL=https://admin.kurdmap.de
-API_DOMAIN=api.kurdmap.de
+API_DOMAIN=gs6xapi.kurdmap.eu
 
 # ── Ports (تنظیم کنید اگر با پورت‌های فعلی تداخل دارد) ──
 API_PORT=8080
@@ -262,7 +262,7 @@ curl -sf -o /dev/null -w "%{http_code}" http://localhost:8081
 |-----|------|-------|-------|
 | A | `kurdmap.de` | `<IP سرور>` | خاموش (DNS only) |
 | A | `admin.kurdmap.de` | `<IP سرور>` | خاموش |
-| A | `api.kurdmap.de` | `<IP سرور>` | خاموش |
+| A | `gs6xapi.kurdmap.eu` | `<IP سرور>` | خاموش |
 | CNAME | `www.kurdmap.de` | `kurdmap.de` | خاموش |
 
 > **مهم:** اگر از Cloudflare استفاده می‌کنید، Proxy را خاموش کنید (DNS Only).  
@@ -273,7 +273,7 @@ curl -sf -o /dev/null -w "%{http_code}" http://localhost:8081
 ```bash
 dig +short kurdmap.de
 dig +short admin.kurdmap.de
-dig +short api.kurdmap.de
+dig +short gs6xapi.kurdmap.eu
 # هر سه باید IP سرور را برگردانند
 ```
 
@@ -317,7 +317,7 @@ sudo systemctl status caddy --no-pager
 ### ۶.۴ — تست HTTPS (۱-۲ دقیقه صبر کنید تا Caddy certificate بگیرد)
 
 ```bash
-curl -f https://api.kurdmap.de/health
+curl -f https://gs6xapi.kurdmap.eu/health
 curl -f https://kurdmap.de
 curl -f https://admin.kurdmap.de
 ```
@@ -328,7 +328,7 @@ curl -f https://admin.kurdmap.de
 
 ```bash
 # 1. همه سایت‌ها کار می‌کنند؟
-curl -sf -o /dev/null -w "KurdMap API: %{http_code}\n" https://api.kurdmap.de/health
+curl -sf -o /dev/null -w "KurdMap API: %{http_code}\n" https://gs6xapi.kurdmap.eu/health
 curl -sf -o /dev/null -w "KurdMap Web: %{http_code}\n" https://kurdmap.de
 curl -sf -o /dev/null -w "KurdMap Admin: %{http_code}\n" https://admin.kurdmap.de
 
@@ -337,7 +337,7 @@ curl -sf -o /dev/null -w "Kozad: %{http_code}\n" https://kozad.net
 curl -sf -o /dev/null -w "Jirlee: %{http_code}\n" https://jirlee.com
 
 # 3. TLS درست est?
-curl -sI https://api.kurdmap.de | grep -i "strict-transport"
+curl -sI https://gs6xapi.kurdmap.eu | grep -i "strict-transport"
 # باید برگرداند: strict-transport-security: max-age=63072000...
 ```
 
@@ -418,7 +418,7 @@ curl -v http://localhost:8080/health 2>&1 | grep "Bad Request"
 
 **حل:** `AllowedHosts` در `docker-compose.prod.yml` باید شامل `localhost` باشد:
 ```yaml
-AllowedHosts: "${API_DOMAIN:-api.kurdmap.de};kurdmap-api;localhost"
+AllowedHosts: "${API_DOMAIN:-gs6xapi.kurdmap.eu};kurdmap-api;localhost"
 ```
 
 ### مشکل: Admin health check stuck on (starting)
@@ -531,7 +531,7 @@ API_PORT=9080
 ```
 kurdmap.de         → localhost:4000 (Frontend SSR)
 admin.kurdmap.de   → localhost:8081 (Admin Nginx)
-api.kurdmap.de     → localhost:8080 (API .NET)
+gs6xapi.kurdmap.eu     → localhost:8080 (API .NET)
 ```
 
 **ویژگی‌ها:**
@@ -591,7 +591,7 @@ sudo caddy validate --config /etc/caddy/Caddyfile
 sudo systemctl restart caddy
 
 # 5. تأیید
-curl -f https://api.kurdmap.de/health
+curl -f https://gs6xapi.kurdmap.eu/health
 curl -f https://kurdmap.de
 curl -f https://admin.kurdmap.de
 ```

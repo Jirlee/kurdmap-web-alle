@@ -65,7 +65,7 @@
 |------|--------|-------|
 | `app.json` | ✅ | `versionCode: 1`، `package: de.kurdmap.mobile`، `blockedPermissions` |
 | `eas.json` | ✅ | `autoIncrement: true`، `buildType: app-bundle`، `releaseStatus: draft` |
-| `.env.production` | ✅ | `EXPO_PUBLIC_API_URL=https://api.kurdmap.de` |
+| `.env.production` | ✅ | `EXPO_PUBLIC_API_URL=https://gs6xapi.kurdmap.eu` |
 | `babel.config.js` | ✅ | `transform-remove-console` در production |
 | Icons/Splash | ✅ | `icon.png` (1024×1024)، `adaptive-icon.png`، `splash.png`، `favicon.png` |
 | `android/app/build.gradle` | ✅ | Release signing با `kurdmap-upload.keystore` |
@@ -129,7 +129,7 @@
 📅 هفته ۲
 │
 ├── ⬜ مرحله ۵: سرور Production
-│   ├── Deploy api.kurdmap.de
+│   ├── Deploy gs6xapi.kurdmap.eu
 │   ├── SSL certificate
 │   ├── CORS تنظیم
 │   ├── Seed data
@@ -211,12 +211,12 @@
 
 ```
 ┌──────────────────────┐         ┌──────────────────────┐
-│   KurdMap Mobile App  │  HTTPS  │   api.kurdmap.de      │
+│   KurdMap Mobile App  │  HTTPS  │   gs6xapi.kurdmap.eu      │
 │   (React Native)      │────────▶│   (ASP.NET Core 10)   │
 │                        │         │                        │
 │  .env.production:      │         │  ← PostgreSQL          │
 │  EXPO_PUBLIC_API_URL=  │         │  ← Redis               │
-│  https://api.kurdmap.de│         │                        │
+│  https://gs6xapi.kurdmap.eu│         │                        │
 └──────────────────────┘         └──────────────────────┘
 ```
 
@@ -228,8 +228,8 @@
 
 | کلاینت | Base URL | استفاده |
 |--------|----------|---------|
-| `apiClient` | `https://api.kurdmap.de/api/v1` | businesses, categories, cities, reviews, favorites |
-| `authClient` | `https://api.kurdmap.de/api/auth` | login, register, logout, delete-account |
+| `apiClient` | `https://gs6xapi.kurdmap.eu/api/v1` | businesses, categories, cities, reviews, favorites |
+| `authClient` | `https://gs6xapi.kurdmap.eu/api/auth` | login, register, logout, delete-account |
 
 **آدرس API از کجا می‌آید؟**
 
@@ -247,14 +247,14 @@
 |------|------|-----|--------|
 | Development | `.env` | `http://localhost:8080` | به سرور local وصل می‌شود |
 | Development (.NET) | `.env.local` | `http://localhost:5110` | به dotnet run وصل می‌شود |
-| **Production** | **`.env.production`** | **`https://api.kurdmap.de`** | **✅ به سرور واقعی** |
+| **Production** | **`.env.production`** | **`https://gs6xapi.kurdmap.eu`** | **✅ به سرور واقعی** |
 
 **در build تولیدی (AAB/APK):**
 - وقتی با `eas build --profile production` یا Gradle build می‌سازی
 - **Expo خودکار** از `.env.production` استفاده می‌کند
-- همچنین `eas.json` → `production.env.EXPO_PUBLIC_API_URL` هم `https://api.kurdmap.de` تنظیم شده
+- همچنین `eas.json` → `production.env.EXPO_PUBLIC_API_URL` هم `https://gs6xapi.kurdmap.eu` تنظیم شده
 
-> 🔑 **نتیجه:** URL در build نهایی embedded است. کاربر چیزی نمی‌بیند، اپ خودکار به `https://api.kurdmap.de` وصل می‌شود.
+> 🔑 **نتیجه:** URL در build نهایی embedded است. کاربر چیزی نمی‌بیند، اپ خودکار به `https://gs6xapi.kurdmap.eu` وصل می‌شود.
 
 ### JWT Authentication — نحوه احراز هویت
 
@@ -389,7 +389,7 @@ Mobile App → Expo Push Service → Firebase Cloud Messaging (FCM) → گوشی
 
 ## 6. راه‌اندازی سرور Production
 
-### ⚠️ سرور `api.kurdmap.de` باید آنلاین باشد قبل از submit!
+### ⚠️ سرور `gs6xapi.kurdmap.eu` باید آنلاین باشد قبل از submit!
 
 ### ۶.۱: تنظیمات سرور — متغیرهای محیطی
 
@@ -429,10 +429,10 @@ JWT_REFRESH_EXPIRY_DAYS=7
 # --- CORS ---
 Cors__AllowedOrigins__0=https://kurdmap.de
 Cors__AllowedOrigins__1=https://admin.kurdmap.de
-Cors__AllowedOrigins__2=https://api.kurdmap.de
+Cors__AllowedOrigins__2=https://gs6xapi.kurdmap.eu
 
 # --- URLs ---
-API_URL=https://api.kurdmap.de
+API_URL=https://gs6xapi.kurdmap.eu
 API_PORT=8080
 FRONTEND_URL=https://kurdmap.de
 FRONTEND_PORT=80
@@ -484,22 +484,22 @@ docker-compose -f docker-compose.yml build
 docker-compose -f docker-compose.yml up -d
 
 # بررسی سلامت
-curl https://api.kurdmap.de/health
+curl https://gs6xapi.kurdmap.eu/health
 ```
 
 ### ۶.۴: SSL Certificate
 
 ```bash
 # با Let's Encrypt (رایگان):
-sudo certbot --nginx -d api.kurdmap.de -d kurdmap.de -d admin.kurdmap.de
+sudo certbot --nginx -d gs6xapi.kurdmap.eu -d kurdmap.de -d admin.kurdmap.de
 
 # یا اگر از reverse proxy (nginx/traefik) استفاده می‌کنی:
 # در nginx config:
 server {
     listen 443 ssl;
-    server_name api.kurdmap.de;
-    ssl_certificate /etc/letsencrypt/live/api.kurdmap.de/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/api.kurdmap.de/privkey.pem;
+    server_name gs6xapi.kurdmap.eu;
+    ssl_certificate /etc/letsencrypt/live/gs6xapi.kurdmap.eu/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/gs6xapi.kurdmap.eu/privkey.pem;
     
     location / {
         proxy_pass http://localhost:8080;
@@ -511,10 +511,10 @@ server {
 
 | مورد | دستور بررسی | وضعیت |
 |------|-------------|--------|
-| سرور آنلاین | `curl https://api.kurdmap.de/health` | ⬜ |
-| SSL معتبر | `curl -v https://api.kurdmap.de 2>&1 \| grep "SSL"` | ⬜ |
-| Database seed شده | `curl https://api.kurdmap.de/api/v1/cities` | ⬜ |
-| Login کار می‌کند | `curl -X POST https://api.kurdmap.de/api/auth/login -d '...'` | ⬜ |
+| سرور آنلاین | `curl https://gs6xapi.kurdmap.eu/health` | ⬜ |
+| SSL معتبر | `curl -v https://gs6xapi.kurdmap.eu 2>&1 \| grep "SSL"` | ⬜ |
+| Database seed شده | `curl https://gs6xapi.kurdmap.eu/api/v1/cities` | ⬜ |
+| Login کار می‌کند | `curl -X POST https://gs6xapi.kurdmap.eu/api/auth/login -d '...'` | ⬜ |
 | Test account ساخته شده | `review@kurdmap.de / TestReview2026!` | ⬜ |
 
 ---
@@ -1194,7 +1194,7 @@ Google Review Team اپ تو را بررسی می‌کند. اگر لاگین ل
 **۱. در سرور production یک کاربر بساز:**
 
 ```bash
-curl -X POST https://api.kurdmap.de/api/auth/register \
+curl -X POST https://gs6xapi.kurdmap.eu/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{
     "fullName": "Google Review",
@@ -1286,7 +1286,7 @@ buildTypes {
 - [x] Account deletion — backend + mobile
 - [x] Privacy Policy screen — GDPR compliant
 - [x] `versionCode: 1`, `package: de.kurdmap.mobile`
-- [x] Production API URL embedded: `https://api.kurdmap.de`
+- [x] Production API URL embedded: `https://gs6xapi.kurdmap.eu`
 - [x] `blockedPermissions` — CAMERA, AUDIO مسدود
 - [x] `transform-remove-console` — حذف console.log
 - [x] i18n: ۴ زبان کامل
@@ -1325,7 +1325,7 @@ buildTypes {
 - [ ] خودت تست کن
 
 **فاز ۵ — سرور Production (هفته ۲):**
-- [ ] Deploy `api.kurdmap.de`
+- [ ] Deploy `gs6xapi.kurdmap.eu`
 - [ ] SSL Certificate
 - [ ] Database seed
 - [ ] Test account: `review@kurdmap.de`
@@ -1447,7 +1447,7 @@ src/kurdmap-mobile/
 ├── eas.json                    ← تنظیمات EAS Build/Submit
 ├── .env                        ← Development: localhost:8080
 ├── .env.local                  ← Development: localhost:5110
-├── .env.production             ← Production: https://api.kurdmap.de
+├── .env.production             ← Production: https://gs6xapi.kurdmap.eu
 ├── release-output/             ← ⬇️ خروجی‌های آماده آپلود
 │   ├── kurdmap-v1.0.0.aab      ← 44 MB — آپلود به Google Play
 │   └── kurdmap-v1.0.0.apk      ← 84 MB — تست مستقیم روی گوشی

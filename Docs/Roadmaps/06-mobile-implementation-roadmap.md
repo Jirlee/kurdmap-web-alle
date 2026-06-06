@@ -435,7 +435,7 @@ Reference: [04-security.md](./04-security.md), OWASP MAS compliance
 - [ ] Add screenshot prevention on sensitive screens (`FLAG_SECURE` on Android)
 
 #### 18d: Network Security ✅ (partial)
-- [x] Created `.env.production` with HTTPS API URL (`https://api.kurdmap.de`)
+- [x] Created `.env.production` with HTTPS API URL (`https://gs6xapi.kurdmap.eu`)
 - [x] EAS build profiles use HTTPS URLs for preview/production
 - [x] Network request timeout verified: 15s on both `apiClient` and `authClient`
 - [x] Removed 3 unused dependencies: `expo-blur`, `lottie-react-native`, `@react-navigation/native`

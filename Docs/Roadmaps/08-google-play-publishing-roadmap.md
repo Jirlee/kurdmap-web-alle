@@ -128,7 +128,7 @@ eas init
 ```json
 "production": {
   "env": {
-    "EXPO_PUBLIC_API_URL": "https://api.kurdmap.de",
+    "EXPO_PUBLIC_API_URL": "https://gs6xapi.kurdmap.eu",
     "EXPO_PUBLIC_SENTRY_DSN": "https://your-key@o0.ingest.sentry.io/12345"
   }
 }
@@ -218,7 +218,7 @@ eas init
     "production": {
       "android": { "buildType": "app-bundle" },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.kurdmap.de"
+        "EXPO_PUBLIC_API_URL": "https://gs6xapi.kurdmap.eu"
       }
     }
   }
@@ -228,7 +228,7 @@ eas init
 **اضافه کردن Sentry DSN (پس از دریافت):**
 ```json
 "env": {
-  "EXPO_PUBLIC_API_URL": "https://api.kurdmap.de",
+  "EXPO_PUBLIC_API_URL": "https://gs6xapi.kurdmap.eu",
   "EXPO_PUBLIC_SENTRY_DSN": "https://exampleKey@o0.ingest.sentry.io/12345"
 }
 ```
@@ -612,7 +612,7 @@ KurdMap — فەرهەنگى بازرگانى کوردى بۆ کۆڵن و دوس
            ┌──────────▼──────────────────┐
            │  🔧 KurdMap.API             │
            │  (ASP.NET Core 10)          │
-           │  URL: api.kurdmap.de        │
+           │  URL: gs6xapi.kurdmap.eu        │
            │  Port: 5000/8080            │
            │  • JWT Auth + Refresh       │
            │  • CQRS + MediatR           │
@@ -689,7 +689,7 @@ KurdMap — فەرهەنگى بازرگانى کوردى بۆ کۆڵن و دوس
 | **Rate Limiting** | ✅ | `[EnableRateLimiting("auth")]` روی AuthController |
 | **Pagination** | ✅ | API از `PaginatedList<T>` استفاده می‌کند، موبایل با React Query infinite query |
 | **Cache** | ✅ | `staleTime: 5 min`، `gcTime: 30 min` در React Query |
-| **Image URLs** | ✅ | تصاویر از `api.kurdmap.de/images/` بارگذاری می‌شوند |
+| **Image URLs** | ✅ | تصاویر از `gs6xapi.kurdmap.eu/images/` بارگذاری می‌شوند |
 | **Token Refresh** | ✅ | JWT با ۳۰ ثانیه buffer قبل از انقضا refresh می‌شود |
 | **Multilingual** | ✅ | `MultilingualText` value object: `name_ku`, `name_kmr`, `name_de`, `name_en` |
 
@@ -714,7 +714,7 @@ KurdMap — فەرهەنگى بازرگانى کوردى بۆ کۆڵن و دوس
 
 | مورد | پیاده‌سازی | سطح |
 |------|-----------|-----|
-| **HTTPS Only** | production فقط `https://api.kurdmap.de` | 🟢 امن |
+| **HTTPS Only** | production فقط `https://gs6xapi.kurdmap.eu` | 🟢 امن |
 | **Timeout** | ۱۵ ثانیه برای هر درخواست | 🟢 امن |
 | **Rate Limiting** | روی auth endpoints فعال | 🟢 امن |
 | **CORS** | فقط domain های مجاز | 🟢 امن |

@@ -52,7 +52,7 @@
 
 - [x] **SEC-01:** حذف hardcoded `Password=postgres` از `appsettings.json` — استفاده از env var
 - [x] **SEC-02:** حذف hardcoded JWT Secret placeholder از `appsettings.json` — استفاده از env var
-- [x] **SEC-03:** تغییر `AllowedHosts: "*"` به `"localhost;api.kurdmap.de"` در `appsettings.json`
+- [x] **SEC-03:** تغییر `AllowedHosts: "*"` به `"localhost;gs6xapi.kurdmap.eu"` در `appsettings.json`
 - [x] **SEC-04:** حذف hardcoded secrets از `docker-compose.yml` — استفاده از `${VARIABLE}` syntax
 - [x] **SEC-05:** حذف port mapping DB/Redis در production (docker-compose.prod.yml)
 - [x] **SEC-06:** `bypassSecurityTrustHtml()` در کد وجود نداشت — grep تایید کرد (مستندات قدیمی)
@@ -60,7 +60,7 @@
 - [x] **SEC-08:** اضافه validation به SSR proxy (`server.ts`) — normalize + reject `..`
 - [x] **SEC-09:** اضافه `[Authorize(Roles = "SuperAdmin,Admin")]` به `DashboardController`
 - [x] **SEC-10:** Redis password + disable dangerous commands (FLUSHDB, FLUSHALL, DEBUG)
-- [x] **CFG-01:** تنظیم `apiUrl` در `environment.prod.ts` — admin panel → `https://api.kurdmap.de`
+- [x] **CFG-01:** تنظیم `apiUrl` در `environment.prod.ts` — admin panel → `https://gs6xapi.kurdmap.eu`
 - [x] **CFG-02:** تنظیم `apiUrl` در `environment.prod.ts` — frontend (از قبل صحیح بود)
 - [x] **CFG-03:** ایجاد `docker-compose.prod.yml` overlay (read-only, capabilities, resources, dual-network)
 - [x] **CFG-04:** `.env.example` با دستورات تولید رمز قوی
@@ -95,7 +95,7 @@
 |--------|--------|-----------|
 | Frontend (SSR) | `kurdmap.de` | `:4000` |
 | Admin Panel | `admin.kurdmap.de` | `:8081` |
-| API | `api.kurdmap.de` | `:8080` |
+| API | `gs6xapi.kurdmap.eu` | `:8080` |
 
 ### معماری شبکه (Podman — Enterprise Network Isolation)
 
@@ -279,7 +279,7 @@ JWT_AUDIENCE=KurdMapClient
 # ── URLs ──
 FRONTEND_URL=https://kurdmap.de
 ADMIN_URL=https://admin.kurdmap.de
-API_DOMAIN=api.kurdmap.de
+API_DOMAIN=gs6xapi.kurdmap.eu
 
 # ── GHCR ──
 GHCR_USERNAME=your-github-username-lowercase
@@ -349,7 +349,7 @@ podman compose exec -T postgres psql -U postgres -d kurdmap < docker/seed-data.s
 # ۱. تنظیم DNS Records (در پنل دامنه — مثلاً Cloudflare)
 #    A    kurdmap.de          → <IP سرور>
 #    A    admin.kurdmap.de    → <IP سرور>
-#    A    api.kurdmap.de      → <IP سرور>
+#    A    gs6xapi.kurdmap.eu      → <IP سرور>
 #    CNAME www.kurdmap.de     → kurdmap.de
 
 # ۲. اضافه کردن import به Caddyfile اصلی هاست
@@ -364,7 +364,7 @@ sudo caddy validate --config /etc/caddy/Caddyfile
 sudo systemctl reload caddy
 
 # ۴. تست HTTPS (صبر کنید تا Caddy certificate بگیرد — ۱-۲ دقیقه)
-curl -f https://api.kurdmap.de/health
+curl -f https://gs6xapi.kurdmap.eu/health
 curl -f https://kurdmap.de
 curl -f https://admin.kurdmap.de
 ```
@@ -403,7 +403,7 @@ echo "*/5 * * * * curl -sf http://localhost:8080/health || echo 'KurdMap API DOW
 | Logging | ✅ | Serilog (Console + File) |
 | EF Core Migrations | ✅ | ۲ migration + auto-migrate on startup |
 | **Secrets Hardcoded** | ✅ | رفع شد — env var در prod, appsettings.Development.json برای dev |
-| **AllowedHosts** | ✅ | `"localhost;api.kurdmap.de"` |
+| **AllowedHosts** | ✅ | `"localhost;gs6xapi.kurdmap.eu"` |
 | **DashboardController** | ✅ | `[Authorize(Roles = "SuperAdmin,Admin")]` |
 | **CSRF/Antiforgery** | ✅ | `AddAntiforgery` + `UseAntiforgery` با XSRF-TOKEN cookie |
 | **COOP/CORP/COEP** | ✅ | `SecurityHeadersMiddleware` — same-origin + credentialless |
@@ -424,7 +424,7 @@ echo "*/5 * * * * curl -sf http://localhost:8080/health || echo 'KurdMap API DOW
 | RTL | ✅ | Right-to-left layout |
 | Accessibility | ✅ | skip-link, scope, caption, aria, touch targets, mobile cards |
 | ۱۰ صفحه | ✅ | dashboard, businesses, categories, cities, users, ads, reviews, reports, settings, login |
-| **API URL خالی** | ✅ | `apiUrl: 'https://api.kurdmap.de'` تنظیم شد |
+| **API URL خالی** | ✅ | `apiUrl: 'https://gs6xapi.kurdmap.eu'` تنظیم شد |
 | **Error Logging** | ✅ | `GlobalErrorHandler` فقط در devMode لاگ می‌کند |
 | **Reactive Forms** | ❌ | فقط template forms |
 | **Component Tests** | ❌ | ۰ تست کامپوننت |
@@ -445,7 +445,7 @@ echo "*/5 * * * * curl -sf http://localhost:8080/health || echo 'KurdMap API DOW
 | ۲۶ shared component | ✅ | bottom-nav, header, footer, pagination, toast, ... |
 | ۷ صفحه | ✅ | home, search, detail, categories, about, contact, policy |
 | Accessibility | ✅ | aria-labels, aria-live, skip-link, translated aria keys |
-| **API URL خالی** | ✅ | از قبل `apiUrl: 'https://api.kurdmap.de/api/v1'` |
+| **API URL خالی** | ✅ | از قبل `apiUrl: 'https://gs6xapi.kurdmap.eu/api/v1'` |
 | **Bundle Size** | ⚠️ | ۶۳۸kB > budget ۵۰۰kB |
 | **bypassSecurityTrust** | ✅ | در کد وجود نداشت (مستندات قدیمی) |
 | **CSP unsafe** | ✅ | nonce-based در SecurityHeadersMiddleware + server.ts |
@@ -563,7 +563,7 @@ echo "*/5 * * * * curl -sf http://localhost:8080/health || echo 'KurdMap API DOW
 
 ```bash
 # ۱. ابتدا رجیستر (کاربر عادی ساخته می‌شود)
-curl -X POST https://api.kurdmap.de/api/auth/register \
+curl -X POST https://gs6xapi.kurdmap.eu/api/auth/register \
   -H 'Content-Type: application/json' \
   -d '{"email": "newadmin@kurdmap.de", "password": "StrongPass123!@#", "fullName": "New Admin"}'
 
@@ -719,7 +719,7 @@ nano .env  # مقادیر: POSTGRES_PASSWORD, REDIS_PASSWORD, JWT_SECRET, GHCR_U
 sudo systemctl reload caddy
 
 # ۲ دقیقه صبر کنید → Caddy خودکار SSL می‌گیرد
-curl -f https://api.kurdmap.de/health  # باید 200 OK برگرداند
+curl -f https://gs6xapi.kurdmap.eu/health  # باید 200 OK برگرداند
 
 # لاگین ادمین:
 # https://admin.kurdmap.de

@@ -50,7 +50,7 @@
 
 - [x] **SEC-01:** حذف hardcoded `Password=postgres` از `appsettings.json` — استفاده از env var
 - [x] **SEC-02:** حذف hardcoded JWT Secret placeholder از `appsettings.json` — استفاده از env var
-- [x] **SEC-03:** تغییر `AllowedHosts: "*"` به `"localhost;api.kurdmap.de"` در `appsettings.json`
+- [x] **SEC-03:** تغییر `AllowedHosts: "*"` به `"localhost;gs6xapi.kurdmap.eu"` در `appsettings.json`
 - [x] **SEC-04:** حذف hardcoded secrets از `docker-compose.yml` — استفاده از `${VARIABLE}` syntax
 - [x] **SEC-05:** حذف port mapping DB/Redis در production (docker-compose.prod.yml)
 - [x] **SEC-06:** `bypassSecurityTrustHtml()` در کد وجود نداشت — grep تایید کرد (مستندات قدیمی)
@@ -58,7 +58,7 @@
 - [x] **SEC-08:** اضافه validation به SSR proxy (`server.ts`) — normalize + reject `..`
 - [x] **SEC-09:** اضافه `[Authorize(Roles = "SuperAdmin,Admin")]` به `DashboardController`
 - [x] **SEC-10:** Redis password + disable dangerous commands (FLUSHDB, FLUSHALL, DEBUG)
-- [x] **CFG-01:** تنظیم `apiUrl` در `environment.prod.ts` — admin panel → `https://api.kurdmap.de`
+- [x] **CFG-01:** تنظیم `apiUrl` در `environment.prod.ts` — admin panel → `https://gs6xapi.kurdmap.eu`
 - [x] **CFG-02:** تنظیم `apiUrl` در `environment.prod.ts` — frontend (از قبل صحیح بود)
 - [x] **CFG-03:** ایجاد `docker-compose.prod.yml` overlay (read-only, capabilities, resources, dual-network)
 - [x] **CFG-04:** `.env.example` با دستورات تولید رمز قوی
@@ -90,7 +90,7 @@
 |--------|--------|-----------|
 | Frontend (SSR) | `kurdmap.de` | `:4000` |
 | Admin Panel | `admin.kurdmap.de` | `:8081` |
-| API | `api.kurdmap.de` | `:8080` |
+| API | `gs6xapi.kurdmap.eu` | `:8080` |
 
 ### معماری شبکه
 
@@ -182,7 +182,7 @@ sudo ln -s /etc/nginx/sites-available/kurdmap.conf /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 
 # ۲. SSL
-sudo certbot --nginx -d kurdmap.de -d www.kurdmap.de -d admin.kurdmap.de -d api.kurdmap.de
+sudo certbot --nginx -d kurdmap.de -d www.kurdmap.de -d admin.kurdmap.de -d gs6xapi.kurdmap.eu
 
 # ۳. تمدید خودکار
 echo "0 */12 * * * certbot renew --quiet" | sudo crontab -
@@ -219,7 +219,7 @@ echo "*/5 * * * * curl -sf http://localhost:8080/health || echo 'KurdMap API DOW
 | Logging | ✅ | Serilog (Console + File) |
 | EF Core Migrations | ✅ | ۲ migration + auto-migrate on startup |
 | **Secrets Hardcoded** | ✅ | رفع شد — env var در prod, appsettings.Development.json برای dev |
-| **AllowedHosts** | ✅ | `"localhost;api.kurdmap.de"` |
+| **AllowedHosts** | ✅ | `"localhost;gs6xapi.kurdmap.eu"` |
 | **DashboardController** | ✅ | `[Authorize(Roles = "SuperAdmin,Admin")]` |
 | **CSRF/Antiforgery** | ✅ | `AddAntiforgery` + `UseAntiforgery` با XSRF-TOKEN cookie |
 | **COOP/CORP/COEP** | ✅ | `SecurityHeadersMiddleware` — same-origin + credentialless |
@@ -240,7 +240,7 @@ echo "*/5 * * * * curl -sf http://localhost:8080/health || echo 'KurdMap API DOW
 | RTL | ✅ | Right-to-left layout |
 | Accessibility | ✅ | skip-link, scope, caption, aria, touch targets, mobile cards |
 | ۱۰ صفحه | ✅ | dashboard, businesses, categories, cities, users, ads, reviews, reports, settings, login |
-| **API URL خالی** | ✅ | `apiUrl: 'https://api.kurdmap.de'` تنظیم شد |
+| **API URL خالی** | ✅ | `apiUrl: 'https://gs6xapi.kurdmap.eu'` تنظیم شد |
 | **Error Logging** | ✅ | `GlobalErrorHandler` فقط در devMode لاگ می‌کند |
 | **Reactive Forms** | ❌ | فقط template forms |
 | **Component Tests** | ❌ | ۰ تست کامپوننت |
@@ -261,7 +261,7 @@ echo "*/5 * * * * curl -sf http://localhost:8080/health || echo 'KurdMap API DOW
 | ۲۶ shared component | ✅ | bottom-nav, header, footer, pagination, toast, ... |
 | ۷ صفحه | ✅ | home, search, detail, categories, about, contact, policy |
 | Accessibility | ✅ | aria-labels, aria-live, skip-link, translated aria keys |
-| **API URL خالی** | ✅ | از قبل `apiUrl: 'https://api.kurdmap.de/api/v1'` |
+| **API URL خالی** | ✅ | از قبل `apiUrl: 'https://gs6xapi.kurdmap.eu/api/v1'` |
 | **Bundle Size** | ⚠️ | ۶۳۸kB > budget ۵۰۰kB |
 | **bypassSecurityTrust** | ✅ | در کد وجود نداشت (مستندات قدیمی) |
 | **CSP unsafe** | ✅ | nonce-based در SecurityHeadersMiddleware + server.ts |
