@@ -30,21 +30,21 @@ import { filter } from 'rxjs';
 
           <!-- Desktop Navigation -->
           <div class="hidden md:flex items-center gap-1">
-            <a routerLink="/" routerLinkActive="!bg-primary-500/10 !text-primary-700 dark:!text-primary-400" [routerLinkActiveOptions]="{exact: true}"
+            <a routerLink="/" routerLinkActive #rlaHome="routerLinkActive" [routerLinkActiveOptions]="{exact: true}"
                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
-               [class]="solidHeader() ? 'text-gray-600 dark:text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20' : 'text-white/80 hover:text-white hover:bg-white/10'"
+               [class]="navLinkClass(rlaHome.isActive)"
                (click)="closeModal()">
               {{ 'nav.home' | translate }}
             </a>
-            <a routerLink="/categories" routerLinkActive="!bg-primary-500/10 !text-primary-700 dark:!text-primary-400"
+            <a routerLink="/categories" routerLinkActive #rlaCat="routerLinkActive"
                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
-               [class]="solidHeader() ? 'text-gray-600 dark:text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20' : 'text-white/80 hover:text-white hover:bg-white/10'"
+               [class]="navLinkClass(rlaCat.isActive)"
                (click)="closeModal()">
               {{ 'nav.categories' | translate }}
             </a>
             <button
                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer inline-flex items-center gap-2"
-               [class]="solidHeader() ? 'text-gray-600 dark:text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20' : 'text-white/80 hover:text-white hover:bg-white/10'"
+               [class]="navLinkClass(false)"
                (click)="openSearch()">
               {{ 'nav.search' | translate }}
               <kbd class="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-medium border transition-colors"
@@ -52,9 +52,9 @@ import { filter } from 'rxjs';
                 <span class="text-[10px]">⌘</span>K
               </kbd>
             </button>
-            <a routerLink="/about" routerLinkActive="!bg-primary-500/10 !text-primary-700 dark:!text-primary-400"
+            <a routerLink="/about" routerLinkActive #rlaAbout="routerLinkActive"
                class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200"
-               [class]="solidHeader() ? 'text-gray-600 dark:text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20' : 'text-white/80 hover:text-white hover:bg-white/10'"
+               [class]="navLinkClass(rlaAbout.isActive)"
                (click)="closeModal()">
               {{ 'nav.about' | translate }}
             </a>
@@ -277,6 +277,8 @@ export class HeaderComponent {
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
     ).subscribe(e => {
       this.isHomePage.set(e.urlAfterRedirects === '/' || e.urlAfterRedirects === '');
+      // Defensive: always close the mobile drawer after a navigation completes.
+      this.mobileMenuOpen.set(false);
     });
 
     if (isPlatformBrowser(this.platformId)) {
@@ -291,6 +293,19 @@ export class HeaderComponent {
         this.scrolled.set(window.scrollY > 20);
       }, { passive: true });
     }
+  }
+
+  /** Context-aware classes for desktop nav items so active/idle styling stays
+   * readable on both the transparent (over-hero) and solid header states. */
+  protected navLinkClass(active: boolean): string {
+    if (active) {
+      return this.solidHeader()
+        ? 'bg-primary-500/10 text-primary-700 dark:text-primary-400'
+        : 'bg-white/15 text-white';
+    }
+    return this.solidHeader()
+      ? 'text-gray-600 dark:text-gray-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20'
+      : 'text-white/80 hover:text-white hover:bg-white/10';
   }
 
   protected toggleDarkMode(): void {

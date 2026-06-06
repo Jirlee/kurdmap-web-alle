@@ -92,11 +92,11 @@
     },
     "contact": {
       "title": "Kontakt",
-      "text": "Für datenschutzbezogene Fragen kontaktieren Sie uns bitte unter info@kurdmap.de."
+      "text": "Für datenschutzbezogene Fragen kontaktieren Sie uns bitte unter info@kurdmap.eu."
     },
     "accountDeletion": {
       "title": "Kontolöschung",
-      "text": "Sie können Ihr Konto jederzeit in den Profileinstellungen der App löschen. Bei der Löschung werden alle Ihre persönlichen Daten einschließlich Bewertungen, Favoriten und Anmeldedaten innerhalb von 30 Tagen dauerhaft von unseren Servern entfernt. Für manuelle Löschung kontaktieren Sie info@kurdmap.de."
+      "text": "Sie können Ihr Konto jederzeit in den Profileinstellungen der App löschen. Bei der Löschung werden alle Ihre persönlichen Daten einschließlich Bewertungen, Favoriten und Anmeldedaten innerhalb von 30 Tagen dauerhaft von unseren Servern entfernt. Für manuelle Löschung kontaktieren Sie info@kurdmap.eu."
     },
     "lastUpdated": "Zuletzt aktualisiert"
   },
@@ -181,7 +181,7 @@
     "subtitle": "Haben Sie Fragen oder möchten Sie Ihr Geschäft eintragen? Wir helfen Ihnen gerne.",
     "email": {
       "title": "E-Mail",
-      "text": "info@kurdmap.de"
+      "text": "info@kurdmap.eu"
     },
     "location": {
       "title": "Standort",
@@ -217,7 +217,7 @@
     },
     "q2": {
       "q": "Wie kann ich mein Geschäft hinzufügen?",
-      "a": "Derzeit können Geschäfte hinzugefügt werden, indem Sie uns unter info@kurdmap.de kontaktieren. Eine Selbstregistrierung wird bald verfügbar sein."
+      "a": "Derzeit können Geschäfte hinzugefügt werden, indem Sie uns unter info@kurdmap.eu kontaktieren. Eine Selbstregistrierung wird bald verfügbar sein."
     },
     "q3": {
       "q": "Ist KurdMap kostenlos?",
@@ -229,7 +229,7 @@
     },
     "q5": {
       "q": "Wie melde ich falsche Informationen?",
-      "a": "Wenn Sie falsche Informationen über ein Geschäft finden, kontaktieren Sie uns bitte unter info@kurdmap.de und wir korrigieren es umgehend."
+      "a": "Wenn Sie falsche Informationen über ein Geschäft finden, kontaktieren Sie uns bitte unter info@kurdmap.eu und wir korrigieren es umgehend."
     }
   },
   "commandPalette": {

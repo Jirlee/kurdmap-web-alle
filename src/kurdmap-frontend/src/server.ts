@@ -68,7 +68,10 @@ app.use('/api', (req, res) => {
       port: url.port || 80,
       path: `/api${req.url}`,
       method: req.method,
-      headers: { ...req.headers, host: url.host },
+      // Forward an allowed Host so the API's HostFiltering (AllowedHosts) accepts
+      // the request. The upstream service name (e.g. "api:8080") is not in the
+      // API's AllowedHosts, which would otherwise cause a 400 on POST requests.
+      headers: { ...req.headers, host: 'localhost' },
     },
     (proxyRes) => {
       res.writeHead(proxyRes.statusCode ?? 502, proxyRes.headers);

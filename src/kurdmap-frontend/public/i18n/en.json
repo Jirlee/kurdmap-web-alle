@@ -92,11 +92,11 @@
     },
     "contact": {
       "title": "Contact",
-      "text": "For privacy-related questions, please contact us at info@kurdmap.de."
+      "text": "For privacy-related questions, please contact us at info@kurdmap.eu."
     },
     "accountDeletion": {
       "title": "Account Deletion",
-      "text": "You can delete your account at any time from the Profile settings in the app. Upon deletion, all your personal data including reviews, favorites, and login credentials will be permanently removed from our servers within 30 days. To request manual deletion, contact info@kurdmap.de."
+      "text": "You can delete your account at any time from the Profile settings in the app. Upon deletion, all your personal data including reviews, favorites, and login credentials will be permanently removed from our servers within 30 days. To request manual deletion, contact info@kurdmap.eu."
     },
     "lastUpdated": "Last Updated"
   },
@@ -181,7 +181,7 @@
     "subtitle": "Have questions or want to register your business? We're happy to help.",
     "email": {
       "title": "Email",
-      "text": "info@kurdmap.de"
+      "text": "info@kurdmap.eu"
     },
     "location": {
       "title": "Location",
@@ -217,7 +217,7 @@
     },
     "q2": {
       "q": "How can I add my business?",
-      "a": "Currently, businesses can be added by contacting us at info@kurdmap.de. A self-service registration will be available soon."
+      "a": "Currently, businesses can be added by contacting us at info@kurdmap.eu. A self-service registration will be available soon."
     },
     "q3": {
       "q": "Is KurdMap free?",
@@ -229,7 +229,7 @@
     },
     "q5": {
       "q": "How do I report incorrect information?",
-      "a": "If you find incorrect information about a business, please contact us at info@kurdmap.de and we will correct it promptly."
+      "a": "If you find incorrect information about a business, please contact us at info@kurdmap.eu and we will correct it promptly."
     }
   },
   "commandPalette": {

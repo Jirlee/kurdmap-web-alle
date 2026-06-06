@@ -28,6 +28,9 @@ describe('LanguageService', () => {
   it('should compute RTL correctly', () => {
     service.setLanguage('ku');
     expect(service.isRtl()).toBe(true);
+    // Kurmanji uses Latin script -> LTR
+    service.setLanguage('kmr');
+    expect(service.isRtl()).toBe(false);
     service.setLanguage('de');
     expect(service.isRtl()).toBe(false);
     service.setLanguage('en');

@@ -73,6 +73,11 @@ services:
       - "127.0.0.1:${API_PORT:-8080}:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT:-Production}
+      # HostFiltering: the SSR frontend proxies API calls with an internal Host
+      # header (e.g. "api"). Include the internal service names plus localhost so
+      # HostFiltering does not reject them with a 400. External traffic arrives via
+      # Caddy with Host rewritten to localhost.
+      AllowedHosts: ${API_ALLOWED_HOSTS:-localhost;api;kurdmap-api}
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-kurdmap_dev};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:?required}"
       ConnectionStrings__Redis: "redis:6379,password=${REDIS_PASSWORD:-changeme}"
       Jwt__Secret: ${JWT_SECRET:?JWT_SECRET is required - use openssl rand -base64 48}
@@ -127,6 +132,9 @@ services:
     environment:
       NODE_ENV: production
       API_URL: "http://api:8080"
+      # Angular SSR SSRF protection: hostnames allowed in Host/X-Forwarded-Host.
+      # 'localhost' is always allowed (baked into the build); add public domains here.
+      NG_ALLOWED_HOSTS: ${FRONTEND_ALLOWED_HOSTS:-kurdmap.eu,www.kurdmap.eu}
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://localhost:4000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 20s

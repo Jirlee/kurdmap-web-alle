@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/theme/ThemeContext';
 import { FadeInView } from '@/components/Animations';
 
-const CONTACT_EMAIL = 'info@kurdmap.de';
+const CONTACT_EMAIL = 'info@kurdmap.eu';
 
 export default function ContactScreen() {
   const { t } = useTranslation();
@@ -86,7 +86,7 @@ export default function ContactScreen() {
             <InfoCard
               icon="mail-outline"
               title={t('contactEmailTitle')}
-              value="info@kurdmap.de"
+              value="info@kurdmap.eu"
               color={theme.colors.primary}
               theme={theme}
               onPress={() => Linking.openURL(`mailto:${CONTACT_EMAIL}`)}

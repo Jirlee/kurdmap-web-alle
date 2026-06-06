@@ -122,11 +122,11 @@
     },
     "contact": {
       "title": "Têkilî",
-      "text": "Ji bo pirsên nepeniyê, ji kerema xwe li info@kurdmap.de bi me re têkiliyê deynin."
+      "text": "Ji bo pirsên nepeniyê, ji kerema xwe li info@kurdmap.eu bi me re têkiliyê deynin."
     },
     "accountDeletion": {
       "title": "Jêbirina Hesabê",
-      "text": "Hûn dikarin hesabê xwe her dem ji mîhengên Profîlê di sepanê de jê bibin. Dema ku jê bike, hemû daneên we yên kesane tevî nirxandin, bijare û agahiyên têketinê di nav 30 rojan de ji serverên me bi awayekî daîmî têne jêbirin. Ji bo jêbirina bi destan, bi info@kurdmap.de re têkilî deynin."
+      "text": "Hûn dikarin hesabê xwe her dem ji mîhengên Profîlê di sepanê de jê bibin. Dema ku jê bike, hemû daneên we yên kesane tevî nirxandin, bijare û agahiyên têketinê di nav 30 rojan de ji serverên me bi awayekî daîmî têne jêbirin. Ji bo jêbirina bi destan, bi info@kurdmap.eu re têkilî deynin."
     },
     "lastUpdated": "Dema dawî hate nûkirin"
   },
@@ -211,7 +211,7 @@
     "subtitle": "Pirsên we hene an hûn dixwazin bazirganiya xwe tomar bikin? Em amade ne ji bo alîkariyê.",
     "email": {
       "title": "E-peyam",
-      "text": "info@kurdmap.de"
+      "text": "info@kurdmap.eu"
     },
     "location": {
       "title": "Cih",
@@ -247,7 +247,7 @@
     },
     "q2": {
       "q": "Çawa dikarim bazirganiya xwe lê zêde bikim?",
-      "a": "Niha hûn dikarin bazirganiya xwe lê zêde bikin bi têkiliya me li info@kurdmap.de. Qeydkirina xweser nêzîk e ku peyda bibe."
+      "a": "Niha hûn dikarin bazirganiya xwe lê zêde bikin bi têkiliya me li info@kurdmap.eu. Qeydkirina xweser nêzîk e ku peyda bibe."
     },
     "q3": {
       "q": "Ma KurdMap belaş e?",
@@ -259,7 +259,7 @@
     },
     "q5": {
       "q": "Çawa ez agahiyê çewt rapôr bikim?",
-      "a": "Eger hûn agahdariya çewt der barê bazirganiyê bibînin, ji kerema xwe li info@kurdmap.de bi me re têkiliyê deynin û emê zû rast bikin."
+      "a": "Eger hûn agahdariya çewt der barê bazirganiyê bibînin, ji kerema xwe li info@kurdmap.eu bi me re têkiliyê deynin û emê zû rast bikin."
     }
   },
   "commandPalette": {

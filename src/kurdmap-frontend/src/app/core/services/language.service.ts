@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, PLATFORM_ID, inject } from '@angular/core';
+import { Injectable, signal, computed, effect, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import { MultilingualText } from '../models';
@@ -25,14 +25,23 @@ export class LanguageService {
         }
       }
     }
+
+    // Keep <html lang> and <html dir> in sync with the active language.
+    // Runs on init and on every change, preventing an initial LTR→RTL flip.
+    effect(() => {
+      const lang = this.currentLang();
+      const rtl = this.isRtl();
+      if (isPlatformBrowser(this.platformId)) {
+        document.documentElement.lang = lang;
+        document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+      }
+    });
   }
 
   setLanguage(lang: SupportedLanguage): void {
     this.currentLang.set(lang);
     if (isPlatformBrowser(this.platformId)) {
       this.storage.setItem('kurdmap-lang', lang);
-      document.documentElement.lang = lang;
-      document.documentElement.dir = this.isRtl() ? 'rtl' : 'ltr';
     }
   }
 

@@ -334,7 +334,7 @@ export class SettingsComponent implements OnInit {
     return {
       siteName: 'KurdMap',
       siteDescription: 'نەخشەی بازرگانییەکانی کورد لە ئەڵمانیا',
-      contactEmail: 'info@kurdmap.de',
+      contactEmail: 'info@kurdmap.eu',
       supportPhone: '+49 123 456 789',
       defaultLanguage: 'ku',
       enableRegistration: true,

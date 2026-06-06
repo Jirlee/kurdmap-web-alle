@@ -38,7 +38,7 @@ import { ContactService } from '../../core/services/contact.service';
                 </div>
                 <div>
                   <h3 class="font-semibold text-gray-900 dark:text-white mb-1">{{ 'contact.email.title' | translate }}</h3>
-                  <a href="mailto:info@kurdmap.de" class="text-sm text-primary-600 dark:text-primary-400 hover:underline">info&#64;kurdmap.de</a>
+                  <a href="mailto:info@kurdmap.eu" class="text-sm text-primary-600 dark:text-primary-400 hover:underline">info&#64;kurdmap.de</a>
                 </div>
               </div>
             </div>
