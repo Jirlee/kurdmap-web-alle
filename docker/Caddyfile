@@ -30,10 +30,8 @@
 }
 
 (kurdmap_proxy_headers) {
+	# X-Real-IP is not set automatically by Caddy; the others (X-Forwarded-*) are.
 	header_up X-Real-IP {remote_host}
-	header_up X-Forwarded-For {remote_host}
-	header_up X-Forwarded-Proto {scheme}
-	header_up X-Forwarded-Host {host}
 }
 
 (kurdmap_json_log_frontend) {
@@ -78,8 +76,13 @@ kurdmap.eu, www.kurdmap.eu {
 
 	reverse_proxy localhost:4000 {
 		import kurdmap_proxy_headers
+		# Angular SSR blocks health checks where Host resolves to an IP.
+		# health_headers forces the Host header so Angular accepts the probe.
 		health_uri /
 		health_interval 30s
+		health_headers {
+			Host "kurdmap.eu"
+		}
 		transport http {
 			dial_timeout 5s
 			response_header_timeout 30s
@@ -123,6 +126,9 @@ gs6xapi.kurdmap.eu {
 
 	reverse_proxy localhost:8080 {
 		import kurdmap_proxy_headers
+		# Override Host to "localhost" so ASP.NET AllowedHosts passes.
+		# The real client domain is still available via X-Forwarded-Host (set by Caddy).
+		header_up Host "localhost"
 		health_uri /health
 		health_interval 30s
 		transport http {
