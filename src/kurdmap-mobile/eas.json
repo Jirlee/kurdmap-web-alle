@@ -21,7 +21,8 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://gs6xapi.kurdmap.eu"
+        "EXPO_PUBLIC_API_URL": "https://gs6xapi.kurdmap.eu",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
       }
     },
     "production": {
@@ -31,7 +32,8 @@
         "image": "latest"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://gs6xapi.kurdmap.eu"
+        "EXPO_PUBLIC_API_URL": "https://gs6xapi.kurdmap.eu",
+        "SENTRY_DISABLE_AUTO_UPLOAD": "true"
       }
     }
   },
