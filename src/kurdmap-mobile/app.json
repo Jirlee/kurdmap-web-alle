@@ -46,6 +46,15 @@
       "expo-font",
       "expo-updates",
       [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 35
+          }
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/splash.png",
@@ -67,7 +76,8 @@
           "organization": "kurdmap",
           "project": "kurdmap-mobile"
         }
-      ]
+      ],
+      "expo-build-properties"
     ],
     "updates": {
       "url": "https://u.expo.dev/90b7a526-7f93-4a49-a833-7f741f86e20c",
@@ -87,7 +97,6 @@
       "eas": {
         "projectId": "90b7a526-7f93-4a49-a833-7f741f86e20c"
       }
-    },
-    "owner": "jirlee"
+    }
   }
 }
