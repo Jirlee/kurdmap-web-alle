@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,8 +25,7 @@ import { ReviewCard } from '@/components/ReviewCard';
 import { MapPreview } from '@/components/MapPreview';
 import { businessesApi } from '@/api/businesses';
 import { reviewsApi } from '@/api/reviews';
-import { favoritesApi } from '@/api/favorites';
-import { useAuthStore } from '@/stores/auth-store';
+import { useFavoritesStore } from '@/stores/favorites-store';
 import { getLocalizedName } from '@/utils/localization';
 import { haptic } from '@/utils/haptics';
 import type { Review, MenuItem, BusinessService as BizService } from '@/types/api';
@@ -37,8 +36,10 @@ export default function BusinessDetailScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const { userId, isAuthenticated } = useAuthStore();
+  const favToggle = useFavoritesStore((s) => s.toggle);
+  const isFavorited = useFavoritesStore((s) =>
+    detailQuery.data ? s.ids.includes(detailQuery.data.id) : false,
+  );
 
   const detailQuery = useQuery({
     queryKey: ['business', slug],
@@ -52,14 +53,12 @@ export default function BusinessDetailScreen() {
     enabled: !!detailQuery.data?.id,
   });
 
-  const toggleFavoriteMutation = useMutation({
-    mutationFn: () =>
-      favoritesApi.toggle({ businessId: detailQuery.data!.id, userId: userId! }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['favorites'] });
+  const handleToggleFavorite = useCallback(() => {
+    if (detailQuery.data) {
+      favToggle(detailQuery.data.id);
       haptic.success();
-    },
-  });
+    }
+  }, [detailQuery.data, favToggle]);
 
   const biz = detailQuery.data;
   const reviewList = useMemo(() => reviewsQuery.data ?? [], [reviewsQuery.data]);
@@ -126,11 +125,13 @@ export default function BusinessDetailScreen() {
           <Text style={[styles.name, { color: theme.colors.text }]}>
             {getLocalizedName(biz.name)}
           </Text>
-          {isAuthenticated && (
-            <Pressable onPress={() => toggleFavoriteMutation.mutate()} hitSlop={8}>
-              <Ionicons name="heart-outline" size={24} color={theme.colors.error} />
-            </Pressable>
-          )}
+          <Pressable onPress={handleToggleFavorite} hitSlop={8}>
+            <Ionicons
+              name={isFavorited ? 'heart' : 'heart-outline'}
+              size={24}
+              color={theme.colors.error}
+            />
+          </Pressable>
         </View>
 
         <View style={styles.badgesRow}>
@@ -308,16 +309,6 @@ export default function BusinessDetailScreen() {
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             {t('reviews')} ({reviewList.length})
           </Text>
-          {isAuthenticated && (
-            <Pressable
-              onPress={() => router.push(`/business/${slug}/reviews`)}
-              style={[styles.writeReviewBtn, { borderColor: theme.colors.primary }]}
-            >
-              <Text style={[styles.writeReviewText, { color: theme.colors.primary }]}>
-                {t('writeReview')}
-              </Text>
-            </Pressable>
-          )}
         </View>
         {reviewList.length === 0 ? (
           <Text style={[styles.noReviews, { color: theme.colors.textTertiary }]}>

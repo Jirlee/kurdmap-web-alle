@@ -7,8 +7,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider, useTheme } from '@/theme/ThemeContext';
 import { OfflineBanner } from '@/components/OfflineBanner';
-import { useAuthStore } from '@/stores/auth-store';
 import { useAppStore } from '@/stores/app-store';
+import { useFavoritesStore } from '@/stores/favorites-store';
 import { validateEnv } from '@/utils/env';
 import { initSentry } from '@/utils/sentry';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -64,7 +64,6 @@ function RootLayoutInner() {
         }}
       >
         <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="(auth)" />
         <Stack.Screen name="onboarding" options={{ animation: 'fade' }} />
         <Stack.Screen name="business/[slug]" options={{ animation: 'slide_from_bottom' }} />
         <Stack.Screen name="category/[id]" />
@@ -77,19 +76,19 @@ function RootLayoutInner() {
 }
 
 export default function RootLayout() {
-  const restoreSession = useAuthStore((s) => s.restoreSession);
+  const restoreFavorites = useFavoritesStore((s) => s.restore);
   const restorePreferences = useAppStore((s) => s.restorePreferences);
   const preferencesRestored = useAppStore((s) => s.preferencesRestored);
   const [appReady, setAppReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
-      await restoreSession();
+      await restoreFavorites();
       await restorePreferences();
       setAppReady(true);
     }
     prepare();
-  }, [restoreSession, restorePreferences]);
+  }, [restoreFavorites, restorePreferences]);
 
   const onLayoutRootView = useCallback(async () => {
     if (appReady) {

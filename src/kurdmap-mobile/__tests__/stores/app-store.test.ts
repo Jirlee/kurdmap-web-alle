@@ -5,7 +5,7 @@ import { useAppStore } from '@/stores/app-store';
 describe('app-store', () => {
   beforeEach(() => {
     useAppStore.setState({
-      language: 'de',
+      language: 'en',
       theme: 'system',
       hasSeenOnboarding: false,
       preferencesRestored: false,
@@ -75,7 +75,7 @@ describe('app-store', () => {
       });
 
       const state = useAppStore.getState();
-      expect(state.language).toBe('de');
+      expect(state.language).toBe('en');
       expect(state.theme).toBe('system');
       expect(state.hasSeenOnboarding).toBe(false);
       expect(state.preferencesRestored).toBe(true);

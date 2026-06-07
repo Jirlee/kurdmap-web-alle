@@ -76,7 +76,11 @@
     },
     "dataCollection": {
       "title": "Data Collection",
-      "text": "We collect only the data necessary to provide our services: business listings, search queries, and account information for registered business owners. We do not collect unnecessary personal data."
+      "text": "The KurdMap mobile app works without any user account or login. We collect only what is needed to provide the service: your search queries and the business listings you view. On our website, registered business owners provide listing and contact details for their own businesses. We do not collect unnecessary personal data and we never sell your data."
+    },
+    "location": {
+      "title": "Location Data",
+      "text": "With your permission, the app uses your device's approximate or precise location solely to show businesses near you and to centre the map. Location is processed in real time and is not stored on our servers, shared with third parties, or used for advertising. You can deny or revoke location access at any time in your device settings."
     },
     "cookies": {
       "title": "Cookies",
@@ -95,8 +99,8 @@
       "text": "For privacy-related questions, please contact us at info@kurdmap.eu."
     },
     "accountDeletion": {
-      "title": "Account Deletion",
-      "text": "You can delete your account at any time from the Profile settings in the app. Upon deletion, all your personal data including reviews, favorites, and login credentials will be permanently removed from our servers within 30 days. To request manual deletion, contact info@kurdmap.eu."
+      "title": "Your Data & Deletion",
+      "text": "The KurdMap mobile app does not require an account, so we do not store any login credentials for app users. Your favourites and preferences are saved only locally on your device and can be cleared at any time from within the app. Business owners who register on our website may request correction or deletion of their data by emailing info@kurdmap.eu; such data is permanently removed within 30 days."
     },
     "lastUpdated": "Last Updated"
   },

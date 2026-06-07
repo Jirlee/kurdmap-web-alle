@@ -178,7 +178,7 @@ export default {
   onboardingSearchTitle: 'Smart Search',
   onboardingSearchDesc: 'Search by name, category, or city. Filter and sort to find exactly what you need.',
   onboardingReviewTitle: 'Reviews & Ratings',
-  onboardingReviewDesc: 'Read reviews from the community and share your own experiences.',
+  onboardingReviewDesc: 'Read reviews and ratings from the community to help you choose.',
   onboardingLanguagesTitle: '4 Languages',
   onboardingLanguagesDesc: 'Use KurdMap in Kurdish (Sorani & Kurmanji), German, or English — switch anytime.',
 
@@ -205,7 +205,7 @@ export default {
   policyDataTitle: 'Data Collection',
   policyDataText: 'We collect data you provide directly: account information (name, email), reviews, and favorites. We also collect device location (with permission) for nearby search. Business data is publicly available.',
   policyStorageTitle: 'Local Storage',
-  policyStorageText: 'Authentication tokens are stored securely using SecureStore (encrypted). Your language, theme, and onboarding preferences are stored locally via AsyncStorage. No personal data is shared with third parties for advertising.',
+  policyStorageText: 'KurdMap has no user accounts, so no login or authentication data is collected. Your language, theme, and onboarding preferences and your saved favorites are stored locally on your device via AsyncStorage and never leave it. No personal data is shared with third parties for advertising.',
   policyThirdPartyTitle: 'Third-Party Services',
   policyThirdPartyText: 'KurdMap uses Google Maps / OpenStreetMap for map display, Expo services for crash reporting and updates, and our own API server hosted in Germany. No data is transferred outside the EU.',
   policyRightsTitle: 'Your Rights (GDPR)',

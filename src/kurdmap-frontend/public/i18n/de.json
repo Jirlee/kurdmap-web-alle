@@ -76,7 +76,11 @@
     },
     "dataCollection": {
       "title": "Datenerhebung",
-      "text": "Wir erheben nur die für unsere Dienste notwendigen Daten: Geschäftseinträge, Suchanfragen und Kontoinformationen für registrierte Geschäftsinhaber. Unnötige personenbezogene Daten werden nicht erhoben."
+      "text": "Die KurdMap-App funktioniert ohne Benutzerkonto und ohne Anmeldung. Wir erheben nur, was zur Bereitstellung des Dienstes erforderlich ist: Ihre Suchanfragen und die von Ihnen aufgerufenen Geschäftseinträge. Auf unserer Website geben registrierte Geschäftsinhaber die Eintrags- und Kontaktdaten ihrer eigenen Unternehmen an. Wir erheben keine unnötigen personenbezogenen Daten und verkaufen Ihre Daten niemals."
+    },
+    "location": {
+      "title": "Standortdaten",
+      "text": "Mit Ihrer Erlaubnis verwendet die App Ihren ungefähren oder genauen Standort ausschließlich, um Unternehmen in Ihrer Nähe anzuzeigen und die Karte zu zentrieren. Der Standort wird in Echtzeit verarbeitet und nicht auf unseren Servern gespeichert, an Dritte weitergegeben oder für Werbung verwendet. Sie können den Standortzugriff jederzeit in den Geräteeinstellungen verweigern oder widerrufen."
     },
     "cookies": {
       "title": "Cookies",
@@ -95,8 +99,8 @@
       "text": "Für datenschutzbezogene Fragen kontaktieren Sie uns bitte unter info@kurdmap.eu."
     },
     "accountDeletion": {
-      "title": "Kontolöschung",
-      "text": "Sie können Ihr Konto jederzeit in den Profileinstellungen der App löschen. Bei der Löschung werden alle Ihre persönlichen Daten einschließlich Bewertungen, Favoriten und Anmeldedaten innerhalb von 30 Tagen dauerhaft von unseren Servern entfernt. Für manuelle Löschung kontaktieren Sie info@kurdmap.eu."
+      "title": "Ihre Daten & Löschung",
+      "text": "Die KurdMap-App erfordert kein Konto, daher speichern wir keine Anmeldedaten für App-Nutzer. Ihre Favoriten und Einstellungen werden ausschließlich lokal auf Ihrem Gerät gespeichert und können jederzeit in der App gelöscht werden. Geschäftsinhaber, die sich auf unserer Website registrieren, können die Berichtigung oder Löschung ihrer Daten per E-Mail an info@kurdmap.eu beantragen; diese Daten werden innerhalb von 30 Tagen dauerhaft entfernt."
     },
     "lastUpdated": "Zuletzt aktualisiert"
   },

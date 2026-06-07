@@ -178,7 +178,7 @@ export default {
   onboardingSearchTitle: 'Intelligente Suche',
   onboardingSearchDesc: 'Suchen Sie nach Name, Kategorie oder Stadt. Filtern und sortieren Sie, um genau das zu finden, was Sie brauchen.',
   onboardingReviewTitle: 'Bewertungen & Sterne',
-  onboardingReviewDesc: 'Lesen Sie Bewertungen der Community und teilen Sie Ihre eigenen Erfahrungen.',
+  onboardingReviewDesc: 'Lesen Sie Bewertungen und Rezensionen der Community, um die richtige Wahl zu treffen.',
   onboardingLanguagesTitle: '4 Sprachen',
   onboardingLanguagesDesc: 'Nutzen Sie KurdMap auf Kurdisch (Sorani & Kurmanji), Deutsch oder Englisch — jederzeit wechselbar.',
 
@@ -205,7 +205,7 @@ export default {
   policyDataTitle: 'Datenerhebung',
   policyDataText: 'Wir erheben Daten, die Sie direkt angeben: Kontoinformationen (Name, E-Mail), Bewertungen und Favoriten. Wir erheben auch den Gerätestandort (mit Erlaubnis) für die Umgebungssuche. Geschäftsdaten sind öffentlich zugänglich.',
   policyStorageTitle: 'Lokale Speicherung',
-  policyStorageText: 'Authentifizierungstoken werden sicher mit SecureStore (verschlüsselt) gespeichert. Ihre Sprach-, Design- und Onboarding-Einstellungen werden lokal über AsyncStorage gespeichert. Keine persönlichen Daten werden zu Werbezwecken an Dritte weitergegeben.',
+  policyStorageText: 'KurdMap hat keine Benutzerkonten, daher werden keine Anmelde- oder Authentifizierungsdaten erfasst. Ihre Sprach-, Design- und Onboarding-Einstellungen sowie Ihre gespeicherten Favoriten werden lokal auf Ihrem Gerät über AsyncStorage gespeichert und verlassen es nie. Keine persönlichen Daten werden zu Werbezwecken an Dritte weitergegeben.',
   policyThirdPartyTitle: 'Drittanbieter-Dienste',
   policyThirdPartyText: 'KurdMap nutzt Google Maps / OpenStreetMap für die Kartenanzeige, Expo-Dienste für Absturzberichte und Updates sowie unseren eigenen API-Server in Deutschland. Es werden keine Daten außerhalb der EU übertragen.',
   policyRightsTitle: 'Ihre Rechte (DSGVO)',

@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Pressable, Alert, Platform, TextInput } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, Text, StyleSheet, ScrollView, Pressable, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/theme/ThemeContext';
 import { FadeInView } from '@/components/Animations';
-import { useAuthStore } from '@/stores/auth-store';
 import Constants from 'expo-constants';
 import { useAppStore, type AppLanguage, type AppTheme } from '@/stores/app-store';
 import i18n from '@/i18n';
@@ -31,10 +30,7 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
 
-  const { isAuthenticated, fullName, email, logout, deleteAccount } = useAuthStore();
   const { language, theme: appTheme, setLanguage, setTheme } = useAppStore();
-  const [deletePassword, setDeletePassword] = useState('');
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleLanguageChange = useCallback(
     async (lang: AppLanguage) => {
@@ -44,68 +40,29 @@ export default function ProfileScreen() {
     [setLanguage],
   );
 
-  const handleLogout = useCallback(() => {
-    Alert.alert(t('logout'), '', [
-      { text: t('cancel'), style: 'cancel' },
-      {
-        text: t('confirm'),
-        style: 'destructive',
-        onPress: () => logout(),
-      },
-    ]);
-  }, [logout, t]);
-
-  const handleDeleteAccount = useCallback(async () => {
-    if (!deletePassword || deletePassword.length < 6) {
-      Alert.alert(t('error'), t('deleteAccountPasswordRequired'));
-      return;
-    }
-    try {
-      await deleteAccount(deletePassword);
-      setShowDeleteConfirm(false);
-      setDeletePassword('');
-      Alert.alert(t('deleteAccountSuccess'));
-    } catch {
-      Alert.alert(t('error'), t('deleteAccountFailed'));
-    }
-  }, [deleteAccount, deletePassword, t]);
-
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.colors.background }]}
       contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 32 }}
     >
-      {/* User Info */}
+      {/* App Branding */}
       <FadeInView>
         <View style={styles.profileSection}>
           <LinearGradient
             colors={[theme.colors.primary, theme.colors.primaryDark]}
             style={styles.avatar}
           >
-            <Text style={styles.avatarText}>
-              {isAuthenticated ? (fullName ?? 'U')[0].toUpperCase() : '?'}
-            </Text>
+            <Ionicons name="map" size={30} color="#FFF" />
           </LinearGradient>
-        {isAuthenticated ? (
-          <View>
-            <Text style={[styles.userName, { color: theme.colors.text }]}>{fullName}</Text>
-            <Text style={[styles.userEmail, { color: theme.colors.textSecondary }]}>
-              {email}
-            </Text>
-          </View>
-        ) : (
           <View>
             <Text style={[styles.userName, { color: theme.colors.text }]}>
-              {t('profileTitle')}
+              {t('appName')}
             </Text>
-            <Pressable onPress={() => router.push('/(auth)/login')}>
-              <Text style={[styles.loginLink, { color: theme.colors.primary }]}>
-                {t('login')}
-              </Text>
-            </Pressable>
+            <Text style={[styles.userEmail, { color: theme.colors.textSecondary }]}>
+              {t('aboutSubtitle')}
+            </Text>
           </View>
-        )}
-      </View>
+        </View>
       </FadeInView>
 
       {/* Language Selection */}
@@ -234,66 +191,6 @@ export default function ProfileScreen() {
         </View>
       </View>
       </FadeInView>
-
-      {/* Logout */}
-      {isAuthenticated && (
-        <Pressable
-          style={[styles.logoutBtn, { borderColor: theme.colors.error }]}
-          onPress={handleLogout}
-        >
-          <Ionicons name="log-out-outline" size={20} color={theme.colors.error} />
-          <Text style={[styles.logoutText, { color: theme.colors.error }]}>
-            {t('profileLogout')}
-          </Text>
-        </Pressable>
-      )}
-
-      {/* Delete Account */}
-      {isAuthenticated && (
-        <FadeInView delay={400}>
-          {!showDeleteConfirm ? (
-            <Pressable
-              style={[styles.deleteBtn]}
-              onPress={() => setShowDeleteConfirm(true)}
-            >
-              <Ionicons name="trash-outline" size={18} color={theme.colors.textTertiary} />
-              <Text style={[styles.deleteText, { color: theme.colors.textTertiary }]}>
-                {t('deleteAccount')}
-              </Text>
-            </Pressable>
-          ) : (
-            <View style={[styles.deleteSection, { backgroundColor: theme.colors.surface, borderColor: theme.colors.error }]}>
-              <Text style={[styles.deleteWarning, { color: theme.colors.error }]}>
-                {t('deleteAccountWarning')}
-              </Text>
-              <TextInput
-                style={[styles.deleteInput, { color: theme.colors.text, borderColor: theme.colors.border, backgroundColor: theme.colors.surfaceVariant }]}
-                placeholder={t('deleteAccountPasswordPlaceholder')}
-                placeholderTextColor={theme.colors.textTertiary}
-                secureTextEntry
-                value={deletePassword}
-                onChangeText={setDeletePassword}
-                autoCapitalize="none"
-                maxLength={128}
-              />
-              <View style={styles.deleteActions}>
-                <Pressable
-                  style={[styles.deleteCancelBtn, { backgroundColor: theme.colors.surfaceVariant }]}
-                  onPress={() => { setShowDeleteConfirm(false); setDeletePassword(''); }}
-                >
-                  <Text style={{ color: theme.colors.text, fontWeight: '500' }}>{t('cancel')}</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.deleteConfirmBtn, { backgroundColor: theme.colors.error }]}
-                  onPress={handleDeleteAccount}
-                >
-                  <Text style={{ color: '#FFF', fontWeight: '600' }}>{t('deleteAccountConfirm')}</Text>
-                </Pressable>
-              </View>
-            </View>
-          )}
-        </FadeInView>
-      )}
     </ScrollView>
   );
 }

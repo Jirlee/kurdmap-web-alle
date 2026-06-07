@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n from '@/i18n';
 
 export type AppLanguage = 'ku' | 'kmr' | 'de' | 'en';
 export type AppTheme = 'light' | 'dark' | 'system';
@@ -17,13 +18,14 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  language: 'de',
+  language: 'en',
   theme: 'system',
   hasSeenOnboarding: false,
   preferencesRestored: false,
 
   setLanguage: async (language: AppLanguage) => {
     await AsyncStorage.setItem('app_language', language);
+    await i18n.changeLanguage(language);
     set({ language });
   },
 
@@ -44,8 +46,10 @@ export const useAppStore = create<AppState>((set) => ({
         AsyncStorage.getItem('app_theme'),
         AsyncStorage.getItem('has_seen_onboarding'),
       ]);
+      const restoredLanguage = (language as AppLanguage) ?? 'en';
+      await i18n.changeLanguage(restoredLanguage);
       set({
-        language: (language as AppLanguage) ?? 'de',
+        language: restoredLanguage,
         theme: (theme as AppTheme) ?? 'system',
         hasSeenOnboarding: onboarding === 'true',
         preferencesRestored: true,

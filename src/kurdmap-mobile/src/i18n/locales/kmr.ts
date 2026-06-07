@@ -178,7 +178,7 @@ export default {
   onboardingSearchTitle: 'Lêgerîna Jîr',
   onboardingSearchDesc: 'Bi nav, kategorî, an bajar bigere. Fîltre û rêz bike da ku tam tiştê ku hewce ye bibînî.',
   onboardingReviewTitle: 'Nirxandin û Stêr',
-  onboardingReviewDesc: 'Nirxandinên civakê bixwîne û ezmûnên xwe parve bike.',
+  onboardingReviewDesc: 'Nirxandinên civakê bixwîne da ku tu hilbijartina rast bikî.',
   onboardingLanguagesTitle: '4 Ziman',
   onboardingLanguagesDesc: 'KurdMap bi Kurdî (Soranî & Kurmancî), Almanî, an Îngilîzî bikar bîne — her dem biguherîne.',
 
@@ -205,7 +205,7 @@ export default {
   policyDataTitle: 'Berhevkirina Daneyan',
   policyDataText: 'Em daneyên ku hûn rasterast didin berhev dikin: agahiyên hesabê (nav, e-name), nirxandin û bijarteyan. Em herwiha cihê amûrê (bi destûr) ji bo lêgerîna nêzîk berhev dikin. Daneyên karsaziyê ji giştî re amade ne.',
   policyStorageTitle: 'Depoya Herêmî',
-  policyStorageText: 'Tokenên nasnameyê bi ewlehî di SecureStore (şîfrekirî) de têne hilanîn. Tercîhên zimanê, tema û onboardingê bi awayê herêmî di AsyncStorage de têne hilanîn. Ti daneyên kesane ji bo reklaman bi aliyên sêyem re nayên parve kirin.',
+  policyStorageText: 'KurdMap ti hesabên bikarhêner tune, ji ber vê yekê ti daneyên têketin an nasnameyê nayên berhevkirin. Tercîhên zimanê, tema û onboardingê û bijarteyên teyên hilanîn bi awayê herêmî li ser cîhaza te di AsyncStorage de têne hilanîn û qet dernakevin. Ti daneyên kesane ji bo reklaman bi aliyên sêyem re nayên parve kirin.',
   policyThirdPartyTitle: 'Xizmetên Aliyê Sêyem',
   policyThirdPartyText: 'KurdMap Google Maps / OpenStreetMap ji bo nîşandana nexşeyê, xizmetên Expo ji bo rapora xeletiyê, û servera API ya me ya li Almanyayê bikar tîne. Tu dane li derveyî EU nayên veguheztin.',
   policyRightsTitle: 'Mafên We (GDPR)',

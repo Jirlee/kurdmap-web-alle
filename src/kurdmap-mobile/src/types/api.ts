@@ -6,31 +6,6 @@ export interface MultilingualText {
   en: string | null;
 }
 
-// ─── Auth ──────────────────────────────────────────────────
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface RegisterRequest {
-  email: string;
-  password: string;
-  fullName: string;
-}
-
-export interface AuthResponse {
-  accessToken: string;
-  refreshToken: string;
-  userId: string;
-  email: string;
-  fullName: string;
-  roles: string[];
-}
-
-export interface RefreshRequest {
-  userId: string;
-}
-
 // ─── Business ──────────────────────────────────────────────
 export enum BusinessStatus {
   Pending = 0,
@@ -194,12 +169,6 @@ export interface Review {
   createdAt: string;
 }
 
-export interface CreateReviewRequest {
-  businessId: string;
-  rating: number;
-  comment?: string;
-}
-
 // ─── Advertisement ─────────────────────────────────────────
 export interface Advertisement {
   id: string;
@@ -216,35 +185,6 @@ export interface Advertisement {
   endDate: string;
   isActive: boolean;
   sortOrder: number;
-}
-
-// ─── Favorite ──────────────────────────────────────────────
-export interface Favorite {
-  id: string;
-  businessId: string;
-  userId: string;
-  createdAt: string;
-}
-
-export interface ToggleFavoriteRequest {
-  businessId: string;
-  userId: string;
-}
-
-export interface ToggleFavoriteResult {
-  isFavorited: boolean;
-}
-
-// ─── User ──────────────────────────────────────────────────
-export interface User {
-  id: string;
-  email: string;
-  fullName: string;
-  roles: string[];
-  isActive: boolean;
-  emailConfirmed: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 // ─── Pagination ────────────────────────────────────────────

@@ -107,7 +107,11 @@
     },
     "dataCollection": {
       "title": "Berhevkirina Daneyan",
-      "text": "Em tenê ew daneên berhev dikin ku ji bo xizmetguzariyên me hewce ne: lîstên bazirganiyê, lêgerînên, û agahiyên hesabê ji bo xwediyên bazirganiyên qeydkirî."
+      "text": "Sepana KurdMap bê tu hesab an têketinê dixebite. Em tenê tiştên ku ji bo xizmetê hewce ne berhev dikin: lêgerînên we û lîstên bazirganiyê yên ku hûn dibînin. Li ser malpera me, xwediyên bazirganiyên qeydkirî agahiyên lîste û têkiliyê yên bazirganiyên xwe didin. Em daneên kesane yên nepêwîst berhev nakin û em tu carî daneên we nafiroşin."
+    },
+    "location": {
+      "title": "Daneyên Cihê",
+      "text": "Bi destûra we, sepan cihê texmînî an rast ê amûra we tenê ji bo nîşandana bazirganiyên nêzî we û navendkirina nexşeyê bi kar tîne. Cih di dema rast de tê hilanîn û li ser serverên me nayê tomarkirin, bi aliyên sêyemîn re nayê parvekirin, an ji bo reklamê nayê bikaranîn. Hûn dikarin her dem gihîştina cihê di mîhengên amûra xwe de red bikin an vekişînin."
     },
     "cookies": {
       "title": "Cookie",
@@ -126,8 +130,8 @@
       "text": "Ji bo pirsên nepeniyê, ji kerema xwe li info@kurdmap.eu bi me re têkiliyê deynin."
     },
     "accountDeletion": {
-      "title": "Jêbirina Hesabê",
-      "text": "Hûn dikarin hesabê xwe her dem ji mîhengên Profîlê di sepanê de jê bibin. Dema ku jê bike, hemû daneên we yên kesane tevî nirxandin, bijare û agahiyên têketinê di nav 30 rojan de ji serverên me bi awayekî daîmî têne jêbirin. Ji bo jêbirina bi destan, bi info@kurdmap.eu re têkilî deynin."
+      "title": "Daneyên We û Jêbirin",
+      "text": "Sepana KurdMap hewceyî hesabê nake, ji ber vê yekê em tu agahiyên têketinê ji bo bikarhênerên sepanê hilnaînin. Bijare û tercihên we tenê herêmî li ser amûra we têne tomarkirin û dikarin her dem ji nav sepanê werin jêbirin. Xwediyên bazirganiyê yên ku li ser malpera me qeyd dibin dikarin daxwaza rastkirin an jêbirina daneên xwe bi e-nameyê li info@kurdmap.eu bikin; ev dane di nav 30 rojan de bi awayekî daîmî têne jêbirin."
     },
     "lastUpdated": "Dema dawî hate nûkirin"
   },

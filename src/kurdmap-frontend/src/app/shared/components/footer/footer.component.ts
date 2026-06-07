@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { ModalService } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-footer',
@@ -65,10 +64,10 @@ import { ModalService } from '../../../core/services/modal.service';
                 </a>
               </li>
               <li>
-                <button (click)="openPolicy()" class="hover:text-primary-400 transition-colors duration-200 flex items-center gap-2 cursor-pointer">
+                <a routerLink="/privacy" class="hover:text-primary-400 transition-colors duration-200 flex items-center gap-2">
                   <span class="size-1 rounded-full bg-gray-700"></span>
                   {{ 'policy.title' | translate }}
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -96,7 +95,7 @@ import { ModalService } from '../../../core/services/modal.service';
         <div class="border-t border-gray-800/50 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <p>&copy; {{ currentYear }} KurdMap. {{ 'footer.rights' | translate }}</p>
           <div class="flex items-center gap-4">
-            <button (click)="openPolicy()" class="hover:text-primary-400 transition-colors cursor-pointer">{{ 'policy.title' | translate }}</button>
+            <a routerLink="/privacy" class="hover:text-primary-400 transition-colors">{{ 'policy.title' | translate }}</a>
             <span class="text-gray-700">|</span>
             <p class="flex items-center gap-1.5">
             Made with
@@ -113,10 +112,5 @@ import { ModalService } from '../../../core/services/modal.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
-  private readonly modalService = inject(ModalService);
   readonly currentYear = new Date().getFullYear();
-
-  protected openPolicy(): void {
-    this.modalService.openPolicy();
-  }
 }

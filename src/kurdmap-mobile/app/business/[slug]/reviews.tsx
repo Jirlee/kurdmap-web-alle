@@ -1,16 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   ScrollView,
   Pressable,
-  Alert,
   RefreshControl,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,11 +16,9 @@ import { useTheme } from '@/theme/ThemeContext';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ErrorView } from '@/components/ErrorView';
 import { ReviewCard } from '@/components/ReviewCard';
-import { StarRating } from '@/components/StarRating';
 import { EmptyState } from '@/components/EmptyState';
 import { reviewsApi } from '@/api/reviews';
 import { businessesApi } from '@/api/businesses';
-import { useAuthStore } from '@/stores/auth-store';
 import { getLocalizedName } from '@/utils/localization';
 import type { Review } from '@/types/api';
 
@@ -32,11 +28,6 @@ export default function ReviewsScreen() {
   const theme = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const { isAuthenticated } = useAuthStore();
-
-  const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
 
   const businessQuery = useQuery({
     queryKey: ['business', slug],
@@ -49,29 +40,6 @@ export default function ReviewsScreen() {
     queryFn: () => reviewsApi.getByBusiness(businessQuery.data!.id),
     enabled: !!businessQuery.data?.id,
   });
-
-  const createMutation = useMutation({
-    mutationFn: () =>
-      reviewsApi.create({
-        businessId: businessQuery.data!.id,
-        rating,
-        comment: comment.trim() || undefined,
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['reviews', businessQuery.data?.id] });
-      setRating(0);
-      setComment('');
-      Alert.alert(t('reviewSuccess'));
-    },
-    onError: () => {
-      Alert.alert(t('reviewError'));
-    },
-  });
-
-  const handleSubmit = useCallback(() => {
-    if (rating === 0) return;
-    createMutation.mutate();
-  }, [rating, createMutation]);
 
   const reviews = reviewsQuery.data ?? [];
 
@@ -101,51 +69,7 @@ export default function ReviewsScreen() {
           />
         }
       >
-        {/* Write Review Form */}
-        {isAuthenticated && (
-          <View style={[styles.formCard, { backgroundColor: theme.colors.surface }]}>
-            <Text style={[styles.formTitle, { color: theme.colors.text }]}>
-              {t('writeReview')}
-            </Text>
-            <View style={styles.ratingInput}>
-              <Text style={[styles.ratingLabel, { color: theme.colors.textSecondary }]}>
-                {t('reviewRating')}
-              </Text>
-              <StarRating
-                rating={rating}
-                interactive
-                onRatingChange={setRating}
-                size={28}
-              />
-            </View>
-            <TextInput
-              style={[
-                styles.commentInput,
-                { color: theme.colors.text, backgroundColor: theme.colors.surfaceVariant, borderColor: theme.colors.border },
-              ]}
-              value={comment}
-              onChangeText={setComment}
-              placeholder={t('reviewComment')}
-              placeholderTextColor={theme.colors.textTertiary}
-              multiline
-              numberOfLines={4}
-              textAlignVertical="top"
-            />
-            <Pressable
-              style={[
-                styles.submitBtn,
-                { backgroundColor: theme.colors.primary },
-                (rating === 0 || createMutation.isPending) && { opacity: 0.5 },
-              ]}
-              onPress={handleSubmit}
-              disabled={rating === 0 || createMutation.isPending}
-            >
-              <Text style={styles.submitBtnText}>{t('reviewSubmit')}</Text>
-            </Pressable>
-          </View>
-        )}
-
-        {/* Reviews List */}
+        {/* Reviews List (read-only) */}
         <View style={styles.reviewsSection}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             {t('reviews')} ({reviews.length})
@@ -175,33 +99,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 18, fontWeight: '600', flex: 1, textAlign: 'center' },
   scrollContent: { paddingBottom: 32 },
-  formCard: {
-    margin: 16,
-    padding: 16,
-    borderRadius: 12,
-  },
-  formTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12 },
-  ratingInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  ratingLabel: { fontSize: 14 },
-  commentInput: {
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 12,
-    fontSize: 14,
-    minHeight: 100,
-    marginBottom: 12,
-  },
-  submitBtn: {
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  submitBtnText: { color: '#FFF', fontSize: 15, fontWeight: '600' },
   reviewsSection: { paddingHorizontal: 16 },
   sectionTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12 },
 });
