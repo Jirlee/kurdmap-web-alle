@@ -497,5 +497,10 @@ eas update --branch production --message "..."
 - Production API: `https://gs6xapi.kurdmap.eu` (set in `eas.json`).
 - Sentry: org `kurdmap`, project `kurdmap-mobile` — set `EXPO_PUBLIC_SENTRY_DSN`
   as an EAS secret for production crash reporting (`eas secret:create`).
+  - `eas.json` sets `SENTRY_DISABLE_AUTO_UPLOAD=true` on the `preview`/`production`
+    profiles so release builds don't require a Sentry **auth token** (the Gradle
+    source-map upload step fails the build without one). Runtime crash reporting
+    still works. To re-enable source-map upload, add a `SENTRY_AUTH_TOKEN` EAS
+    secret and remove that flag.
 - Keep `play-service-account.json` and any downloaded keystore **out of git**
   and in a password manager.
