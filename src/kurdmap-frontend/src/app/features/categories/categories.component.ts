@@ -141,7 +141,7 @@ import { Category } from '../../core/models';
       height: 3rem;
       flex-shrink: 0;
       border-radius: 0.9rem;
-      color: var(--color-primary-600, #059669);
+      color: var(--color-primary-600, #9B5FC0);
       background: linear-gradient(135deg,
         color-mix(in oklch, var(--color-primary-500) 16%, transparent),
         color-mix(in oklch, var(--color-accent-400) 16%, transparent));
@@ -165,7 +165,7 @@ import { Category } from '../../core/models';
       text-overflow: ellipsis;
       transition: color 0.2s ease;
     }
-    .cat-card:hover .cat-card__name { color: var(--color-primary-600, #059669); }
+    .cat-card:hover .cat-card__name { color: var(--color-primary-600, #9B5FC0); }
     .cat-card__meta {
       font-size: 0.75rem;
       color: var(--color-gray-500, #6b7280);
@@ -179,7 +179,7 @@ import { Category } from '../../core/models';
       transition: transform 0.28s ease, color 0.28s ease;
     }
     .cat-card:hover .cat-card__arrow {
-      color: var(--color-primary-500, #10b981);
+      color: var(--color-primary-500, #B57EDC);
       transform: translateX(4px);
     }
     :host-context([dir="rtl"]) .cat-card__arrow { transform: scaleX(-1); }

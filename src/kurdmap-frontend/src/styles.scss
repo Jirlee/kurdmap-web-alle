@@ -9,33 +9,43 @@
 
 /* --- Theme Tokens --- */
 @theme {
-  /* Brand Colors — warm emerald with depth */
-  --color-primary: oklch(0.65 0.19 160);
-  --color-primary-50: oklch(0.97 0.02 160);
-  --color-primary-100: oklch(0.93 0.05 160);
-  --color-primary-200: oklch(0.87 0.1 160);
-  --color-primary-300: oklch(0.78 0.14 160);
-  --color-primary-400: oklch(0.72 0.17 160);
-  --color-primary-500: oklch(0.65 0.19 160);
-  --color-primary-600: oklch(0.55 0.17 160);
-  --color-primary-700: oklch(0.47 0.15 160);
-  --color-primary-800: oklch(0.39 0.12 160);
-  --color-primary-900: oklch(0.32 0.09 160);
-  --color-primary-950: oklch(0.22 0.06 160);
+  /* Brand Colors — soft lavender (2026 trend) */
+  --color-primary: oklch(0.67 0.13 305);
+  --color-primary-50: oklch(0.975 0.012 305);
+  --color-primary-100: oklch(0.95 0.03 305);
+  --color-primary-200: oklch(0.90 0.06 305);
+  --color-primary-300: oklch(0.83 0.09 305);
+  --color-primary-400: oklch(0.75 0.115 305);
+  --color-primary-500: oklch(0.67 0.13 305);
+  --color-primary-600: oklch(0.59 0.145 305);
+  --color-primary-700: oklch(0.51 0.14 305);
+  --color-primary-800: oklch(0.43 0.115 305);
+  --color-primary-900: oklch(0.37 0.09 305);
+  --color-primary-950: oklch(0.27 0.06 305);
 
-  /* Accent — warm gold for highlights */
-  --color-accent: oklch(0.82 0.16 80);
-  --color-accent-50: oklch(0.97 0.03 80);
-  --color-accent-100: oklch(0.94 0.06 80);
-  --color-accent-200: oklch(0.89 0.1 80);
-  --color-accent-400: oklch(0.82 0.16 80);
-  --color-accent-500: oklch(0.73 0.17 80);
-  --color-accent-600: oklch(0.63 0.16 80);
+  /* Secondary — soft rose */
+  --color-secondary: oklch(0.82 0.10 350);
+  --color-secondary-50: oklch(0.97 0.02 350);
+  --color-secondary-100: oklch(0.94 0.04 350);
+  --color-secondary-200: oklch(0.90 0.07 350);
+  --color-secondary-300: oklch(0.86 0.09 350);
+  --color-secondary-400: oklch(0.82 0.10 350);
+  --color-secondary-500: oklch(0.76 0.12 350);
+  --color-secondary-600: oklch(0.68 0.14 350);
+
+  /* Accent — vivid pink for highlights */
+  --color-accent: oklch(0.72 0.19 350);
+  --color-accent-50: oklch(0.97 0.025 350);
+  --color-accent-100: oklch(0.94 0.05 350);
+  --color-accent-200: oklch(0.90 0.10 350);
+  --color-accent-400: oklch(0.72 0.19 350);
+  --color-accent-500: oklch(0.68 0.205 350);
+  --color-accent-600: oklch(0.61 0.195 350);
 
   /* Surface Colors for layered glass look */
-  --color-surface: oklch(0.99 0.002 250);
-  --color-surface-dim: oklch(0.96 0.005 250);
-  --color-surface-bright: oklch(1 0 0);
+  --color-surface: #F8F4FA;
+  --color-surface-dim: #EDE1F7;
+  --color-surface-bright: #FFFFFF;
 
   /* Fonts */
   --font-sans: 'DM Sans', 'Inter', system-ui, -apple-system, sans-serif;
@@ -52,7 +62,7 @@
   --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.03), 0 2px 6px -1px rgb(0 0 0 / 0.05);
   --shadow-card-hover: 0 8px 24px -4px rgb(0 0 0 / 0.08), 0 4px 8px -4px rgb(0 0 0 / 0.04);
   --shadow-elevated: 0 16px 40px -8px rgb(0 0 0 / 0.1), 0 8px 16px -8px rgb(0 0 0 / 0.06);
-  --shadow-glow: 0 0 20px -4px oklch(0.65 0.19 160 / 0.25);
+  --shadow-glow: 0 0 20px -4px oklch(0.67 0.13 305 / 0.3);
   --shadow-inner-glow: inset 0 1px 0 0 rgb(255 255 255 / 0.1);
 
   /* Animations */
@@ -218,7 +228,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: var(--color-surface);
-    color: var(--color-gray-800);
+    color: #2B2B2B;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
@@ -270,6 +280,6 @@
 
   /* Smooth selection */
   ::selection {
-    background: oklch(0.65 0.19 160 / 0.2);
+    background: oklch(0.67 0.13 305 / 0.2);
   }
 }

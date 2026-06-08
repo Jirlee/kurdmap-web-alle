@@ -39,7 +39,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
         <!-- Step 3 -->
         <div class="relative text-center group" style="animation: fade-in-up 0.5s ease-out both; animation-delay: 0.3s;">
-          <div class="size-16 rounded-2xl bg-green-100 flex items-center justify-center mx-auto mb-5 group-hover:bg-green-200 transition-colors duration-300">
+          <div class="size-16 rounded-2xl bg-secondary-100 flex items-center justify-center mx-auto mb-5 group-hover:bg-secondary-200 transition-colors duration-300">
             <span class="text-2xl">🤝</span>
           </div>
           <div class="absolute -top-2 -end-2 size-7 rounded-full bg-primary-600 text-white text-xs font-bold flex items-center justify-center shadow-md hidden md:flex">3</div>

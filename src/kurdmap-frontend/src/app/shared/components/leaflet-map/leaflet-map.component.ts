@@ -111,7 +111,7 @@ export class LeafletMapComponent {
       const marker = L.marker(pos, {
         icon: L.divIcon({
           className: 'kurdmap-marker',
-          html: `<div class="w-8 h-8 bg-emerald-600 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold">
+          html: `<div class="w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold" style="background:#B57EDC">
             ${biz.isVerified ? '✓' : '●'}
           </div>`,
           iconSize: [32, 32],
@@ -123,7 +123,7 @@ export class LeafletMapComponent {
         <div style="min-width: 180px; font-family: system-ui, sans-serif;">
           <strong style="font-size: 14px;">${this.escapeHtml(name)}</strong>
           <div style="color: #6b7280; font-size: 12px; margin-top: 4px;">${this.escapeHtml(biz.street)}</div>
-          ${biz.isVerified ? '<span style="color: #10b981; font-size: 11px; font-weight: 600;">✓ Verifiziert</span>' : ''}
+          ${biz.isVerified ? '<span style="color: #B57EDC; font-size: 11px; font-weight: 600;">✓ Verifiziert</span>' : ''}
         </div>
       `);
 

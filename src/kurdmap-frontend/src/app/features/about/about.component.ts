@@ -42,8 +42,8 @@ import { SeoService } from '../../core/services/seo.service';
         <!-- Features grid -->
         <div class="grid sm:grid-cols-2 gap-6 mb-8">
           <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-8 shadow-sm">
-            <div class="size-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mb-4">
-              <svg class="size-5 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <div class="size-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mb-4">
+              <svg class="size-5 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
               </svg>
             </div>

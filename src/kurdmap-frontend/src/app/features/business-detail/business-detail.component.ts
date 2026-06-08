@@ -306,7 +306,7 @@ import { BrowserStorageService } from '../../core/services/browser-storage.servi
                     </a>
                     <button
                       (click)="showDirections.set(!showDirections())"
-                      class="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 hover:text-emerald-700 cursor-pointer transition-colors"
+                      class="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-700 cursor-pointer transition-colors"
                     >
                       <svg class="size-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/></svg>
                       {{ (showDirections() ? 'directions.close' : 'directions.getDirections') | translate }}
@@ -700,7 +700,7 @@ export default class BusinessDetailComponent implements OnInit {
     L.marker([b.latitude, b.longitude], {
       icon: L.divIcon({
         className: 'kurdmap-marker',
-        html: `<div class="w-10 h-10 bg-emerald-600 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-sm font-bold">
+        html: `<div class="w-10 h-10 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white text-sm font-bold" style="background:#B57EDC">
           ${b.isVerified ? '✓' : '●'}
         </div>`,
         iconSize: [40, 40],

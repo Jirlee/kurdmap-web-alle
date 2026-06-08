@@ -32,17 +32,19 @@ type ViewMode = 'list' | 'split' | 'map';
   template: `
     <section class="search-section">
       <!-- Search & Filters — sticky on mobile -->
-      <div class="sticky top-0 z-10 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 pb-3 pt-2 bg-surface/95 backdrop-blur-md">
+      <div class="filter-shell sticky top-0 z-10 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 pb-3.5 pt-3">
         <!-- Search input — large touch target -->
         <div class="relative mb-3">
-          <svg class="absolute start-4 top-1/2 -translate-y-1/2 size-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
+          <span class="search-ico absolute start-2.5 top-1/2 -translate-y-1/2 flex size-8 items-center justify-center rounded-xl">
+            <svg class="size-4.5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </span>
           <input
             type="text"
             [placeholder]="'search.placeholder' | translate"
             [attr.aria-label]="'aria.searchInput' | translate"
-            class="w-full ps-12 pe-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl focus-visible:ring-2 focus-visible:ring-primary-500/40 focus-visible:border-primary-400 focus-visible:bg-white dark:focus-visible:bg-gray-900 outline-none text-base transition-all duration-200"
+            class="search-input w-full ps-13 pe-4 py-3.5 outline-none text-base"
             [ngModel]="searchText()"
             (ngModelChange)="onSearchInput($event)"
           />
@@ -81,61 +83,76 @@ type ViewMode = 'list' | 'split' | 'map';
 
           <!-- Radius selector (only when near-me is active) -->
           @if (nearMeActive()) {
-            <select
-              class="filter-chip active"
-              [ngModel]="selectedRadius()"
-              (ngModelChange)="onRadiusChange($event)"
-            >
-              <option [value]="1">1 km</option>
-              <option [value]="5">5 km</option>
-              <option [value]="10">10 km</option>
-              <option [value]="25">25 km</option>
-              <option [value]="50">50 km</option>
-            </select>
+            <label class="select-chip active">
+              <svg class="lead size-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3.25"/>
+                <circle cx="12" cy="12" r="8.5" stroke-dasharray="3 3"/>
+              </svg>
+              <select
+                [ngModel]="selectedRadius()"
+                (ngModelChange)="onRadiusChange($event)"
+              >
+                <option [value]="1">1 km</option>
+                <option [value]="5">5 km</option>
+                <option [value]="10">10 km</option>
+                <option [value]="25">25 km</option>
+                <option [value]="50">50 km</option>
+              </select>
+            </label>
           }
 
           <!-- Category filter -->
-          <select
-            class="filter-chip"
-            [class.active]="!!selectedCategory()"
-            [ngModel]="selectedCategory()"
-            (ngModelChange)="onCategoryChange($event)"
-          >
-            <option value="">{{ 'search.allCategories' | translate }}</option>
-            @for (cat of categories(); track cat.id) {
-              <option [value]="cat.slug">{{ langService.getLocalizedField(cat) }}</option>
-            }
-          </select>
+          <label class="select-chip" [class.active]="!!selectedCategory()">
+            <svg class="lead size-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
+            </svg>
+            <select
+              [ngModel]="selectedCategory()"
+              (ngModelChange)="onCategoryChange($event)"
+            >
+              <option value="">{{ 'search.allCategories' | translate }}</option>
+              @for (cat of categories(); track cat.id) {
+                <option [value]="cat.slug">{{ langService.getLocalizedField(cat) }}</option>
+              }
+            </select>
+          </label>
 
           <!-- City filter -->
-          <select
-            class="filter-chip"
-            [class.active]="!!selectedCity()"
-            [ngModel]="selectedCity()"
-            (ngModelChange)="onCityChange($event)"
-          >
-            <option value="">{{ 'search.allCities' | translate }}</option>
-            @for (city of cities(); track city.id) {
-              <option [value]="city.slug">{{ langService.getLocalizedField(city) }}</option>
-            }
-          </select>
+          <label class="select-chip" [class.active]="!!selectedCity()">
+            <svg class="lead size-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+            </svg>
+            <select
+              [ngModel]="selectedCity()"
+              (ngModelChange)="onCityChange($event)"
+            >
+              <option value="">{{ 'search.allCities' | translate }}</option>
+              @for (city of cities(); track city.id) {
+                <option [value]="city.slug">{{ langService.getLocalizedField(city) }}</option>
+              }
+            </select>
+          </label>
 
           <!-- Sort -->
-          <select
-            class="filter-chip"
-            [class.active]="selectedSort() !== 0"
-            [ngModel]="selectedSort()"
-            (ngModelChange)="onSortChange($event)"
-          >
-            <option [value]="0">{{ 'search.relevance' | translate }}</option>
-            <option [value]="1">{{ 'search.name' | translate }}</option>
-            <option [value]="2">{{ 'search.newest' | translate }}</option>
-            <option [value]="3">{{ 'search.verifiedFirst' | translate }}</option>
-            <option [value]="5">{{ 'search.featuredFirst' | translate }}</option>
-            @if (nearMeActive()) {
-              <option [value]="4">{{ 'search.nearestFirst' | translate }}</option>
-            }
-          </select>
+          <label class="select-chip" [class.active]="selectedSort() !== 0">
+            <svg class="lead size-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v18M21 16.5L16.5 21m0 0L12 16.5m4.5 4.5V3"/>
+            </svg>
+            <select
+              [ngModel]="selectedSort()"
+              (ngModelChange)="onSortChange($event)"
+            >
+              <option [value]="0">{{ 'search.relevance' | translate }}</option>
+              <option [value]="1">{{ 'search.name' | translate }}</option>
+              <option [value]="2">{{ 'search.newest' | translate }}</option>
+              <option [value]="3">{{ 'search.verifiedFirst' | translate }}</option>
+              <option [value]="5">{{ 'search.featuredFirst' | translate }}</option>
+              @if (nearMeActive()) {
+                <option [value]="4">{{ 'search.nearestFirst' | translate }}</option>
+              }
+            </select>
+          </label>
 
           <!-- Spacer -->
           <div class="flex-1"></div>
@@ -424,73 +441,149 @@ type ViewMode = 'list' | 'split' | 'map';
     .search-section :where(.grid, .flex) { min-width: 0; }
     .search-section app-business-card { display: block; min-width: 0; max-width: 100%; }
 
-    .filter-chip {
+    /* ===== Filter shell — professional glass panel ===== */
+    .filter-shell {
+      background:
+        linear-gradient(180deg, color-mix(in oklab, var(--color-primary-50) 70%, white) 0%, var(--color-surface) 100%);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border-bottom: 1px solid color-mix(in oklab, var(--color-primary-200) 60%, transparent);
+      box-shadow: 0 10px 30px -20px color-mix(in oklab, var(--color-primary-500) 60%, transparent);
+    }
+    :host-context(.dark) .filter-shell {
+      background: linear-gradient(180deg, rgba(45, 27, 61, 0.55) 0%, var(--color-surface) 100%);
+      border-bottom-color: rgba(181, 126, 220, 0.2);
+    }
+
+    /* Search input — premium pill with gradient icon */
+    .search-ico {
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-accent-500));
+      box-shadow: 0 4px 12px -4px color-mix(in oklab, var(--color-primary-500) 70%, transparent);
+    }
+    .search-input {
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid color-mix(in oklab, var(--color-primary-200) 70%, transparent);
+      border-radius: 1rem;
+      color: var(--color-gray-800);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+    .search-input::placeholder { color: var(--color-gray-400); }
+    .search-input:focus-visible {
+      background: #fff;
+      border-color: var(--color-primary-400);
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-primary-500) 18%, transparent);
+    }
+    :host-context(.dark) .search-input {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(181, 126, 220, 0.25);
+      color: var(--color-gray-200);
+    }
+    :host-context(.dark) .search-input:focus-visible {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--color-primary-400);
+    }
+
+    /* ===== Select chips with leading icons ===== */
+    .select-chip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
       flex-shrink: 0;
-      padding: 0.5rem 0.875rem;
-      background: var(--color-gray-50, #f9fafb);
-      border: 1px solid var(--color-gray-200, #e5e7eb);
-      border-radius: 9999px;
-      font-size: 0.8125rem;
-      font-weight: 500;
-      color: var(--color-gray-700, #374151);
+      padding-inline: 0.875rem 0.75rem;
+      min-height: 2.875rem;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid color-mix(in oklab, var(--color-primary-200) 65%, transparent);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
       cursor: pointer;
-      transition: all 0.15s ease;
-      white-space: nowrap;
-      min-height: 2.75rem;
+      transition: transform 0.18s var(--ease-spring), border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+    .select-chip .lead {
+      color: var(--color-primary-500);
+      flex-shrink: 0;
+      transition: color 0.18s ease;
+    }
+    .select-chip select {
       appearance: none;
       -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.5rem center;
-      padding-inline-end: 1.75rem;
-    }
-    :host-context([dir="rtl"]) .filter-chip {
-      background-position: left 0.5rem center;
-      padding-inline-end: 0.875rem;
-      padding-inline-start: 1.75rem;
-    }
-    .filter-chip:focus-visible {
-      outline: 2px solid var(--color-primary-500);
-      outline-offset: 2px;
-    }
-    /* Active state — a non-default value is selected */
-    .filter-chip.active {
-      background-color: var(--color-primary-50);
-      border-color: var(--color-primary-300);
-      color: var(--color-primary-700);
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.8125rem;
       font-weight: 600;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      color: var(--color-gray-700);
+      cursor: pointer;
+      min-width: 0;
+      padding-inline-end: 1.25rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right center;
     }
-    :host-context(.dark) .filter-chip.active {
-      background-color: rgba(59, 130, 246, 0.12);
+    :host-context([dir="rtl"]) .select-chip select {
+      padding-inline-end: 0;
+      padding-inline-start: 1.25rem;
+      background-position: left center;
+    }
+    .select-chip:hover {
+      transform: translateY(-1px);
+      border-color: var(--color-primary-300);
+      box-shadow: var(--shadow-card-hover);
+    }
+    .select-chip.active {
+      background: linear-gradient(135deg, var(--color-primary-50), color-mix(in oklab, var(--color-accent-100) 60%, white));
+      border-color: var(--color-primary-400);
+      box-shadow: 0 6px 18px -10px color-mix(in oklab, var(--color-primary-500) 70%, transparent);
+    }
+    .select-chip.active .lead { color: var(--color-primary-600); }
+    .select-chip.active select { color: var(--color-primary-700); }
+    .select-chip:focus-within {
+      border-color: var(--color-primary-400);
+      box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-primary-500) 16%, transparent);
+    }
+    :host-context(.dark) .select-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(181, 126, 220, 0.22);
+    }
+    :host-context(.dark) .select-chip select { color: var(--color-gray-300); }
+    :host-context(.dark) .select-chip.active {
+      background: rgba(181, 126, 220, 0.16);
       border-color: var(--color-primary-500);
-      color: var(--color-primary-300);
     }
+    :host-context(.dark) .select-chip.active .lead,
+    :host-context(.dark) .select-chip.active select { color: var(--color-primary-300); }
 
     .filter-chip-btn {
       flex-shrink: 0;
       display: inline-flex;
       align-items: center;
       gap: 0.375rem;
-      padding: 0.5rem 0.875rem;
-      background: var(--color-gray-50, #f9fafb);
-      border: 1px solid var(--color-gray-200, #e5e7eb);
-      border-radius: 9999px;
+      padding: 0.5rem 0.95rem;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid color-mix(in oklab, var(--color-primary-200) 65%, transparent);
+      border-radius: 1rem;
       font-size: 0.8125rem;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--color-gray-700, #374151);
       cursor: pointer;
-      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: transform 0.18s var(--ease-spring), border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
       white-space: nowrap;
-      min-height: 2.75rem;
+      min-height: 2.875rem;
+    }
+    .filter-chip-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--color-primary-300);
+      box-shadow: var(--shadow-card-hover);
     }
     .filter-chip-btn:active {
-      transform: scale(0.95);
+      transform: scale(0.96);
     }
     .filter-chip-btn.active {
-      background: var(--color-primary-50);
-      border-color: var(--color-primary-300);
-      color: var(--color-primary-700);
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-accent-500));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 8px 20px -8px color-mix(in oklab, var(--color-primary-500) 75%, transparent);
     }
     .filter-chip-btn:focus-visible {
       outline: 2px solid var(--color-primary-500);
@@ -501,11 +594,13 @@ type ViewMode = 'list' | 'split' | 'map';
       cursor: wait;
     }
 
-    :host-context(.dark) .filter-chip,
     :host-context(.dark) .filter-chip-btn {
       background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(181, 126, 220, 0.22);
       color: var(--color-gray-300);
+    }
+    :host-context(.dark) .filter-chip-btn.active {
+      color: #fff;
     }
 
     /* View mode toggles */
