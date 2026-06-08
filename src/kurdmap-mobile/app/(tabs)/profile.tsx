@@ -7,6 +7,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/theme/ThemeContext';
 import { FadeInView } from '@/components/Animations';
+import { gradients } from '@/theme';
 import Constants from 'expo-constants';
 import { useAppStore, type AppLanguage, type AppTheme } from '@/stores/app-store';
 import i18n from '@/i18n';
@@ -49,7 +50,7 @@ export default function ProfileScreen() {
       <FadeInView>
         <View style={styles.profileSection}>
           <LinearGradient
-            colors={[theme.colors.primary, theme.colors.primaryDark]}
+            colors={gradients.brandVivid}
             style={styles.avatar}
           >
             <Ionicons name="map" size={30} color="#FFF" />
@@ -67,7 +68,7 @@ export default function ProfileScreen() {
 
       {/* Language Selection */}
       <FadeInView delay={100}>
-      <View style={[styles.section, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.shadow }]}>
+      <View style={[styles.section, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder, shadowColor: theme.colors.shadow }]}>
         <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
           <Ionicons name="language-outline" size={18} /> {t('profileLanguage')}
         </Text>
@@ -100,7 +101,7 @@ export default function ProfileScreen() {
 
       {/* Theme Selection */}
       <FadeInView delay={200}>
-      <View style={[styles.section, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.shadow }]}>
+      <View style={[styles.section, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder, shadowColor: theme.colors.shadow }]}>
         <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
           <Ionicons name="color-palette-outline" size={18} /> {t('profileTheme')}
         </Text>
@@ -138,7 +139,7 @@ export default function ProfileScreen() {
 
       {/* About & Links */}
       <FadeInView delay={300}>
-      <View style={[styles.section, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.shadow }]}>
+      <View style={[styles.section, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder, shadowColor: theme.colors.shadow }]}>
         <Pressable
           style={styles.navRow}
           onPress={() => router.push('/about')}
@@ -228,14 +229,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 12,
     padding: 16,
-    borderRadius: 16,
+    borderRadius: 20,
+    borderWidth: StyleSheet.hairlineWidth,
     ...Platform.select({
       ios: {
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.06,
-        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.1,
+        shadowRadius: 16,
       },
-      android: { elevation: 2 },
+      android: { elevation: 3 },
     }),
   },
   sectionTitle: { fontSize: 16, fontWeight: '600', marginBottom: 12 },

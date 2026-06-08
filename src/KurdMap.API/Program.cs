@@ -176,6 +176,10 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddSwaggerGen(options =>
     {
         options.SwaggerDoc("v1", new() { Title = "KurdMap API", Version = "v1" });
+        // Distinct types can share a short name (e.g. BusinessSummaryDto exists in
+        // both KurdMap.Shared and KurdMap.Application.Businesses.DTOs). Use full
+        // names as schemaIds to avoid SwaggerGenerator schemaId collisions.
+        options.CustomSchemaIds(type => type.FullName?.Replace("+", "."));
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
             Description = "Enter JWT Bearer token",

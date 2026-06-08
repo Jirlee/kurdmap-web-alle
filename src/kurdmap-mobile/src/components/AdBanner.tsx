@@ -113,15 +113,15 @@ const styles = StyleSheet.create({
   adCard: {
     width: SCREEN_WIDTH - 32,
     height: 180,
-    borderRadius: 20,
+    borderRadius: 22,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 12,
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.22,
+        shadowRadius: 18,
       },
-      android: { elevation: 4 },
+      android: { elevation: 5 },
     }),
   },
   adImage: {

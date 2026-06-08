@@ -31,8 +31,8 @@ export function SearchBar({
       style={[
         styles.container,
         {
-          backgroundColor: `${theme.colors.surface}E6`,
-          borderColor: isFocused ? theme.colors.primary : theme.colors.border,
+          backgroundColor: theme.colors.glassStrong,
+          borderColor: isFocused ? theme.colors.primary : theme.colors.glassBorder,
           shadowColor: isFocused ? theme.colors.primary : theme.colors.shadow,
         },
       ]}
@@ -86,16 +86,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 14,
     paddingVertical: 12,
-    borderRadius: 16,
+    borderRadius: 18,
     borderWidth: 1,
     gap: 10,
     ...Platform.select({
       ios: {
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.12,
+        shadowRadius: 14,
       },
-      android: { elevation: 2 },
+      android: { elevation: 3 },
     }),
   },
   input: {

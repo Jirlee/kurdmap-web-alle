@@ -10,9 +10,9 @@ import { FadeInView, StaggerChildren } from '@/components/Animations';
 
 const FEATURES = [
   { icon: 'language-outline' as const, colorHex: '#10B981', key: 'multilingual' },
-  { icon: 'map-outline' as const, colorHex: '#3B82F6', key: 'map' },
+  { icon: 'map-outline' as const, colorHex: '#16A34A', key: 'map' },
   { icon: 'phone-portrait-outline' as const, colorHex: '#F59E0B', key: 'mobile' },
-  { icon: 'shield-checkmark-outline' as const, colorHex: '#8B5CF6', key: 'verified' },
+  { icon: 'shield-checkmark-outline' as const, colorHex: '#65A30D', key: 'verified' },
 ];
 
 export default function AboutScreen() {

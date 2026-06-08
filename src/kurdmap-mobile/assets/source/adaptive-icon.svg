@@ -1,0 +1,47 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pin" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/>
+      <stop offset="0.5" stop-color="#16A34A"/>
+      <stop offset="1" stop-color="#14532D"/>
+    </linearGradient>
+    <radialGradient id="well" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#ECFDF5"/>
+      <stop offset="1" stop-color="#BBF7D0"/>
+    </radialGradient>
+    <radialGradient id="sun" cx="0.42" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#FEF9C3"/>
+      <stop offset="0.45" stop-color="#FDE047"/>
+      <stop offset="1" stop-color="#FACC15"/>
+    </radialGradient>
+    <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE047"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="pinShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="22" stdDeviation="30" flood-color="#052E16" flood-opacity="0.32"/>
+    </filter>
+  </defs>
+
+  <!-- Transparent bg: Android adaptiveIcon backgroundColor (#16A34A) shows behind.
+       Mark scaled to stay inside the adaptive safe zone. -->
+  <g transform="translate(512 512) scale(0.66) translate(-512 -512)">
+    <g filter="url(#pinShadow)">
+      <path d="M512,205 C383,205 279,309 279,438 C279,575 410,705 512,865 C614,705 745,575 745,438 C745,309 641,205 512,205 Z" fill="url(#pin)"/>
+      <path d="M512,205 C383,205 279,309 279,438 C279,520 326,604 392,690 C360,602 352,520 372,452 C400,356 470,300 560,300 C612,300 660,318 700,352 C660,262 592,205 512,205 Z" fill="#FFFFFF" opacity="0.18"/>
+    </g>
+    <circle cx="512" cy="438" r="156" fill="url(#well)"/>
+    <g fill="url(#ray)" transform="translate(512 438)">
+      <rect x="-15" y="-168" width="30" height="58" rx="15"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(45)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(90)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(135)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(180)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(225)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(270)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(315)"/>
+    </g>
+    <circle cx="512" cy="438" r="104" fill="url(#sun)"/>
+    <ellipse cx="478" cy="404" rx="48" ry="34" fill="#FFFFFF" opacity="0.45"/>
+  </g>
+</svg>

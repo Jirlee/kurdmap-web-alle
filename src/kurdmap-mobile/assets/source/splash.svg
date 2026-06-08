@@ -1,0 +1,90 @@
+<svg width="1242" height="1242" viewBox="0 0 1242 1242" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#06140C"/>
+      <stop offset="0.55" stop-color="#0B2A18"/>
+      <stop offset="1" stop-color="#06140C"/>
+    </linearGradient>
+    <radialGradient id="aura" cx="0.5" cy="0.42" r="0.55">
+      <stop offset="0" stop-color="#22C55E" stop-opacity="0.35"/>
+      <stop offset="0.6" stop-color="#16A34A" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#16A34A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pin" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/>
+      <stop offset="0.5" stop-color="#16A34A"/>
+      <stop offset="1" stop-color="#14532D"/>
+    </linearGradient>
+    <radialGradient id="well" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#ECFDF5"/>
+      <stop offset="1" stop-color="#BBF7D0"/>
+    </radialGradient>
+    <radialGradient id="sun" cx="0.42" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#FEF9C3"/>
+      <stop offset="0.45" stop-color="#FDE047"/>
+      <stop offset="1" stop-color="#FACC15"/>
+    </radialGradient>
+    <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE047"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4ADE80" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#4ADE80" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#4ADE80" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <filter id="pinShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="26" stdDeviation="34" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+    <filter id="sunGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#FDE047" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Map base -->
+  <rect x="0" y="0" width="1242" height="1242" fill="url(#sky)"/>
+
+  <!-- subtle map grid (glass map) -->
+  <g stroke="#16A34A" stroke-opacity="0.16" stroke-width="2">
+    <path d="M0,200 H1242 M0,420 H1242 M0,640 H1242 M0,860 H1242 M0,1060 H1242"/>
+    <path d="M200,0 V1242 M420,0 V1242 M640,0 V1242 M860,0 V1242 M1040,0 V1242"/>
+  </g>
+  <!-- diagonal glowing roads -->
+  <g stroke="url(#road)" stroke-width="8" stroke-linecap="round" opacity="0.7">
+    <path d="M-40,300 L520,560 L760,500 L1300,760"/>
+    <path d="M-40,900 L360,720 L820,820 L1300,640"/>
+    <path d="M120,1300 L520,820 L640,560 L900,-40"/>
+  </g>
+  <!-- aura behind the pin -->
+  <rect x="0" y="0" width="1242" height="1242" fill="url(#aura)"/>
+
+  <!-- center map pin with sun -->
+  <g transform="translate(621 560) scale(0.92) translate(-512 -512)">
+    <g filter="url(#pinShadow)">
+      <path d="M512,205 C383,205 279,309 279,438 C279,575 410,705 512,865 C614,705 745,575 745,438 C745,309 641,205 512,205 Z" fill="url(#pin)"/>
+      <path d="M512,205 C383,205 279,309 279,438 C279,520 326,604 392,690 C360,602 352,520 372,452 C400,356 470,300 560,300 C612,300 660,318 700,352 C660,262 592,205 512,205 Z" fill="#FFFFFF" opacity="0.18"/>
+    </g>
+    <circle cx="512" cy="438" r="156" fill="url(#well)"/>
+    <g fill="url(#ray)" transform="translate(512 438)">
+      <rect x="-15" y="-168" width="30" height="58" rx="15"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(45)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(90)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(135)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(180)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(225)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(270)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(315)"/>
+    </g>
+    <g filter="url(#sunGlow)">
+      <circle cx="512" cy="438" r="104" fill="url(#sun)"/>
+    </g>
+    <ellipse cx="478" cy="404" rx="48" ry="34" fill="#FFFFFF" opacity="0.45"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="621" y="1000" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="700" fill="#ECFDF3" letter-spacing="2">KurdMap</text>
+  <text x="621" y="1060" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="400" fill="#4ADE80" letter-spacing="6">EUROPE</text>
+</svg>

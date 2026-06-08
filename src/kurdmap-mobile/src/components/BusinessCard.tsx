@@ -39,7 +39,7 @@ export const BusinessCard = React.memo(function BusinessCard({
   return (
     <ScaleOnPress>
       <Pressable
-        style={[styles.card, { backgroundColor: theme.colors.card, shadowColor: theme.colors.shadow }]}
+        style={[styles.card, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder, shadowColor: theme.colors.shadow }]}
         onPress={handlePress}
         android_ripple={{ color: theme.colors.surfaceVariant }}
         accessibilityRole="button"
@@ -115,14 +115,15 @@ export const BusinessCard = React.memo(function BusinessCard({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
     marginBottom: 16,
+    borderWidth: StyleSheet.hairlineWidth,
     ...Platform.select({
       ios: {
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.12,
-        shadowRadius: 12,
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.14,
+        shadowRadius: 18,
       },
       android: { elevation: 4 },
     }),

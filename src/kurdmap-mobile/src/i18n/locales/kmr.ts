@@ -23,7 +23,7 @@ export default {
 
   // Mal
   homeTitle: 'KurdMap',
-  homeSubtitle: 'Karûbarên kurdî li Almanyayê bibîne',
+  homeSubtitle: 'Karûbarên kurdî li seranserê Ewrûpayê bibîne',
   featuredBusinesses: 'Karûbarên taybet',
   categories: 'Kategorî',
   nearbyBusinesses: 'Karûbarên nêzîk',

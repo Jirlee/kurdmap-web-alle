@@ -106,7 +106,7 @@ export default function MapScreen() {
       <Pressable
         style={[
           styles.locationBtn,
-          { backgroundColor: theme.colors.surface, top: insets.top + 12 },
+          { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder, top: insets.top + 12 },
         ]}
         onPress={centerOnUser}
       >
@@ -117,7 +117,7 @@ export default function MapScreen() {
       <View
         style={[
           styles.countBadge,
-          { backgroundColor: theme.colors.surface, bottom: insets.bottom + 16 },
+          { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder, bottom: insets.bottom + 16 },
         ]}
       >
         <Ionicons name="business-outline" size={16} color={theme.colors.primary} />
@@ -145,11 +145,12 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    borderWidth: StyleSheet.hairlineWidth,
+    elevation: 5,
+    shadowColor: '#15803D',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
   },
   callout: {
     padding: 4,
@@ -185,11 +186,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 24,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    borderWidth: StyleSheet.hairlineWidth,
+    elevation: 5,
+    shadowColor: '#15803D',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
   },
   countText: {
     fontSize: 14,

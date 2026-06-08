@@ -23,7 +23,7 @@ export default {
 
   // Home
   homeTitle: 'KurdMap',
-  homeSubtitle: 'Entdecke kurdische Geschäfte in Deutschland',
+  homeSubtitle: 'Entdecke kurdische Geschäfte in ganz Europa',
   featuredBusinesses: 'Empfohlene Geschäfte',
   categories: 'Kategorien',
   nearbyBusinesses: 'Geschäfte in der Nähe',

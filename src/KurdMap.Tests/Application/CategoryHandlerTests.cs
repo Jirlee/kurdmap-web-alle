@@ -15,18 +15,20 @@ public class CategoryHandlerTests
     private readonly ICategoryRepository _categoryRepo = Substitute.For<ICategoryRepository>();
     private readonly ICacheService _cacheService = Substitute.For<ICacheService>();
     private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>();
+    private readonly ISlugService _slugService = Substitute.For<ISlugService>();
 
     // === CreateCategory ===
 
     [Fact]
     public async Task CreateCategory_WhenSlugUnique_ShouldSucceed()
     {
+        _slugService.GenerateSlug("Restaurant").Returns("restaurant");
         _categoryRepo.GetBySlugAsync("restaurant", Arg.Any<CancellationToken>()).Returns((Category?)null);
 
-        var handler = new CreateCategoryCommandHandler(_categoryRepo, _cacheService, _unitOfWork);
+        var handler = new CreateCategoryCommandHandler(_categoryRepo, _slugService, _cacheService, _unitOfWork);
         var command = new CreateCategoryCommand(
             new MultilingualTextDto("چێشتخانە", "kmr", "Restaurant", "Restaurant"),
-            "restaurant", "utensils", 1);
+            "utensils", 1);
 
         var result = await handler.Handle(command, CancellationToken.None);
 
@@ -39,20 +41,23 @@ public class CategoryHandlerTests
     }
 
     [Fact]
-    public async Task CreateCategory_WhenSlugDuplicate_ShouldFail()
+    public async Task CreateCategory_WhenSlugDuplicate_ShouldSuffix()
     {
         var existing = Category.Create(
             MultilingualText.Create("ku", "de"), "restaurant", null, 1);
+        _slugService.GenerateSlug("Restaurant").Returns("restaurant");
         _categoryRepo.GetBySlugAsync("restaurant", Arg.Any<CancellationToken>()).Returns(existing);
+        _categoryRepo.GetBySlugAsync("restaurant-1", Arg.Any<CancellationToken>()).Returns((Category?)null);
 
-        var handler = new CreateCategoryCommandHandler(_categoryRepo, _cacheService, _unitOfWork);
+        var handler = new CreateCategoryCommandHandler(_categoryRepo, _slugService, _cacheService, _unitOfWork);
         var command = new CreateCategoryCommand(
-            new MultilingualTextDto("ku", "kmr", "de", "en"), "restaurant", null, 2);
+            new MultilingualTextDto("ku", "kmr", "Restaurant", "en"), null, 2);
 
         var result = await handler.Handle(command, CancellationToken.None);
 
-        Assert.False(result.IsSuccess);
-        Assert.Contains("already exists", result.Error!);
+        Assert.True(result.IsSuccess);
+        Assert.Equal("restaurant-1", result.Value!.Slug);
+        await _categoryRepo.Received(1).AddAsync(Arg.Any<Category>(), Arg.Any<CancellationToken>());
     }
 
     // === DeleteCategory ===

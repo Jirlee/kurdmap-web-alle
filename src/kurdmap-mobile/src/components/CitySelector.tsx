@@ -9,12 +9,12 @@ import { getCityName } from '@/utils/localization';
 import type { City } from '@/types/api';
 
 const CITY_GRADIENTS: [string, string][] = [
-  ['#10B981', '#059669'],
-  ['#6366F1', '#4F46E5'],
-  ['#F59E0B', '#D97706'],
-  ['#EC4899', '#DB2777'],
-  ['#3B82F6', '#2563EB'],
-  ['#8B5CF6', '#7C3AED'],
+  ['#22C55E', '#15803D'],
+  ['#10B981', '#047857'],
+  ['#4ADE80', '#16A34A'],
+  ['#FACC15', '#22C55E'],
+  ['#16A34A', '#14532D'],
+  ['#84CC16', '#15803D'],
 ];
 
 interface Props {
@@ -82,15 +82,15 @@ const styles = StyleSheet.create({
   },
   card: {
     marginRight: 12,
-    borderRadius: 16,
+    borderRadius: 18,
     overflow: 'hidden',
     ...Platform.select({
       ios: {
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.22,
+        shadowRadius: 14,
       },
-      android: { elevation: 4 },
+      android: { elevation: 5 },
     }),
   },
   gradient: {

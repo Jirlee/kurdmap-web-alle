@@ -1,0 +1,77 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Bright glass green background -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="0.45" stop-color="#16A34A"/>
+      <stop offset="1" stop-color="#15803D"/>
+    </linearGradient>
+    <!-- Green glass pin body -->
+    <linearGradient id="pin" x1="0.2" y1="0" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#4ADE80"/>
+      <stop offset="0.5" stop-color="#16A34A"/>
+      <stop offset="1" stop-color="#14532D"/>
+    </linearGradient>
+    <!-- Inner well behind the sun (subtle glass) -->
+    <radialGradient id="well" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#ECFDF5"/>
+      <stop offset="1" stop-color="#BBF7D0"/>
+    </radialGradient>
+    <!-- Warm yellow sun -->
+    <radialGradient id="sun" cx="0.42" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#FEF9C3"/>
+      <stop offset="0.45" stop-color="#FDE047"/>
+      <stop offset="1" stop-color="#FACC15"/>
+    </radialGradient>
+    <linearGradient id="ray" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FDE047"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.3" r="0.7">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="pinShadow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="28" stdDeviation="36" flood-color="#052E16" flood-opacity="0.40"/>
+    </filter>
+    <filter id="sunGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feDropShadow dx="0" dy="0" stdDeviation="16" flood-color="#FDE047" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1024" height="1024" rx="232" fill="url(#bg)"/>
+  <ellipse cx="340" cy="250" rx="560" ry="380" fill="#FFFFFF" opacity="0.12"/>
+  <rect x="0" y="0" width="1024" height="1024" rx="232" fill="url(#glow)"/>
+
+  <!-- Map pin -->
+  <g filter="url(#pinShadow)">
+    <path d="M512,205 C383,205 279,309 279,438 C279,575 410,705 512,865 C614,705 745,575 745,438 C745,309 641,205 512,205 Z" fill="url(#pin)"/>
+    <!-- glossy highlight on pin -->
+    <path d="M512,205 C383,205 279,309 279,438 C279,520 326,604 392,690 C360,602 352,520 372,452 C400,356 470,300 560,300 C612,300 660,318 700,352 C660,262 592,205 512,205 Z" fill="#FFFFFF" opacity="0.18"/>
+  </g>
+
+  <!-- Inner light well -->
+  <circle cx="512" cy="438" r="156" fill="url(#well)"/>
+
+  <!-- Sun rays (8) -->
+  <g fill="url(#ray)">
+    <g transform="translate(512 438)">
+      <rect x="-15" y="-168" width="30" height="58" rx="15"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(45)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(90)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(135)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(180)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(225)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(270)"/>
+      <rect x="-15" y="-168" width="30" height="58" rx="15" transform="rotate(315)"/>
+    </g>
+  </g>
+
+  <!-- Sun disc -->
+  <g filter="url(#sunGlow)">
+    <circle cx="512" cy="438" r="104" fill="url(#sun)"/>
+  </g>
+  <!-- sun gloss -->
+  <ellipse cx="478" cy="404" rx="48" ry="34" fill="#FFFFFF" opacity="0.45"/>
+</svg>

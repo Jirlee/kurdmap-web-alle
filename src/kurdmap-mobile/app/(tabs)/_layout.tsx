@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Animated, Platform } from 'react-native';
+import { Animated, Platform, StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -51,17 +51,18 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: theme.colors.tabBar,
           borderTopColor: theme.colors.tabBarBorder,
+          borderTopWidth: StyleSheet.hairlineWidth,
           paddingBottom: Platform.OS === 'ios' ? 0 : 6,
           paddingTop: 6,
           height: Platform.OS === 'ios' ? 84 : 62,
           ...Platform.select({
             ios: {
-              shadowColor: '#000',
-              shadowOffset: { width: 0, height: -2 },
-              shadowOpacity: 0.06,
-              shadowRadius: 8,
+              shadowColor: theme.colors.primary,
+              shadowOffset: { width: 0, height: -6 },
+              shadowOpacity: 0.1,
+              shadowRadius: 16,
             },
-            android: { elevation: 8 },
+            android: { elevation: 10 },
           }),
         },
         tabBarLabelStyle: {

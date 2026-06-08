@@ -37,7 +37,7 @@ const SLIDES: Slide[] = [
   {
     key: 'search',
     icon: 'search',
-    colors: ['#6366F1', '#4F46E5'],
+    colors: ['#22C55E', '#15803D'],
     titleKey: 'onboardingSearchTitle',
     descKey: 'onboardingSearchDesc',
   },
@@ -51,7 +51,7 @@ const SLIDES: Slide[] = [
   {
     key: 'languages',
     icon: 'globe',
-    colors: ['#EC4899', '#DB2777'],
+    colors: ['#84CC16', '#4D7C0F'],
     titleKey: 'onboardingLanguagesTitle',
     descKey: 'onboardingLanguagesDesc',
   },

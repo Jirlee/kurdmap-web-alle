@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/theme/ThemeContext';
+import { gradients } from '@/theme';
 import { BusinessCard } from '@/components/BusinessCard';
 import { CategoryCard } from '@/components/CategoryCard';
 import { CitySelector } from '@/components/CitySelector';
@@ -72,7 +73,7 @@ export default function HomeScreen() {
     >
       {/* Gradient Hero Header */}
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.primaryDark]}
+        colors={theme.colors.statusBar === 'light' ? gradients.darkHero : gradients.brandVivid}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[styles.heroHeader, { paddingTop: insets.top + 16 }]}

@@ -38,7 +38,7 @@ export const CategoryCard = React.memo(function CategoryCard({ category }: Props
   return (
     <ScaleOnPress>
       <Pressable
-        style={[styles.card, { backgroundColor: theme.colors.surface, shadowColor: theme.colors.shadow }]}
+        style={[styles.card, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder, shadowColor: theme.colors.shadow }]}
         onPress={() => router.push(`/category/${category.id}`)}
         android_ripple={{ color: theme.colors.surfaceVariant }}
         accessibilityRole="button"
@@ -63,13 +63,14 @@ const styles = StyleSheet.create({
     width: 100,
     alignItems: 'center',
     padding: 12,
-    borderRadius: 16,
+    borderRadius: 18,
     marginRight: 10,
+    borderWidth: StyleSheet.hairlineWidth,
     ...Platform.select({
       ios: {
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.08,
-        shadowRadius: 8,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 12,
       },
       android: { elevation: 2 },
     }),

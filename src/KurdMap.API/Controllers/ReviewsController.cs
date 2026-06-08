@@ -1,3 +1,4 @@
+using KurdMap.Application.Common.Interfaces;
 using KurdMap.Application.Reviews.Commands.ApproveReview;
 using KurdMap.Application.Reviews.Commands.CreateReview;
 using KurdMap.Application.Reviews.Commands.DeleteReview;
@@ -14,7 +15,7 @@ namespace KurdMap.API.Controllers;
 [ApiController]
 [Route("api/v1/reviews")]
 [EnableRateLimiting("fixed")]
-public class ReviewsController(ISender sender) : BaseApiController
+public class ReviewsController(ISender sender, ICurrentUserService currentUser) : BaseApiController
 {
     [HttpGet("business/{businessId:guid}")]
     [ProducesResponseType(typeof(List<ReviewDto>), StatusCodes.Status200OK)]
@@ -31,8 +32,15 @@ public class ReviewsController(ISender sender) : BaseApiController
     [Authorize]
     [ProducesResponseType(typeof(ReviewDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Create([FromBody] CreateReviewCommand command, CancellationToken ct)
-        => CreatedOrBadRequest(await sender.Send(command, ct));
+    {
+        // Never trust a client-supplied user id — bind the review to the caller.
+        if (currentUser.UserId is not { } uid)
+            return Unauthorized();
+
+        return CreatedOrBadRequest(await sender.Send(command with { UserId = uid }, ct));
+    }
 
     [HttpPut("{id:guid}/approve")]
     [Authorize(Roles = "SuperAdmin,Admin,Moderator")]

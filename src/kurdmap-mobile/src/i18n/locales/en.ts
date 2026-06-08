@@ -23,7 +23,7 @@ export default {
 
   // Home
   homeTitle: 'KurdMap',
-  homeSubtitle: 'Discover Kurdish businesses in Germany',
+  homeSubtitle: 'Discover Kurdish businesses across Europe',
   featuredBusinesses: 'Featured Businesses',
   categories: 'Categories',
   nearbyBusinesses: 'Nearby Businesses',

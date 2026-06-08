@@ -102,7 +102,7 @@ export default function ContactScreen() {
               icon="time-outline"
               title={t('contactResponseTitle')}
               value={t('contactResponseText')}
-              color="#3B82F6"
+              color="#65A30D"
               theme={theme}
             />
           </View>

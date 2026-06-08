@@ -109,7 +109,7 @@ export default function BusinessDetailScreen() {
     >
       {/* Back Button */}
       <Pressable
-        style={[styles.backBtn, { top: insets.top + 8, backgroundColor: theme.colors.surface }]}
+        style={[styles.backBtn, { top: insets.top + 8, backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder }]}
         onPress={() => router.back()}
       >
         <Ionicons name="arrow-back" size={22} color={theme.colors.text} />
@@ -190,7 +190,7 @@ export default function BusinessDetailScreen() {
             label={t('call')}
             onPress={handleCall}
             color={theme.colors.primary}
-            bgColor={theme.colors.surface}
+            bgColor={theme.colors.glassStrong}
           />
         )}
         {biz.email && (
@@ -199,7 +199,7 @@ export default function BusinessDetailScreen() {
             label={t('email')}
             onPress={handleEmail}
             color={theme.colors.primary}
-            bgColor={theme.colors.surface}
+            bgColor={theme.colors.glassStrong}
           />
         )}
         {biz.website && (
@@ -208,7 +208,7 @@ export default function BusinessDetailScreen() {
             label={t('website')}
             onPress={handleWebsite}
             color={theme.colors.primary}
-            bgColor={theme.colors.surface}
+            bgColor={theme.colors.glassStrong}
           />
         )}
         <ActionButton
@@ -216,20 +216,20 @@ export default function BusinessDetailScreen() {
           label={t('directions')}
           onPress={handleDirections}
           color={theme.colors.primary}
-          bgColor={theme.colors.surface}
+          bgColor={theme.colors.glassStrong}
         />
         <ActionButton
           icon="share-outline"
           label={t('share')}
           onPress={handleShare}
           color={theme.colors.primary}
-          bgColor={theme.colors.surface}
+          bgColor={theme.colors.glassStrong}
         />
       </View>
 
       {/* Opening Hours */}
       {biz.hours && (
-        <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder }]}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             {t('openingHours')}
           </Text>
@@ -239,7 +239,7 @@ export default function BusinessDetailScreen() {
 
       {/* Menu Items */}
       {biz.menuItems.length > 0 && (
-        <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder }]}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             {t('menu')}
           </Text>
@@ -267,7 +267,7 @@ export default function BusinessDetailScreen() {
 
       {/* Services */}
       {biz.services.length > 0 && (
-        <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+        <View style={[styles.card, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder }]}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             {t('services')}
           </Text>
@@ -294,7 +294,7 @@ export default function BusinessDetailScreen() {
       )}
 
       {/* Map Preview */}
-      <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+      <View style={[styles.card, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder }]}>
         <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
           {t('directions')}
         </Text>
@@ -304,7 +304,7 @@ export default function BusinessDetailScreen() {
       </View>
 
       {/* Reviews */}
-      <View style={[styles.card, { backgroundColor: theme.colors.surface }]}>
+      <View style={[styles.card, { backgroundColor: theme.colors.glassStrong, borderColor: theme.colors.glassBorder }]}>
         <View style={styles.reviewsHeader}>
           <Text style={[styles.sectionTitle, { color: theme.colors.text }]}>
             {t('reviews')} ({reviewList.length})
@@ -343,7 +343,7 @@ function ActionButton({
   bgColor: string;
 }) {
   return (
-    <Pressable style={[styles.actionBtn, { backgroundColor: bgColor }]} onPress={onPress}>
+    <Pressable style={[styles.actionBtn, { backgroundColor: bgColor, borderColor: `${color}26`, borderWidth: StyleSheet.hairlineWidth }]} onPress={onPress}>
       <Ionicons name={icon} size={20} color={color} />
       <Text style={[styles.actionLabel, { color }]}>{label}</Text>
     </Pressable>
@@ -361,11 +361,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
   },
   headerSection: { paddingHorizontal: 16, paddingTop: 16 },
   titleRow: {
@@ -403,7 +404,7 @@ const styles = StyleSheet.create({
     gap: 4,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    borderRadius: 12,
+    borderRadius: 16,
     minWidth: 60,
   },
   actionLabel: { fontSize: 11, fontWeight: '500' },
@@ -411,10 +412,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 16,
     padding: 16,
-    borderRadius: 16,
+    borderRadius: 20,
+    borderWidth: StyleSheet.hairlineWidth,
     ...Platform.select({
-      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8 },
-      android: { elevation: 2 },
+      ios: { shadowColor: '#15803D', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.1, shadowRadius: 16 },
+      android: { elevation: 3 },
     }),
   },
   sectionTitle: { fontSize: 18, fontWeight: '600', marginBottom: 12 },

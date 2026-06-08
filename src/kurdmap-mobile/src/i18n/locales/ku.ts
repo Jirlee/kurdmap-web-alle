@@ -23,7 +23,7 @@ export default {
 
   // ماڵەوە
   homeTitle: 'کوردماپ',
-  homeSubtitle: 'کاروباری کوردی لە ئەڵمانیا بدۆزەرەوە',
+  homeSubtitle: 'کاروباری کوردی لە سەرتاسەری ئەوروپا بدۆزەرەوە',
   featuredBusinesses: 'کاروبارە تایبەتەکان',
   categories: 'پۆلەکان',
   nearbyBusinesses: 'کاروبارەکانی نزیک',
